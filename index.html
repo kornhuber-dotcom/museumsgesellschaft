@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mitgliedsausweis - Museumsgesellschaft e. V. Braunlage</title>
+    <title>Mitgliederportal - Museumsgesellschaft e. V. Braunlage</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Museumsverein">
@@ -52,74 +52,7 @@
             padding: 0 15px;
         }
         
-        /* Wallet-Pass im Tannengrün-Gold Look */
-        .wallet-pass {
-            background-color: #1b4d3e;
-            color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            margin-bottom: 20px;
-            border: 2px solid #d4af37;
-        }
-        .wallet-header {
-            padding: 15px 20px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .wallet-header span {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #d4af37;
-            font-weight: bold;
-        }
-        .wallet-body {
-            padding: 20px;
-        }
-        .pass-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
-        .pass-row:last-child {
-            margin-bottom: 0;
-        }
-        .pass-field label {
-            display: block;
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #a3c1b5;
-            margin-bottom: 4px;
-            letter-spacing: 0.5px;
-        }
-        .pass-field .pass-value {
-            font-size: 15px;
-            font-weight: bold;
-            color: #ffffff;
-        }
-        .pass-gold {
-            color: #d4af37 !important;
-        }
-        .wallet-footer {
-            background-color: rgba(0, 0, 0, 0.15);
-            padding: 12px 20px;
-            text-align: center;
-            border-top: 1px solid rgba(212, 175, 55, 0.2);
-        }
-
-        /* QR-Code Bereich auf der Karte */
-        .pass-qr-container {
-            background: #ffffff;
-            padding: 10px;
-            border-radius: 8px;
-            display: inline-block;
-            margin-top: 10px;
-        }
-
-        /* Normale Karten für Menüpunkte */
+        /* Normale Karten & Kacheln */
         .card {
             background: #ffffff;
             border-radius: 10px;
@@ -131,16 +64,30 @@
             border-right: 1px solid #e0e0e0;
             border-bottom: 1px solid #e0e0e0;
         }
+        .card-gold {
+            background: linear-gradient(135deg, #1b4d3e 0%, #123329 100%);
+            color: #ffffff;
+            border-left: 5px solid #d4af37;
+            border-top: 1px solid #d4af37;
+            border-right: 1px solid #d4af37;
+            border-bottom: 1px solid #d4af37;
+        }
         .card h2 {
             margin-top: 0;
             font-size: 16px;
             color: #1b4d3e;
+        }
+        .card-gold h2 {
+            color: #d4af37;
         }
         .card p {
             font-size: 13px;
             line-height: 1.4;
             color: #555555;
             margin-bottom: 12px;
+        }
+        .card-gold p {
+            color: #e0e0e0;
         }
         .btn {
             display: block;
@@ -169,6 +116,84 @@
         .hidden {
             display: none;
         }
+
+        /* Modal-Overlay für den digitalen Ausweis im Wallet-Look */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+        .wallet-pass {
+            background-color: #1b4d3e;
+            color: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 360px;
+            overflow: hidden;
+            border: 2px solid #d4af37;
+            animation: scaleIn 0.25s ease;
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .wallet-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .wallet-body {
+            padding: 20px;
+        }
+        .pass-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .pass-row:last-child {
+            margin-bottom: 0;
+        }
+        .pass-field label {
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #a3c1b5;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+        .pass-field .pass-value {
+            font-size: 15px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .pass-gold {
+            color: #d4af37 !important;
+        }
+        .pass-qr-container {
+            background: #ffffff;
+            padding: 8px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        .wallet-footer {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 12px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -176,7 +201,7 @@
     <div class="header">
         <img src="logo.png" alt="Logo Museumsgesellschaft e. V. Braunlage" class="header-logo-img">
         <h1>Museumsgesellschaft e. V. Braunlage</h1>
-        <p>Digitaler Mitgliedsausweis</p>
+        <p>Mitgliederportal & Services</p>
     </div>
 
     <div class="container">
@@ -184,15 +209,56 @@
         <!-- Push-Benachrichtigungen -->
         <div class="card" id="push-card">
             <h2>Eilmeldungen & Push</h2>
-            <p>Erhalten Sie wichtige Vereinsinformationen und Erinnerungen direkt per Benachrichtigung.</p>
+            <p>Erhalten Sie wichtige Vereinsinformationen direkt per Benachrichtigung.</p>
             <button class="btn" onclick="enablePush()">Push-Benachrichtigungen aktivieren</button>
         </div>
 
-        <!-- Mitgliedsausweis mit dynamischer ID & datenschutzkonformem QR-Code -->
+        <!-- Kachel: Digitaler Mitgliedsausweis -->
+        <div class="card card-gold">
+            <h2>Digitaler Mitgliedsausweis</h2>
+            <p>Ihr offizieller Vereinsausweis im modernen Wallet-Format – jederzeit griffbereit.</p>
+            <button class="btn btn-gold" onclick="openIdCard()">🪪 Ausweis anzeigen</button>
+        </div>
+
+        <!-- Kachel: MGVO Login & Passworteingabe -->
+        <div class="card">
+            <h2>Mitglieder-Login</h2>
+            <p>Direkter Zugang zum geschützten MGVO-Mitgliederbereich mit Ihren Zugangsdaten.</p>
+            <a href="https://www.mgvo.de/mgb/login/login.php?call_id=3d660e620b631ab2139df53ffecde062&mgb_id=kornhuber@t-online.de" target="_blank" rel="noopener noreferrer" class="btn">🔑 Zum Login & Passworteingabe</a>
+        </div>
+
+        <!-- Kachel: Selbstauskunft / Zugangscode anfordern -->
+        <div class="card">
+            <h2>Mitglieder-Selbstauskunft</h2>
+            <p>Neuen Zugangscode anfordern oder eigene Stammdaten und Dokumente einsehen.</p>
+            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" rel="noopener noreferrer" class="btn">📋 Zugangscode anfordern</a>
+        </div>
+
+        <!-- Auf dem Smartphone speichern / Homescreen -->
+        <div class="card" id="install-card">
+            <h2>Portal auf Smartphone speichern</h2>
+            <p>Fügen Sie diese App zu Ihrem Startbildschirm hinzu – auch offline verfügbar.</p>
+            <button class="btn btn-gold" onclick="showInstallInstructions()">📲 Zum Startbildschirm hinzufügen</button>
+        </div>
+
+        <!-- Aktuelle Veranstaltungen -->
+        <div class="card">
+            <h2>Aktuelle Veranstaltungen</h2>
+            <p>Informationen zur kommenden <em>„Tour auf Von-Langen-Spuren“</em> am 4. Oktober.</p>
+            <a href="#" onclick="alert('Veranstaltungsdetails werden geladen...'); return false;" class="btn">Details ansehen</a>
+        </div>
+
+    </div>
+
+    <!-- MODAL: Der digitale Mitgliedsausweis (Wallet-Look mit Logo) -->
+    <div id="id-card-modal" class="modal-overlay" onclick="closeIdCardOnOutside(event)">
         <div class="wallet-pass">
             <div class="wallet-header">
-                <span>Mitgliedschaft</span>
-                <span>🏛️</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <img src="logo.png" alt="Logo" style="width: 28px; height: 28px; background: #fff; padding: 2px; border-radius: 4px;">
+                    <span style="font-size: 11px; letter-spacing: 0.5px; color: #d4af37; font-weight: bold;">Museumsgesellschaft</span>
+                </div>
+                <span style="font-size: 12px; color: #a3c1b5;">Mitgliedsausweis</span>
             </div>
             <div class="wallet-body">
                 <div class="pass-row">
@@ -216,80 +282,75 @@
                     </div>
                 </div>
                 
-                <!-- Datenschutzkonformer QR-Code (enthält nur die ID) -->
-                <div style="text-align: center; margin-top: 15px; border-top: 1px solid rgba(212,175,55,0.3); padding-top: 15px;">
+                <!-- Datenschutzkonformer QR-Code -->
+                <div style="text-align: center; margin-top: 15px; border-top: 1px solid rgba(212,175,55,0.3); padding-top: 12px;">
                     <div class="pass-qr-container">
-                        <img id="qr-code-img" src="" alt="Mitglieds-QR-Code" style="display: block; width: 120px; height: 120px;">
+                        <img id="qr-code-img" src="" alt="Mitglieds-QR-Code" style="display: block; width: 100px; height: 100px;">
                     </div>
-                    <div style="font-size: 10px; color: #c5d7d0; margin-top: 5px;">Anonymer Prüf-Code</div>
+                    <div style="font-size: 9px; color: #c5d7d0; margin-top: 4px;">Anonymer Prüf-Code</div>
                 </div>
             </div>
-            <div class="wallet-footer">
-                Offizieller Ausweis • Offline verfügbar
+            <div class="wallet-footer" style="display: flex; gap: 8px;">
+                <button class="btn btn-gold" onclick="addToWalletSimulation()" style="font-size: 12px; padding: 8px; flex: 1;">📲 In Wallet laden</button>
+                <button class="btn" onclick="closeIdCard()" style="font-size: 12px; padding: 8px; background: #555; border-color: #777; flex: 1;">Schließen</button>
             </div>
         </div>
-
-        <!-- Auf dem Smartphone speichern -->
-        <div class="card" id="install-card">
-            <h2>Auf dem Smartphone speichern</h2>
-            <p>Fügen Sie diese App zu Ihrem Startbildschirm hinzu, um den Ausweis immer griffbereit zu haben.</p>
-            <button class="btn btn-gold" onclick="showInstallInstructions()">📲 Zum Startbildschirm hinzufügen</button>
-        </div>
-
-        <!-- Aktuelle Veranstaltungen -->
-        <div class="card">
-            <h2>Aktuelle Veranstaltungen</h2>
-            <p>Informationen zur kommenden <em>„Tour auf Von-Langen-Spuren“</em> am 4. Oktober.</p>
-            <a href="#" onclick="alert('Veranstaltungsdetails werden geladen...'); return false;" class="btn">Details ansehen</a>
-        </div>
-
-        <!-- Dokumente & Protokolle (Verweis auf den geschützten MGVO-Mitgliederbereich) -->
-        <div class="card">
-            <h2>Dokumente & Protokolle</h2>
-            <p>Einsicht in Satzungen, Protokolle und Vereinsberichte im geschützten Mitgliederbereich.</p>
-            <a href="https://www.mgvo.de/mgb/login/login.php?call_id=3d660e620b631ab2139df53ffecde062&mgb_id=kornhuber@t-online.de" target="_blank" rel="noopener noreferrer" class="btn">📂 Zum Mitgliederbereich & Dokumenten</a>
-        </div>
-
     </div>
 
     <!-- Info-Modal für Installationsanleitung -->
-    <div id="install-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; justify-content:center; align-items:center;" onclick="closeInstallModal(event)">
-        <div style="background:#fff; padding:20px; border-radius:12px; width:85%; max-width:320px; border:2px solid #d4af37;">
-            <h3 style="color:#1b4d3e; margin-top:0;">Ausweis speichern</h3>
+    <div id="install-modal" class="modal-overlay" onclick="closeInstallModal(event)">
+        <div style="background:#fff; padding:20px; border-radius:12px; width:85%; max-width:320px; border:2px solid #d4af37;" id="modal-box">
+            <h3 style="color:#1b4d3e; margin-top:0;">App speichern</h3>
             <p id="install-text" style="font-size:13px; color:#444; line-height:1.5;"></p>
             <button class="btn" onclick="document.getElementById('install-modal').style.display='none'" style="margin-top:15px;">Verstanden</button>
         </div>
     </div>
 
     <script>
-        // Beim Start: ID aus URL auslesen, speichern, QR-Code generieren und Push prüfen
         window.addEventListener('DOMContentLoaded', (event) => {
             if (localStorage.getItem('push_enabled') === 'true') {
                 document.getElementById('push-card').classList.add('hidden');
             }
             
-            // ID aus der URL abgreifen (z. B. index.html?id=1049) oder aus dem lokalen Speicher laden
+            // ID aus URL auslesen oder Fallback nutzen
             const urlParams = new URLSearchParams(window.location.search);
             let memberId = urlParams.get('id');
             
             if (memberId) {
                 localStorage.setItem('mg_member_id', memberId);
             } else {
-                memberId = localStorage.getItem('mg_member_id') || '1049'; // Fallback falls keine ID übergeben
+                memberId = localStorage.getItem('mg_member_id') || '1049';
             }
             
             document.getElementById('display-member-id').textContent = memberId;
             
-            // URL bereinigen, damit die ID nicht unnötig in der Adresszeile steht
             if (urlParams.get('id')) {
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
-            // QR-Code mit der reinen ID generieren (datenschutzkonform)
+            // QR-Code generieren
             const qrImg = document.getElementById('qr-code-img');
             const qrData = encodeURIComponent(`MG-${memberId}`);
-            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${qrData}`;
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${qrData}`;
         });
+
+        function openIdCard() {
+            document.getElementById('id-card-modal').style.display = 'flex';
+        }
+
+        function closeIdCard() {
+            document.getElementById('id-card-modal').style.display = 'none';
+        }
+
+        function closeIdCardOnOutside(e) {
+            if (e.target.id === 'id-card-modal') {
+                closeIdCard();
+            }
+        }
+
+        function addToWalletSimulation() {
+            alert('Ausweis wurde für die Wallet aufbereitet. (Auf iOS/Android wird die PWA als Startbildschirm-Verknüpfung wie eine Wallet-Karte genutzt).');
+        }
 
         function enablePush() {
             localStorage.setItem('push_enabled', 'true');
