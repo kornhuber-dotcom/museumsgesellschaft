@@ -93,6 +93,7 @@
             margin-top: 10px;
             margin-right: 5px;
             transition: background-color 0.2s;
+            cursor: pointer;
         }
         .btn-gold {
             background-color: #d4af37;
@@ -101,6 +102,9 @@
         }
         .btn:hover {
             opacity: 0.9;
+        }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -116,20 +120,20 @@
 
     <div class="container">
 
-        <!-- Schnellinformationen -->
-        <div class="card">
+        <!-- Schnellinformationen (verschwindet nach Aktivierung) -->
+        <div class="card" id="push-card">
             <h2>Schnellinformationen (Push)</h2>
             <p>Erhalten Sie wichtige Eilmeldungen und Erinnerungen direkt aufs Smartphone.</p>
-            <button class="btn" onclick="alert('Push-Benachrichtigungen sind aktiv.')">Push-Benachrichtigungen aktivieren</button>
+            <button class="btn" onclick="enablePush()">Push-Benachrichtigungen aktivieren</button>
         </div>
 
-        <!-- Digitaler Mitgliedsausweis & Direkter Login -->
+        <!-- Mitgliederbereich & Login -->
         <div class="card card-gold">
-            <h2>MGVO Mitglieder-Login</h2>
+            <h2>Mitgliederbereich & Login</h2>
             <p>Status: <strong>Aktives Mitglied</strong><br>
-            Direkter Zugang mit bereits hinterlegtem Benutzernamen.</p>
+            Direkter Zugang zu Ihren Mitgliederdaten.</p>
             <!-- Direkter Login mit vorgegebener Mailadresse -->
-            <a href="https://www.mgvo.de/mgb/login/login.php?call_id=3d660e620b631ab2139df53ffecde062&mgb_id=kornhuber@t-online.de" target="_blank" rel="noopener noreferrer" class="btn btn-gold">🔑 Direkt-Login (App-Nutzer)</a>
+            <a href="https://www.mgvo.de/mgb/login/login.php?call_id=3d660e620b631ab2139df53ffecde062&mgb_id=kornhuber@t-online.de" target="_blank" rel="noopener noreferrer" class="btn btn-gold">🔑 Direkt-Login</a>
         </div>
 
         <!-- Mitglieder-Selbstauskunft (Zugang anfordern) -->
@@ -154,6 +158,21 @@
         </div>
 
     </div>
+
+    <script>
+        // Prüfen, ob Push-Benachrichtigungen bereits aktiviert wurden
+        window.addEventListener('DOMContentLoaded', (event) => {
+            if (localStorage.getItem('push_enabled') === 'true') {
+                document.getElementById('push-card').classList.add('hidden');
+            }
+        });
+
+        function enablePush() {
+            localStorage.setItem('push_enabled', 'true');
+            alert('Push-Benachrichtigungen wurden erfolgreich aktiviert.');
+            document.getElementById('push-card').classList.add('hidden');
+        }
+    </script>
 
 </body>
 </html>
