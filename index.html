@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museumsgesellschaft e. V. Braunlage - Mitgliederbereich</title>
+    <!-- Verknüpfung zur PWA-Manifest-Datei für das App-Symbol auf dem Handy -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1b4d3e">
+    <style>
+        :root {
+            --primary-color: #1b4d3e; /* Tannengrün */
+            --accent-color: #d4af37;  /* Gold */
+            --bg-color: #f4f6f5;
+            --text-color: #333333;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.2rem;
+            text-align: center;
+            border-bottom: 4px solid var(--accent-color);
+        }
+
+        /* Edler weißer Hintergrund für das Logo, damit grüne Linien perfekt sichtbar sind */
+        .logo-container {
+            background-color: #ffffff;
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+
+        header img {
+            max-height: 55px;
+            width: auto;
+            display: block;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        header p {
+            margin: 0.3rem 0 0 0;
+            font-size: 0.85rem;
+            color: var(--accent-color);
+        }
+
+        main {
+            flex: 1;
+            padding: 1rem;
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 1rem;
+            color: var(--primary-color);
+        }
+
+        /* Spezielles Design für den digitalen Mitgliedsausweis */
+        .id-card {
+            background: linear-gradient(135deg, #1b4d3e 0%, #113329 100%);
+            color: white;
+            border-left: 4px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .id-card h2 {
+            color: var(--accent-color);
+            margin-top: 0;
+            font-size: 1.05rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            padding-bottom: 0.4rem;
+        }
+
+        .id-details {
+            font-size: 0.9rem;
+            margin-top: 0.8rem;
+            line-height: 1.5;
+        }
+
+        .id-details span {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.6rem 1rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            border: 1px solid var(--accent-color);
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #14382d;
+        }
+
+        .btn-secondary {
+            background-color: #ffffff;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary-color);
+            color: #ffffff;
+        }
+
+        #events-container p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.75rem;
+            color: #777;
+            background-color: #eaeaea;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo Museumsgesellschaft Braunlage">
+        </div>
+        <h1>Museumsgesellschaft e. V. Braunlage</h1>
+        <p>Mitgliederportal & Schnellinfo</p>
+    </header>
+
+    <main>
+        <!-- Push-Benachrichtigung Steuerung -->
+        <div class="card">
+            <h2>Schnellinformationen (Push)</h2>
+            <p>Erhalten Sie wichtige Eilmeldungen und Erinnerungen direkt aufs Smartphone.</p>
+            <button id="push-btn" class="btn btn-secondary" onclick="subscribePush()">Push-Benachrichtigungen aktivieren</button>
+        </div>
+
+        <!-- Digitaler Mitgliedsausweis -->
+        <div class="id-card">
+            <h2>Digitaler Mitgliedsausweis</h2>
+            <div class="id-details">
+                <p>Status: <span>Aktives Mitglied</span></p>
+                <p>Verein: <span>Museumsgesellschaft e. V. Braunlage</span></p>
+            </div>
+            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" class="btn" style="background-color: var(--accent-color); color: var(--primary-color); font-weight: bold; border: none;">Mitgliedsstatus prüfen</a>
+        </div>
+
+        <!-- Mitglieder-Selbstauskunft -->
+        <div class="card">
+            <h2>Mitglieder-Selbstauskunft</h2>
+            <p>Hier können Sie Ihre bei uns geführten Daten einsehen und verwalten.</p>
+            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" class="btn">Zur Selbstauskunft</a>
+        </div>
+
+        <!-- Dokumente & Vereinsarchiv (Direkt via lokalem Ordner/PDFs) -->
+        <div class="card">
+            <h2>Dokumente & Protokolle</h2>
+            <p>Einsicht in Satzungen, Berichte und öffentliche Vereinsdokumente.</p>
+            <a href="dokumente/" target="_blank" class="btn">Dokumentenordner öffnen</a>
+        </div>
+
+        <!-- Aktuelle Veranstaltungen -->
+        <div class="card">
+            <h2>Aktuelle Veranstaltungen</h2>
+            <div id="events-container">
+                <p>Veranstaltungs-Schnittstelle ist bereit. <br><a href="https://www.mgvo.de/prog/pub_events.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank">Veranstaltungsliste öffnen</a></p>
+            </div>
+        </div>
+
+        <!-- Kontakt -->
+        <div class="card">
+            <h2>Kontakt zum Vorstand</h2>
+            <p>Haben Sie Fragen oder Anregungen? Schreiben Sie uns direkt.</p>
+            <a href="https://www.mgvo.de/prog/pub_contact.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" class="btn">Kontaktformular</a>
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2026 Museumsgesellschaft e. V. Braunlage
+    </footer>
+
+    <script>
+        // Service Worker für PWA & Push registrieren
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+            .then(() => console.log("Service Worker erfolgreich registriert."))
+            .catch(err => console.log("Service Worker Registrierung fehlgeschlagen: ", err));
+        }
+
+        function subscribePush() {
+            if (!('Notification' in window)) {
+                alert("Ihr Browser unterstützt keine Push-Benachrichtigungen.");
+                return;
+            }
+
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    const btn = document.getElementById('push-btn');
+                    btn.innerText = "Push-Dienst aktiv ✓";
+                    btn.style.backgroundColor = "#1b4d3e";
+                    btn.style.color = "#ffffff";
+                    alert("Erfolgreich! Sie werden ab sofort über wichtige Neuigkeiten informiert.");
+                } else {
+                    alert("Benachrichtigungen wurden abgelehnt.");
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
