@@ -3,77 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Museumsgesellschaft Braunlage e. V.</title>
+    <title>Museumsgesellschaft Braunlage e. V. - Mitgliederportal</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f6f4;
             color: #222222;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+        }
+        .header {
+            background-color: #1b4d3e;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px 15px;
+            border-bottom: 4px solid #d4af37;
+        }
+        .header img {
+            max-height: 50px;
+            background: #ffffff;
+            padding: 5px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .header h1 {
+            margin: 5px 0 0 0;
+            font-size: 20px;
+            color: #ffffff;
+        }
+        .header p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            color: #d4af37;
         }
         .container {
             max-width: 600px;
-            margin: 0 auto;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+        .card {
             background: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            border-top: 6px solid #1b4d3e;
-        }
-        h1 {
-            color: #1b4d3e;
-            font-size: 24px;
-            text-align: center;
+            border-radius: 8px;
+            padding: 20px;
             margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border-left: 6px solid #1b4d3e;
+            border-top: 1px solid #e0e0e0;
+            border-right: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
         }
-        p {
-            line-height: 1.6;
+        .card-gold {
+            background: #1b4d3e;
+            color: #ffffff;
+            border-left: 6px solid #d4af37;
+        }
+        .card h2 {
+            margin-top: 0;
+            font-size: 18px;
+            color: #1b4d3e;
+        }
+        .card-gold h2 {
+            color: #d4af37;
+        }
+        .card p {
+            font-size: 14px;
+            line-height: 1.5;
             color: #444444;
         }
-        .mgvo-container {
-            text-align: center;
-            margin: 30px 0;
+        .card-gold p {
+            color: #ffffff;
         }
-        .mgvo-btn {
+        .btn {
             display: inline-block;
             background-color: #1b4d3e;
             color: #ffffff;
-            font-family: Arial, sans-serif;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
-            padding: 14px 28px;
+            padding: 10px 20px;
             text-decoration: none;
-            border-radius: 8px;
-            border: 2px solid #d4af37;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: background-color 0.2s, transform 0.1s;
+            border-radius: 6px;
+            border: 1px solid #d4af37;
+            margin-top: 10px;
+            transition: background-color 0.2s;
         }
-        .mgvo-btn:hover {
-            background-color: #153d31;
-            transform: translateY(-1px);
+        .btn-gold {
+            background-color: #d4af37;
+            color: #1b4d3e;
+            border: 1px solid #ffffff;
+        }
+        .btn:hover {
+            opacity: 0.9;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Museumsgesellschaft Braunlage e. V.</h1>
-        <p>Willkommen im internen Bereich unserer Vereins-App. Über den folgenden Button gelangst du direkt zur offiziellen Mitgliederverwaltung und Selbstauskunft von MGVO.</p>
+    <div class="header">
+        <h1>Museumsgesellschaft e. V. Braunlage</h1>
+        <p>Mitgliederportal & Schnellinfo</p>
+    </div>
 
-        <!-- MGVO Mitgliederbereich Button -->
-        <div class="mgvo-container">
-            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" 
-               target="_blank" 
-               rel="noopener noreferrer"
-               class="mgvo-btn">
-               🔗 MGVO Mitgliederbereich
-            </a>
+    <div class="container">
+
+        <!-- Schnellinformationen -->
+        <div class="card">
+            <h2>Schnellinformationen (Push)</h2>
+            <p>Erhalten Sie wichtige Eilmeldungen und Erinnerungen direkt aufs Smartphone.</p>
+            <button class="btn" onclick="alert('Push-Benachrichtigungen sind aktiv.')">Push-Benachrichtigungen aktivieren</button>
         </div>
 
-        <p style="font-size: 14px; text-align: center; color: #666666; margin-top: 30px;">
-            Sicherer Zugriff über die offizielle MGVO-Schnittstelle.
-        </p>
+        <!-- Digitaler Mitgliedsausweis -->
+        <div class="card card-gold">
+            <h2>Digitaler Mitgliedsausweis</h2>
+            <p>Status: <strong>Aktives Mitglied</strong><br>
+            Verein: Museumsgesellschaft e. V. Braunlage</p>
+            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" rel="noopener noreferrer" class="btn btn-gold">Mitgliedsstatus prüfen</a>
+        </div>
+
+        <!-- Mitglieder-Selbstauskunft -->
+        <div class="card">
+            <h2>Mitglieder-Selbstauskunft</h2>
+            <p>Hier können Sie Ihre bei uns geführten Daten einsehen und verwalten.</p>
+            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" rel="noopener noreferrer" class="btn">Zur Selbstauskunft</a>
+        </div>
+
+        <!-- Dokumente & Protokolle -->
+        <div class="card">
+            <h2>Dokumente & Protokolle</h2>
+            <p>Einsicht in Satzungen, Berichte und öffentliche Vereinsdokumente.</p>
+            <a href="#" onclick="alert('Dokumentenordner wird geladen...'); return false;" class="btn">Dokumentenordner öffnen</a>
+        </div>
+
+        <!-- Aktuelle Veranstaltungen -->
+        <div class="card">
+            <h2>Aktuelle Veranstaltungen</h2>
+            <p>Informationen zu kommenden Ausflügen, wie z.B. der <em>„Tour auf Von-Langen-Spuren“</em> am 4. Oktober.</p>
+            <a href="#" onclick="alert('Veranstaltungsdetails werden geladen...'); return false;" class="btn">Details ansehen</a>
+        </div>
+
     </div>
 
 </body>
