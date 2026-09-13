@@ -227,6 +227,13 @@
             <button class="btn btn-gold" onclick="openIdCard()">🪪 Ausweis anzeigen</button>
         </div>
 
+        <!-- Kachel für Kalender & Veranstaltungen -->
+        <div class="card">
+            <h2>Kalender & Öffnungszeiten</h2>
+            <p>Aktuelle Termine, Exkursionen und Öffnungszeiten auf einen Blick.</p>
+            <button class="btn" onclick="openCalendarModal()">📅 Termine & Öffnungszeiten ansehen</button>
+        </div>
+
         <!-- Kachel: Mitglieder-Login (Daten ändern & Passworteingabe) -->
         <div class="card">
             <h2>Mitglieder-Login & Datenpflege</h2>
@@ -257,7 +264,7 @@
 
     </div>
 
-    <!-- MODAL: Der digitale Mitgliedsausweis (Wallet-Look mit Name & ID) -->
+    <!-- MODAL: Der digitale Mitgliedsausweis -->
     <div id="id-card-modal" class="modal-overlay" onclick="closeIdCardOnOutside(event)">
         <div class="wallet-pass">
             <div class="wallet-header">
@@ -285,7 +292,6 @@
                     </div>
                 </div>
                 
-                <!-- QR-Code verweist auf die Server-Prüfung per ID -->
                 <div style="text-align: center; margin-top: 12px; border-top: 1px solid rgba(212,175,55,0.3); padding-top: 12px;">
                     <div class="pass-qr-container">
                         <img id="qr-code-img" src="" alt="Mitglieds-QR-Code" style="display: block; width: 90px; height: 90px;">
@@ -297,6 +303,24 @@
                 <button class="btn btn-gold" onclick="addToWalletSimulation()" style="font-size: 12px; padding: 8px; flex: 1;">📲 In Wallet laden</button>
                 <button class="btn" onclick="closeIdCard()" style="font-size: 12px; padding: 8px; background: #555; border-color: #777; flex: 1;">Schließen</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal für Kalender & Veranstaltungen mit integriertem Google-Kalender -->
+    <div id="calendar-modal" class="modal-overlay" onclick="closeCalendarOnOutside(event)">
+        <div style="background:#fff; padding:15px; border-radius:12px; width:95%; max-width:400px; border:2px solid #1b4d3e; max-height: 85vh; display: flex; flex-direction: column; box-sizing: border-box;">
+            <h3 style="color:#1b4d3e; margin-top:0; margin-bottom: 10px; font-size: 16px;">Termine & Öffnungszeiten</h3>
+            
+            <!-- Eingeundener Google Kalender -->
+            <div style="flex: 1; width: 100%; min-height: 350px; background: #f9f9f9; border-radius: 8px; overflow: hidden; border: 1px solid #ddd;">
+                <iframe src="https://calendar.google.com/calendar/embed?src=5438f77f82951d89b420bc1e1b546f0eb92f64650ce42ae607b5d8cee1609ae6%40group.calendar.google.com&ctz=Europe%2FBerlin" 
+                        style="border: 0; width: 100%; height: 350px;" 
+                        frameborder="0" 
+                        scrolling="no">
+                </iframe>
+            </div>
+
+            <button class="btn" onclick="closeCalendarModal()" style="margin-top: 12px; padding: 10px;">Schließen</button>
         </div>
     </div>
 
@@ -314,7 +338,7 @@
         window.OneSignalDeferred = window.OneSignalDeferred || [];
         window.OneSignalDeferred.push(async function(OneSignal) {
             await OneSignal.init({
-                appId: "DEINE_ONESIGNAL_APP_ID_HIER_EINTRAGEN", // <-- HIER SPÄTER DEINE APP-ID EINTRAGEN
+                appId: "DEINE_ONESIGNAL_APP_ID_HIER_EINTRAGEN",
                 safari_web_id: "",
                 notifyButton: {
                     enable: false,
@@ -322,7 +346,7 @@
             });
         });
 
-        // --- GEHEIMER VEREINSSCHLÜSSEL (Muss exakt mit dem Generator übereinstimmen) ---
+        // --- GEHEIMER VEREINSSCHLÜSSEL ---
         const SECRET_PASSPHRASE = "MuseumsgesellschaftBraunlage2026SecureKey";
 
         window.addEventListener('DOMContentLoaded', (event) => {
@@ -338,18 +362,15 @@
 
             if (encryptedData) {
                 try {
-                    // Daten mit dem Geheimschlüssel entschlüsseln
                     const bytes = CryptoJS.AES.decrypt(encryptedData, SECRET_PASSPHRASE);
                     const decryptedString = bytes.toString(CryptoJS.enc.Utf8);
                     
                     if (decryptedString) {
-                        // Format im String: id|vorname nachname
                         const parts = decryptedString.split('|');
                         if (parts.length >= 2) {
                             memberId = parts[0];
                             memberName = parts[1];
                             
-                            // Sicher im lokalen Speicher des Handys ablegen, damit der Ausweis bleibt
                             localStorage.setItem('mg_member_id', memberId);
                             localStorage.setItem('mg_member_name', memberName);
                         }
@@ -359,28 +380,23 @@
                 }
             }
 
-            // Fallback auf LocalStorage, falls der Link frisch ohne Parameter geöffnet wird
             if (!encryptedData) {
                 memberId = localStorage.getItem('mg_member_id') || '9999';
                 memberName = localStorage.getItem('mg_member_name') || 'Testmitglied';
             }
 
-            // Werte in den Ausweis schreiben
             document.getElementById('display-member-id').textContent = memberId;
             document.getElementById('display-name').textContent = memberName;
             
-            // URL-Leiste nach erfolgreichem Einlesen sofort bereinigen (schützt vor ungesicherten Bookmarks)
             if (encryptedData) {
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
-            // QR-Code mit der Server-Prüfurl erzeugen (für die Rot/Grün-Prüfung)
             const qrImg = document.getElementById('qr-code-img');
             const targetCheckUrl = `https://museum-braunlage.de/check.php?id=${memberId}`;
             qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(targetCheckUrl)}`;
         });
 
-        // Funktion beim Klick auf den Push-Button
         async function enablePush() {
             window.OneSignalDeferred = window.OneSignalDeferred || [];
             window.OneSignalDeferred.push(async function(OneSignal) {
@@ -406,6 +422,21 @@
         function closeIdCardOnOutside(e) {
             if (e.target.id === 'id-card-modal') {
                 closeIdCard();
+            }
+        }
+
+        // Steuerfunktionen für das Kalender-Modal
+        function openCalendarModal() {
+            document.getElementById('calendar-modal').style.display = 'flex';
+        }
+
+        function closeCalendarModal() {
+            document.getElementById('calendar-modal').style.display = 'none';
+        }
+
+        function closeCalendarOnOutside(e) {
+            if (e.target.id === 'calendar-modal') {
+                closeCalendarModal();
             }
         }
 
