@@ -306,21 +306,27 @@
         </div>
     </div>
 
-    <!-- Modal für Kalender & Veranstaltungen mit integriertem Google-Kalender -->
+    <!-- Modal für Kalender & Veranstaltungen (Lösung B: Sauberer Text & Live-Link) -->
     <div id="calendar-modal" class="modal-overlay" onclick="closeCalendarOnOutside(event)">
-        <div style="background:#fff; padding:15px; border-radius:12px; width:95%; max-width:400px; border:2px solid #1b4d3e; max-height: 85vh; display: flex; flex-direction: column; box-sizing: border-box;">
-            <h3 style="color:#1b4d3e; margin-top:0; margin-bottom: 10px; font-size: 16px;">Termine & Öffnungszeiten</h3>
+        <div style="background:#fff; padding:20px; border-radius:12px; width:90%; max-width:350px; border:2px solid #1b4d3e;">
+            <h3 style="color:#1b4d3e; margin-top:0; font-size:16px;">Termine & Öffnungszeiten</h3>
             
-            <!-- Eingeundener Google Kalender -->
-            <div style="flex: 1; width: 100%; min-height: 350px; background: #f9f9f9; border-radius: 8px; overflow: hidden; border: 1px solid #ddd;">
-                <iframe src="https://calendar.google.com/calendar/embed?src=5438f77f82951d89b420bc1e1b546f0eb92f64650ce42ae607b5d8cee1609ae6%40group.calendar.google.com&ctz=Europe%2FBerlin" 
-                        style="border: 0; width: 100%; height: 350px;" 
-                        frameborder="0" 
-                        scrolling="no">
-                </iframe>
+            <div style="font-size:13px; color:#444; line-height:1.5; margin-bottom: 15px;">
+                <p style="margin-top: 0;"><strong>Nächste Veranstaltung:</strong><br>📅 <strong>04. Oktober 2026</strong><br>Tour auf Von-Langen-Spuren (Exkursion nach Grünenplan & Fürstenberg).</p>
+                
+                <hr style="border:0; border-top:1px solid #eee; margin: 10px 0;">
+                
+                <p style="margin-bottom: 0;"><strong>Öffnungszeiten:</strong><br>Nach Vereinbarung sowie zu Sonderveranstaltungen.</p>
             </div>
 
-            <button class="btn" onclick="closeCalendarModal()" style="margin-top: 12px; padding: 10px;">Schließen</button>
+            <!-- Direkter Link zum Google-Kalender im Browser/App -->
+            <a href="https://calendar.google.com/calendar/embed?src=5438f77f82951d89b420bc1e1b546f0eb92f64650ce42ae607b5d8cee1609ae6%40group.calendar.google.com&ctz=Europe%2FBerlin" 
+               target="_blank" rel="noopener noreferrer" 
+               class="btn btn-gold" style="margin-bottom: 10px; font-size: 13px; padding: 10px; text-align: center;">
+               📅 Gesamten Kalender öffnen
+            </a>
+
+            <button class="btn" onclick="closeCalendarModal()" style="padding: 10px; background: #555; border-color: #777;">Schließen</button>
         </div>
     </div>
 
