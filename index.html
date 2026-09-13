@@ -3,91 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Museumsgesellschaft Braunlage e. V. - Mitgliederportal</title>
+    <title>Mitgliedsausweis - Museumsgesellschaft e. V. Braunlage</title>
+    <!-- PWA Meta Tags für Apple & Android -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Museumsverein">
+    <meta name="theme-color" content="#1b4d3e">
+    
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #f4f6f4;
             color: #222222;
             margin: 0;
             padding: 0;
+            -webkit-font-smoothing: antialiased;
         }
         .header {
             background-color: #1b4d3e;
             color: #ffffff;
             text-align: center;
-            padding: 20px 15px;
+            padding: 25px 15px;
             border-bottom: 4px solid #d4af37;
         }
         .header-logo-img {
-            background: #ffffff; /* Hintergrund für das Logo */
+            background: #ffffff;
             padding: 8px;
-            border-radius: 6px;
+            border-radius: 8px;
             display: inline-block;
             margin-bottom: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            max-width: 150px; /* Maximale Breite des Logos */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            max-width: 120px;
         }
         .header h1 {
             margin: 5px 0 0 0;
-            font-size: 20px;
+            font-size: 18px;
             color: #ffffff;
+            font-weight: 600;
         }
         .header p {
             margin: 5px 0 0 0;
-            font-size: 14px;
+            font-size: 13px;
             color: #d4af37;
+            letter-spacing: 0.5px;
         }
         .container {
-            max-width: 600px;
+            max-width: 500px;
             margin: 20px auto;
             padding: 0 15px;
         }
+        
+        /* Wallet-Pass Design im Tannengrün-Gold Look */
+        .wallet-pass {
+            background: linear-gradient(135deg, #1b4d3e 0%, #123329 100%);
+            color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 2px solid #d4af37;
+        }
+        .wallet-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .wallet-header span {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #d4af37;
+            font-weight: bold;
+        }
+        .wallet-body {
+            padding: 20px;
+        }
+        .pass-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .pass-field label {
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #a3c1b5;
+            margin-bottom: 3px;
+        }
+        .pass-field value, .pass-field div {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .pass-gold {
+            color: #d4af37 !important;
+        }
+        .wallet-footer {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 11px;
+            color: #c5d7d0;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        /* Normale Karten für Menüpunkte */
         .card {
             background: #ffffff;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            border-left: 6px solid #1b4d3e;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid #1b4d3e;
             border-top: 1px solid #e0e0e0;
             border-right: 1px solid #e0e0e0;
             border-bottom: 1px solid #e0e0e0;
         }
-        .card-gold {
-            background: #1b4d3e;
-            color: #ffffff;
-            border-left: 6px solid #d4af37;
-        }
         .card h2 {
             margin-top: 0;
-            font-size: 18px;
+            font-size: 16px;
             color: #1b4d3e;
         }
-        .card-gold h2 {
-            color: #d4af37;
-        }
         .card p {
-            font-size: 14px;
-            line-height: 1.5;
-            color: #444444;
-        }
-        .card-gold p {
-            color: #ffffff;
+            font-size: 13px;
+            line-height: 1.4;
+            color: #555555;
+            margin-bottom: 12px;
         }
         .btn {
-            display: inline-block;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
             background-color: #1b4d3e;
             color: #ffffff;
             font-size: 14px;
             font-weight: bold;
-            padding: 10px 20px;
+            padding: 12px;
+            text-align: center;
             text-decoration: none;
             border-radius: 6px;
             border: 1px solid #d4af37;
-            margin-top: 10px;
-            margin-right: 5px;
-            transition: background-color 0.2s;
+            transition: opacity 0.2s;
             cursor: pointer;
         }
         .btn-gold {
@@ -96,7 +154,7 @@
             border: 1px solid #ffffff;
         }
         .btn:hover {
-            opacity: 0.9;
+            opacity: 0.95;
         }
         .hidden {
             display: none;
@@ -106,66 +164,96 @@
 <body>
 
     <div class="header">
-        <!-- Das echte Logo wird hier eingebunden -->
-        <img src="logo.png" alt="Logo Museumsgesellschaft Braunlage" class="header-logo-img">
-        
+        <!-- Logo der Museumsgesellschaft -->
+        <img src="logo.png" alt="Logo Museumsgesellschaft e. V. Braunlage" class="header-logo-img">
         <h1>Museumsgesellschaft e. V. Braunlage</h1>
-        <p>Mitgliederportal & Schnellinfo</p>
+        <p>Digitaler Mitgliedsausweis</p>
     </div>
 
     <div class="container">
 
-        <!-- Schnellinformationen (verschwindet nach Aktivierung) -->
-        <div class="card" id="push-card">
-            <h2>Schnellinformationen (Push)</h2>
-            <p>Erhalten Sie wichtige Eilmeldungen und Erinnerungen direkt aufs Smartphone.</p>
-            <button class="btn" onclick="enablePush()">Push-Benachrichtigungen aktivieren</button>
+        <!-- Der digitale Mitgliedsausweis im Wallet-Pass-Format -->
+        <div class="wallet-pass">
+            <div class="wallet-header">
+                <span>Mitgliedschaft</span>
+                <span style="font-size: 14px;">🏛️</span>
+            </div>
+            <div class="wallet-body">
+                <div class="pass-row">
+                    <div class="pass-field">
+                        <label>Inhaber / Inhaberin</label>
+                        <div>Eckart Kornhuber</div>
+                    </div>
+                    <div class="pass-field" style="text-align: right;">
+                        <label>Status</label>
+                        <div class="pass-gold">Aktiv</div>
+                    </div>
+                </div>
+                <div class="pass-row" style="margin-bottom: 0;">
+                    <div class="pass-field">
+                        <label>Kategorie</label>
+                        <div>Ordentliches Mitglied</div>
+                    </div>
+                    <div class="pass-field" style="text-align: right;">
+                        <label>Gültigkeit</label>
+                        <div>Unbefristet</div>
+                    </div>
+                </div>
+            </div>
+            <div class="wallet-footer">
+                Offizieller Ausweis • Offline verfügbar
+            </div>
         </div>
 
-        <!-- Mitgliederbereich & Login -->
-        <div class="card card-gold">
-            <h2>Mitgliederbereich & Login</h2>
-            <p>Status: <strong>Aktives Mitglied</strong><br>
-            Direkter Zugang zu Ihren Mitgliederdaten.</p>
-            <!-- Direkter Login mit vorgegebener Mailadresse -->
-            <a href="https://www.mgvo.de/mgb/login/login.php?call_id=3d660e620b631ab2139df53ffecde062&mgb_id=kornhuber@t-online.de" target="_blank" rel="noopener noreferrer" class="btn btn-gold">🔑 Direkt-Login</a>
-        </div>
-
-        <!-- Mitglieder-Selbstauskunft (Zugang anfordern) -->
-        <div class="card">
-            <h2>Mitglieder-Selbstauskunft</h2>
-            <p>Falls Sie noch keine Zugangsdaten haben oder Ihre Daten anfordern möchten.</p>
-            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" rel="noopener noreferrer" class="btn">Zugang anfordern / Selbstauskunft</a>
-        </div>
-
-        <!-- Dokumente & Protokolle -->
-        <div class="card">
-            <h2>Dokumente & Protokolle</h2>
-            <p>Einsicht in Satzungen, Berichte und öffentliche Vereinsdokumente.</p>
-            <a href="#" onclick="alert('Dokumentenordner wird geladen...'); return false;" class="btn">Dokumentenordner öffnen</a>
+        <!-- Anleitung zum Speichern auf dem Homescreen (Wallet-Ersatz) -->
+        <div class="card" id="install-card">
+            <h2>Auf dem Smartphone speichern</h2>
+            <p>Fügen Sie diese App zu Ihrem Startbildschirm hinzu, um den Ausweis wie eine Wallet-Karte immer griffbereit zu haben – auch ohne Internet.</p>
+            <button class="btn btn-gold" onclick="showInstallInstructions()">📲 Zum Startbildschirm hinzufügen</button>
         </div>
 
         <!-- Aktuelle Veranstaltungen -->
         <div class="card">
             <h2>Aktuelle Veranstaltungen</h2>
-            <p>Informationen zu kommenden Ausflügen, wie z.B. der <em>„Tour auf Von-Langen-Spuren“</em> am 4. Oktober.</p>
+            <p>Informationen zur kommenden <em>„Tour auf Von-Langen-Spuren“</em> am 4. Oktober.</p>
             <a href="#" onclick="alert('Veranstaltungsdetails werden geladen...'); return false;" class="btn">Details ansehen</a>
+        </div>
+
+        <!-- Dokumente & Protokolle -->
+        <div class="card">
+            <h2>Dokumente & Protokolle</h2>
+            <p>Einsicht in Satzungen und Vereinsberichte.</p>
+            <a href="#" onclick="alert('Dokumentenordner wird geladen...'); return false;" class="btn">Ordner öffnen</a>
         </div>
 
     </div>
 
-    <script>
-        // Prüfen, ob Push-Benachrichtigungen bereits aktiviert wurden
-        window.addEventListener('DOMContentLoaded', (event) => {
-            if (localStorage.getItem('push_enabled') === 'true') {
-                document.getElementById('push-card').classList.add('hidden');
-            }
-        });
+    <!-- Einfaches Info-Fenster für die Anleitung -->
+    <div id="install-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; justify-content:center; align-items:center;" onclick="closeInstallModal(event)">
+        <div style="background:#fff; padding:20px; border-radius:12px; width:85%; max-width:320px; border:2px solid #d4af37;" id="modal-box">
+            <h3 style="color:#1b4d3e; margin-top:0;">Ausweis speichern</h3>
+            <p id="install-text" style="font-size:13px; color:#444; line-height:1.5;"></p>
+            <button class="btn" onclick="document.getElementById('install-modal').style.display='none'" style="margin-top:15px;">Verstanden</button>
+        </div>
+    </div>
 
-        function enablePush() {
-            localStorage.setItem('push_enabled', 'true');
-            alert('Push-Benachrichtigungen wurden erfolgreich aktiviert.');
-            document.getElementById('push-card').classList.add('hidden');
+    <script>
+        function showInstallInstructions() {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const textEl = document.getElementById('install-text');
+            
+            if (isIOS) {
+                textEl.innerHTML = "Tippen Sie unten in Safari auf das <strong>Teilen-Symbol</strong> (Quadrat mit Pfeil nach oben) und wählen Sie im Menü <strong>„Zum Home-Bildschirm“</strong> aus.";
+            } else {
+                textEl.innerHTML = "Tippen Sie oben rechts auf die <strong>drei Punkte</strong> und wählen Sie <strong>„Zum Startbildschirm hinzufügen“</strong> oder „App installieren“ aus.";
+            }
+            document.getElementById('install-modal').style.display = 'flex';
+        }
+
+        function closeInstallModal(e) {
+            if (e.target.id === 'install-modal') {
+                document.getElementById('install-modal').style.display = 'none';
+            }
         }
     </script>
 
