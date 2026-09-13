@@ -52,7 +52,6 @@
             padding: 0 15px;
         }
         
-        /* Normale Karten & Kacheln */
         .card {
             background: #ffffff;
             border-radius: 10px;
@@ -220,18 +219,25 @@
             <button class="btn btn-gold" onclick="openIdCard()">🪪 Ausweis anzeigen</button>
         </div>
 
-        <!-- Kachel: MGVO Login & Passworteingabe -->
+        <!-- Kachel: Mitglieder-Login (Daten ändern & Passworteingabe) -->
         <div class="card">
-            <h2>Mitglieder-Login</h2>
-            <p>Direkter Zugang zum geschützten MGVO-Mitgliederbereich mit Ihren Zugangsdaten.</p>
-            <a href="https://www.mgvo.de/mgb/login/login.php?call_id=3d660e620b631ab2139df53ffecde062&mgb_id=kornhuber@t-online.de" target="_blank" rel="noopener noreferrer" class="btn">🔑 Zum Login & Passworteingabe</a>
+            <h2>Mitglieder-Login & Datenpflege</h2>
+            <p>Mit Passworteingabe anmelden, um persönliche Daten einzusehen oder zu ändern und Dokumente abzurufen.</p>
+            <a href="https://www.mgvo.de/mgb/login/login.php?call_id=3d660e620b631ab2139df53ffecde062&mgb_id=kornhuber@t-online.de" target="_blank" rel="noopener noreferrer" class="btn">🔑 Zum Login & Datenänderung</a>
         </div>
 
-        <!-- Kachel: Selbstauskunft / Zugangscode anfordern -->
+        <!-- Kachel: Neuen Zugangscode anfordern -->
         <div class="card">
-            <h2>Mitglieder-Selbstauskunft</h2>
-            <p>Neuen Zugangscode anfordern oder eigene Stammdaten und Dokumente einsehen.</p>
-            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" rel="noopener noreferrer" class="btn">📋 Zugangscode anfordern</a>
+            <h2>Zugangscode anfordern</h2>
+            <p>Falls Sie noch kein Passwort haben oder Ihren Zugangscode neu anfordern möchten.</p>
+            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" rel="noopener noreferrer" class="btn">✉️ Neuen Zugangscode anfordern</a>
+        </div>
+
+        <!-- Kachel: Kontakt zum Vorstand -->
+        <div class="card">
+            <h2>Kontakt zum Vorstand</h2>
+            <p>Haben Sie Fragen, Anregungen oder Anliegen an die Museumsgesellschaft?</p>
+            <a href="mailto:info@museumsgesellschaft-braunlage.de" class="btn">✉️ Nachricht an den Vorstand</a>
         </div>
 
         <!-- Auf dem Smartphone speichern / Homescreen -->
@@ -241,12 +247,14 @@
             <button class="btn btn-gold" onclick="showInstallInstructions()">📲 Zum Startbildschirm hinzufügen</button>
         </div>
 
-        <!-- Aktuelle Veranstaltungen -->
+        <!-- Optional: Aktuelle Veranstaltungen (Bei Bedarf einkommentieren oder füllen) -->
+        <!--
         <div class="card">
             <h2>Aktuelle Veranstaltungen</h2>
             <p>Informationen zur kommenden <em>„Tour auf Von-Langen-Spuren“</em> am 4. Oktober.</p>
-            <a href="#" onclick="alert('Veranstaltungsdetails werden geladen...'); return false;" class="btn">Details ansehen</a>
+            <a href="#" class="btn">Details ansehen</a>
         </div>
+        -->
 
     </div>
 
@@ -312,7 +320,6 @@
                 document.getElementById('push-card').classList.add('hidden');
             }
             
-            // ID aus URL auslesen oder Fallback nutzen
             const urlParams = new URLSearchParams(window.location.search);
             let memberId = urlParams.get('id');
             
@@ -328,7 +335,6 @@
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
-            // QR-Code generieren
             const qrImg = document.getElementById('qr-code-img');
             const qrData = encodeURIComponent(`MG-${memberId}`);
             qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${qrData}`;
