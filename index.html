@@ -15,6 +15,9 @@
     <!-- CryptoJS für sichere, clientseitige AES-Entschlüsselung -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
+    <!-- ical.js zum fehlerfreien Parsen des Google-Kalenders -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ical.js/1.5.0/ical.min.js"></script>
+
     <!-- OneSignal Web SDK für echte Push-Benachrichtigungen -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
@@ -227,10 +230,10 @@
             <button class="btn btn-gold" onclick="openIdCard()">🪪 Ausweis anzeigen</button>
         </div>
 
-        <!-- Kachel für Kalender & Veranstaltungen -->
+        <!-- Kachel für Termine & Veranstaltungen -->
         <div class="card">
             <h2>Kalender & Öffnungszeiten</h2>
-            <p>Aktuelle Termine, Exkursionen und Öffnungszeiten auf einen Blick.</p>
+            <p>Aktuelle Termine, Exkursionen und Öffnungszeiten direkt aus dem Google-Kalender.</p>
             <button class="btn" onclick="openCalendarModal()">📅 Termine & Öffnungszeiten ansehen</button>
         </div>
 
@@ -305,25 +308,16 @@
         </div>
     </div>
 
-    <!-- Modal für Kalender & Veranstaltungen (live eingebunden) -->
+    <!-- Modal für Termine & Veranstaltungen (Live aus Google Kalender via ICS) -->
     <div id="calendar-modal" class="modal-overlay" onclick="closeCalendarOnOutside(event)">
-        <div style="background:#fff; padding:15px; border-radius:12px; width:92%; max-width:400px; border:2px solid #1b4d3e; box-sizing: border-box;">
-            <h3 style="color:#1b4d3e; margin-top:0; font-size:16px; margin-bottom: 10px;">Live-Kalender & Termine</h3>
+        <div style="background:#fff; padding:20px; border-radius:12px; width:92%; max-width:360px; border:2px solid #1b4d3e; box-sizing: border-box;">
+            <h3 style="color:#1b4d3e; margin-top:0; font-size:16px; margin-bottom: 12px;">Termine & Öffnungszeiten</h3>
             
-            <!-- Eingebetteter Google-Kalender im Agenda-Modus (zeigt automatisch immer die anstehenden Termine) -->
-            <div style="width:100%; height:280px; overflow:hidden; border-radius:8px; border:1px solid #ddd; margin-bottom: 12px;">
-                <iframe src="https://calendar.google.com/calendar/embed?height=280&wkst=2&bgcolor=%23ffffff&ctz=Europe%2FBerlin&showTitle=0&showNav=1&showDate=1&showTabs=0&showCalendars=0&showTz=0&mode=AGENDA&src=5438f77f82951d89b420bc1e1b546f0eb92f64650ce42ae607b5d8cee1609ae6%40group.calendar.google.com" 
-                        style="border-width:0" width="100%" height="280" frameborder="0" scrolling="no"></iframe>
+            <div id="calendar-events-container" style="font-size: 13px; color: #444; line-height: 1.5; margin-bottom: 15px; max-height: 300px; overflow-y: auto;">
+                <p style="text-align: center; color: #777;">Lade Termine...</p>
             </div>
 
-            <!-- Direkter Link zum Öffnen in der Google Calendar App -->
-            <a href="https://calendar.google.com/calendar/embed?src=5438f77f82951d89b420bc1e1b546f0eb92f64650ce42ae607b5d8cee1609ae6%40group.calendar.google.com&ctz=Europe%2FBerlin" 
-               target="_blank" rel="noopener noreferrer" 
-               class="btn btn-gold" style="margin-bottom: 8px; font-size: 12px; padding: 8px; text-align: center;">
-               📅 Kalender im Browser öffnen
-            </a>
-
-            <button class="btn" onclick="closeCalendarModal()" style="padding: 8px; background: #555; border-color: #777; font-size: 12px;">Schließen</button>
+            <button class="btn" onclick="closeCalendarModal()" style="padding: 10px; background: #1b4d3e; border-color: #d4af37; font-size: 13px;">Schließen</button>
         </div>
     </div>
 
@@ -398,7 +392,84 @@
             const qrImg = document.getElementById('qr-code-img');
             const targetCheckUrl = `https://museum-braunlage.de/check.php?id=${memberId}`;
             qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(targetCheckUrl)}`;
+
+            // Google Kalender ICS im Hintergrund laden
+            loadGoogleCalendarEvents();
         });
+
+        // Funktion zum Laden und Parsen des Google-Kalenders über die iCal-Schnittstelle
+        async function loadGoogleCalendarEvents() {
+            const container = document.getElementById('calendar-events-container');
+            // Deine öffentliche Google Kalender ICS-URL
+            const calendarId = '5438f77f82951d89b420bc1e1b546f0eb92f64650ce42ae607b5d8cee1609ae6@group.calendar.google.com';
+            // Wir leiten die Abfrage über einen CORS-Proxy, damit der Browser den Kalender direkt laden darf
+            const icsUrl = `https://calendar.google.com/calendar/ical/${encodeURIComponent(calendarId)}/public/basic.ics`;
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(icsUrl)}`;
+
+            try {
+                const response = await fetch(proxyUrl);
+                if (!response.ok) throw new Error('Netzwerkfehler beim Abrufen');
+                const data = await response.json();
+                const icsData = data.contents;
+
+                // iCal.js Daten parsen
+                const jcalData = ICAL.parse(icsData);
+                const comp = new ICAL.Component(jcalData);
+                const vevents = comp.getAllSubcomponents('vevent');
+
+                const now = new Date();
+                let eventsList = [];
+
+                vevents.forEach(vevent => {
+                    const event = new ICAL.Event(vevent);
+                    const startDate = event.startDate.toJSDate();
+                    
+                    // Nur zukünftige Termine (oder heute) anzeigen
+                    if (startDate >= new Date(now.getFullYear(), now.getMonth(), now.getDate())) {
+                        eventsList.push({
+                            title: event.summary,
+                            date: startDate,
+                            allDay: event.startDate.isDate
+                        });
+                    }
+                });
+
+                // Nach Datum sortieren (nächste Termine zuerst)
+                eventsList.sort((a, b) => a.date - b.date);
+
+                if (eventsList.length === 0) {
+                    container.innerHTML = '<p style="color: #666; text-align: center;">Aktuell sind keine kommenden Termine eingetragen.</p>';
+                    return;
+                }
+
+                let htmlOutput = '';
+                // Die nächsten 5 Termine anzeigen
+                const nextEvents = eventsList.slice(0, 5);
+
+                nextEvents.forEach((ev, index) => {
+                    const options = { weekday: 'short', year: 'numeric', month: '2-digit', day: '2-digit' };
+                    const dateString = ev.date.toLocaleDateString('de-DE', options);
+                    const timeString = ev.allDay ? 'Ganztägig' : ev.date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr';
+                    
+                    const isNext = index === 0;
+                    const headerText = isNext ? 'Nächster Termin:' : 'Ausblick:';
+
+                    htmlOutput += `
+                        <p style="${isNext ? 'margin-top: 0;' : 'margin-top: 12px; border-top: 1px solid #eee; pt: 8px;'}">
+                            <strong>${headerText}</strong><br>
+                            📅 <strong>${dateString}, ${timeString}</strong><br>
+                            ${ev.title}
+                        </p>
+                    `;
+                });
+
+                container.innerHTML = htmlOutput;
+
+            } catch (error) {
+                console.error("Fehler beim Laden des Kalenders:", error);
+                container.innerHTML = '<p style="color: #c0392b; text-align: center;">Termine konnten im Moment nicht geladen werden.</p>';
+            }
+        }
 
         async function enablePush() {
             window.OneSignalDeferred = window.OneSignalDeferred || [];
