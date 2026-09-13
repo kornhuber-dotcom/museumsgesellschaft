@@ -274,8 +274,8 @@
                         <div class="pass-value" id="display-member-id">-</div>
                     </div>
                     <div class="pass-field" style="text-align: right;">
-                        <label>Jahrgang / Saison</label>
-                        <div class="pass-value" id="display-year">-</div>
+                        <label>Gültig bis</label>
+                        <div class="pass-value" style="color: #d4af37;">31.12.2026</div>
                     </div>
                 </div>
                 
@@ -315,8 +315,8 @@
             const urlParams = new URLSearchParams(window.location.search);
             const encryptedData = urlParams.get('data');
             
-            let memberId = "1049";
-            let memberName = "Mitglied";
+            let memberId = "9999";
+            let memberName = "Testmitglied";
 
             if (encryptedData) {
                 try {
@@ -343,14 +343,13 @@
 
             // Fallback auf LocalStorage, falls der Link frisch ohne Parameter geöffnet wird
             if (!encryptedData) {
-                memberId = localStorage.getItem('mg_member_id') || '1049';
-                memberName = localStorage.getItem('mg_member_name') || 'Aktives Mitglied';
+                memberId = localStorage.getItem('mg_member_id') || '9999';
+                memberName = localStorage.getItem('mg_member_name') || 'Testmitglied';
             }
 
             // Werte in den Ausweis schreiben
             document.getElementById('display-member-id').textContent = memberId;
             document.getElementById('display-name').textContent = memberName;
-            document.getElementById('display-year').textContent = new Date().getFullYear();
             
             // URL-Leiste nach erfolgreichem Einlesen sofort bereinigen (schützt vor ungesicherten Bookmarks)
             if (encryptedData) {
