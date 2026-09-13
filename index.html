@@ -9,6 +9,9 @@
     <meta name="apple-mobile-web-app-title" content="Museumsverein">
     <meta name="theme-color" content="#1b4d3e">
     
+    <!-- CryptoJS für sichere, clientseitige AES-Entschlüsselung -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -51,7 +54,6 @@
             margin: 20px auto;
             padding: 0 15px;
         }
-        
         .card {
             background: #ffffff;
             border-radius: 10px;
@@ -160,7 +162,7 @@
         .pass-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
         .pass-row:last-child {
             margin-bottom: 0;
@@ -170,11 +172,11 @@
             font-size: 10px;
             text-transform: uppercase;
             color: #a3c1b5;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             letter-spacing: 0.5px;
         }
         .pass-field .pass-value {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: bold;
             color: #ffffff;
         }
@@ -247,18 +249,9 @@
             <button class="btn btn-gold" onclick="showInstallInstructions()">📲 Zum Startbildschirm hinzufügen</button>
         </div>
 
-        <!-- Optional: Aktuelle Veranstaltungen (Bei Bedarf einkommentieren oder füllen) -->
-        <!--
-        <div class="card">
-            <h2>Aktuelle Veranstaltungen</h2>
-            <p>Informationen zur kommenden <em>„Tour auf Von-Langen-Spuren“</em> am 4. Oktober.</p>
-            <a href="#" class="btn">Details ansehen</a>
-        </div>
-        -->
-
     </div>
 
-    <!-- MODAL: Der digitale Mitgliedsausweis (Wallet-Look mit Logo) -->
+    <!-- MODAL: Der digitale Mitgliedsausweis (Wallet-Look mit Name & ID) -->
     <div id="id-card-modal" class="modal-overlay" onclick="closeIdCardOnOutside(event)">
         <div class="wallet-pass">
             <div class="wallet-header">
@@ -270,13 +263,9 @@
             </div>
             <div class="wallet-body">
                 <div class="pass-row">
-                    <div class="pass-field">
-                        <label>Inhaber / Inhaberin</label>
-                        <div class="pass-value">Eckart Kornhuber</div>
-                    </div>
-                    <div class="pass-field" style="text-align: right;">
-                        <label>Status</label>
-                        <div class="pass-value pass-gold">Aktiv</div>
+                    <div class="pass-field" style="width: 100%;">
+                        <label>Inhaber / Mitglied</label>
+                        <div class="pass-value" id="display-name" style="font-size: 16px; color: #d4af37;">-</div>
                     </div>
                 </div>
                 <div class="pass-row">
@@ -285,17 +274,17 @@
                         <div class="pass-value" id="display-member-id">-</div>
                     </div>
                     <div class="pass-field" style="text-align: right;">
-                        <label>Gültigkeit</label>
-                        <div class="pass-value">Unbefristet</div>
+                        <label>Jahrgang / Saison</label>
+                        <div class="pass-value" id="display-year">-</div>
                     </div>
                 </div>
                 
-                <!-- Datenschutzkonformer QR-Code -->
-                <div style="text-align: center; margin-top: 15px; border-top: 1px solid rgba(212,175,55,0.3); padding-top: 12px;">
+                <!-- QR-Code verweist auf die Server-Prüfung per ID -->
+                <div style="text-align: center; margin-top: 12px; border-top: 1px solid rgba(212,175,55,0.3); padding-top: 12px;">
                     <div class="pass-qr-container">
-                        <img id="qr-code-img" src="" alt="Mitglieds-QR-Code" style="display: block; width: 100px; height: 100px;">
+                        <img id="qr-code-img" src="" alt="Mitglieds-QR-Code" style="display: block; width: 90px; height: 90px;">
                     </div>
-                    <div style="font-size: 9px; color: #c5d7d0; margin-top: 4px;">Anonymer Prüf-Code</div>
+                    <div style="font-size: 9px; color: #c5d7d0; margin-top: 4px;">QR-Code zur Einlassprüfung</div>
                 </div>
             </div>
             <div class="wallet-footer" style="display: flex; gap: 8px;">
@@ -315,29 +304,63 @@
     </div>
 
     <script>
+        // --- GEHEIMER VEREINSSCHLÜSSEL (Muss exakt mit dem Generator übereinstimmen) ---
+        const SECRET_PASSPHRASE = "MuseumsgesellschaftBraunlage2026SecureKey";
+
         window.addEventListener('DOMContentLoaded', (event) => {
             if (localStorage.getItem('push_enabled') === 'true') {
                 document.getElementById('push-card').classList.add('hidden');
             }
             
             const urlParams = new URLSearchParams(window.location.search);
-            let memberId = urlParams.get('id');
+            const encryptedData = urlParams.get('data');
             
-            if (memberId) {
-                localStorage.setItem('mg_member_id', memberId);
-            } else {
-                memberId = localStorage.getItem('mg_member_id') || '1049';
+            let memberId = "1049";
+            let memberName = "Mitglied";
+
+            if (encryptedData) {
+                try {
+                    // Daten mit dem Geheimschlüssel entschlüsseln
+                    const bytes = CryptoJS.AES.decrypt(encryptedData, SECRET_PASSPHRASE);
+                    const decryptedString = bytes.toString(CryptoJS.enc.Utf8);
+                    
+                    if (decryptedString) {
+                        // Format im String: id|vorname nachname
+                        const parts = decryptedString.split('|');
+                        if (parts.length >= 2) {
+                            memberId = parts[0];
+                            memberName = parts[1];
+                            
+                            // Sicher im lokalen Speicher des Handys ablegen, damit der Ausweis bleibt
+                            localStorage.setItem('mg_member_id', memberId);
+                            localStorage.setItem('mg_member_name', memberName);
+                        }
+                    }
+                } catch (e) {
+                    console.error("Entschlüsselungsfehler:", e);
+                }
             }
-            
+
+            // Fallback auf LocalStorage, falls der Link frisch ohne Parameter geöffnet wird
+            if (!encryptedData) {
+                memberId = localStorage.getItem('mg_member_id') || '1049';
+                memberName = localStorage.getItem('mg_member_name') || 'Aktives Mitglied';
+            }
+
+            // Werte in den Ausweis schreiben
             document.getElementById('display-member-id').textContent = memberId;
+            document.getElementById('display-name').textContent = memberName;
+            document.getElementById('display-year').textContent = new Date().getFullYear();
             
-            if (urlParams.get('id')) {
+            // URL-Leiste nach erfolgreichem Einlesen sofort bereinigen (schützt vor ungesicherten Bookmarks)
+            if (encryptedData) {
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
+            // QR-Code mit der Server-Prüfurl erzeugen (für die Rot/Grün-Prüfung)
             const qrImg = document.getElementById('qr-code-img');
-            const qrData = encodeURIComponent(`MG-${memberId}`);
-            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${qrData}`;
+            const targetCheckUrl = `https://museum-braunlage.de/check.php?id=${memberId}`;
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(targetCheckUrl)}`;
         });
 
         function openIdCard() {
@@ -355,7 +378,7 @@
         }
 
         function addToWalletSimulation() {
-            alert('Ausweis wurde für die Wallet aufbereitet. (Auf iOS/Android wird die PWA als Startbildschirm-Verknüpfung wie eine Wallet-Karte genutzt).');
+            alert('Ausweis wurde für die Wallet aufbereitet. (PWA-Verknüpfung auf dem Startbildschirm).');
         }
 
         function enablePush() {
@@ -369,9 +392,9 @@
             const textEl = document.getElementById('install-text');
             
             if (isIOS) {
-                textEl.innerHTML = "Tippen Sie unten in Safari auf das <strong>Teilen-Symbol</strong> (Quadrat mit Pfeil nach oben) und wählen Sie im Menü <strong>„Zum Home-Bildschirm“</strong> aus.";
+                textEl.innerHTML = "Tippen Sie unten in Safari auf das <strong>Teilen-Symbol</strong> und wählen Sie <strong>„Zum Home-Bildschirm“</strong> aus.";
             } else {
-                textEl.innerHTML = "Tippen Sie oben rechts auf die <strong>drei Punkte</strong> und wählen Sie <strong>„Zum Startbildschirm hinzufügen“</strong> oder „App installieren“ aus.";
+                textEl.innerHTML = "Tippen Sie oben rechts auf die <strong>drei Punkte</strong> und wählen Sie <strong>„Zum Startbildschirm hinzufügen“</strong> aus.";
             }
             document.getElementById('install-modal').style.display = 'flex';
         }
