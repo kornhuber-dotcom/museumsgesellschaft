@@ -9,8 +9,14 @@
     <meta name="apple-mobile-web-app-title" content="Museumsverein">
     <meta name="theme-color" content="#1b4d3e">
     
+    <!-- Verweis auf die Manifest-Datei für die PWA -->
+    <link rel="manifest" href="manifest.json">
+
     <!-- CryptoJS für sichere, clientseitige AES-Entschlüsselung -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+    <!-- OneSignal Web SDK für echte Push-Benachrichtigungen -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
     <style>
         body {
@@ -239,7 +245,7 @@
         <div class="card">
             <h2>Kontakt zum Vorstand</h2>
             <p>Haben Sie Fragen, Anregungen oder Anliegen an die Museumsgesellschaft?</p>
-            <a href="mailto:info@museumsgesellschaft-braunlage.de" class="btn">✉️ Nachricht an den Vorstand</a>
+            <a href="mailto:info@museum-braunlage.de" class="btn">✉️ Nachricht an den Vorstand</a>
         </div>
 
         <!-- Auf dem Smartphone speichern / Homescreen -->
@@ -304,6 +310,18 @@
     </div>
 
     <script>
+        // --- ONE-SIGNAL INITIALISIERUNG ---
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        window.OneSignalDeferred.push(async function(OneSignal) {
+            await OneSignal.init({
+                appId: "DEINE_ONESIGNAL_APP_ID_HIER_EINTRAGEN", // <-- HIER SPÄTER DEINE APP-ID EINTRAGEN
+                safari_web_id: "",
+                notifyButton: {
+                    enable: false,
+                },
+            });
+        });
+
         // --- GEHEIMER VEREINSSCHLÜSSEL (Muss exakt mit dem Generator übereinstimmen) ---
         const SECRET_PASSPHRASE = "MuseumsgesellschaftBraunlage2026SecureKey";
 
@@ -362,6 +380,21 @@
             qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(targetCheckUrl)}`;
         });
 
+        // Funktion beim Klick auf den Push-Button
+        async function enablePush() {
+            window.OneSignalDeferred = window.OneSignalDeferred || [];
+            window.OneSignalDeferred.push(async function(OneSignal) {
+                try {
+                    await OneSignal.Slidedown.promptPush();
+                    localStorage.setItem('push_enabled', 'true');
+                    document.getElementById('push-card').classList.add('hidden');
+                } catch (error) {
+                    console.error("Fehler beim Aktivieren von Push:", error);
+                    alert("Benachrichtigungen konnten nicht aktiviert werden. Bitte prüfen Sie die Browsereinstellungen.");
+                }
+            });
+        }
+
         function openIdCard() {
             document.getElementById('id-card-modal').style.display = 'flex';
         }
@@ -378,12 +411,6 @@
 
         function addToWalletSimulation() {
             alert('Ausweis wurde für die Wallet aufbereitet. (PWA-Verknüpfung auf dem Startbildschirm).');
-        }
-
-        function enablePush() {
-            localStorage.setItem('push_enabled', 'true');
-            alert('Push-Benachrichtigungen wurden erfolgreich aktiviert.');
-            document.getElementById('push-card').classList.add('hidden');
         }
 
         function showInstallInstructions() {
