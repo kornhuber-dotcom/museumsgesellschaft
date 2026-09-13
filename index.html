@@ -19,19 +19,14 @@
             padding: 20px 15px;
             border-bottom: 4px solid #d4af37;
         }
-        .header-logo {
-            background: #ffffff;
-            padding: 8px 12px;
+        .header-logo-img {
+            background: #ffffff; /* Hintergrund für das Logo */
+            padding: 8px;
             border-radius: 6px;
             display: inline-block;
             margin-bottom: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .header-logo span {
-            font-weight: bold;
-            color: #1b4d3e;
-            font-size: 16px;
-            letter-spacing: 1px;
+            max-width: 150px; /* Maximale Breite des Logos */
         }
         .header h1 {
             margin: 5px 0 0 0;
@@ -111,9 +106,9 @@
 <body>
 
     <div class="header">
-        <div class="header-logo">
-            <span>F / S &nbsp; 🏛️</span>
-        </div>
+        <!-- Das echte Logo wird hier eingebunden -->
+        <img src="logo.png" alt="Logo Museumsgesellschaft Braunlage" class="header-logo-img">
+        
         <h1>Museumsgesellschaft e. V. Braunlage</h1>
         <p>Mitgliederportal & Schnellinfo</p>
     </div>
