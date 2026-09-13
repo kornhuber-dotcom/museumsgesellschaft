@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -308,7 +309,7 @@
         </div>
     </div>
 
-    <!-- Modal für Termine & Veranstaltungen (Live aus Google Kalender via ICS) -->
+    <!-- Modal für Termine & Veranstaltungen -->
     <div id="calendar-modal" class="modal-overlay" onclick="closeCalendarOnOutside(event)">
         <div style="background:#fff; padding:20px; border-radius:12px; width:92%; max-width:360px; border:2px solid #1b4d3e; box-sizing: border-box;">
             <h3 style="color:#1b4d3e; margin-top:0; font-size:16px; margin-bottom: 12px;">Termine & Öffnungszeiten</h3>
@@ -393,26 +394,22 @@
             const targetCheckUrl = `https://museum-braunlage.de/check.php?id=${memberId}`;
             qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(targetCheckUrl)}`;
 
-            // Google Kalender ICS im Hintergrund laden
+            // Google Kalender laden
             loadGoogleCalendarEvents();
         });
 
-        // Funktion zum Laden und Parsen des Google-Kalenders über die iCal-Schnittstelle
         async function loadGoogleCalendarEvents() {
             const container = document.getElementById('calendar-events-container');
-            // Deine öffentliche Google Kalender ICS-URL
             const calendarId = '5438f77f82951d89b420bc1e1b546f0eb92f64650ce42ae607b5d8cee1609ae6@group.calendar.google.com';
-            // Wir leiten die Abfrage über einen CORS-Proxy, damit der Browser den Kalender direkt laden darf
+            // Wir nutzen einen alternativen, sehr stabilen CORS-Dienst (corsproxy.io)
             const icsUrl = `https://calendar.google.com/calendar/ical/${encodeURIComponent(calendarId)}/public/basic.ics`;
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(icsUrl)}`;
+            const proxyUrl = `https://corsproxy.io/?` + encodeURIComponent(icsUrl);
 
             try {
                 const response = await fetch(proxyUrl);
-                if (!response.ok) throw new Error('Netzwerkfehler beim Abrufen');
-                const data = await response.json();
-                const icsData = data.contents;
+                if (!response.ok) throw new Error('Netzwerkfehler');
+                const icsData = await response.text();
 
-                // iCal.js Daten parsen
                 const jcalData = ICAL.parse(icsData);
                 const comp = new ICAL.Component(jcalData);
                 const vevents = comp.getAllSubcomponents('vevent');
@@ -424,7 +421,6 @@
                     const event = new ICAL.Event(vevent);
                     const startDate = event.startDate.toJSDate();
                     
-                    // Nur zukünftige Termine (oder heute) anzeigen
                     if (startDate >= new Date(now.getFullYear(), now.getMonth(), now.getDate())) {
                         eventsList.push({
                             title: event.summary,
@@ -434,7 +430,6 @@
                     }
                 });
 
-                // Nach Datum sortieren (nächste Termine zuerst)
                 eventsList.sort((a, b) => a.date - b.date);
 
                 if (eventsList.length === 0) {
@@ -443,7 +438,6 @@
                 }
 
                 let htmlOutput = '';
-                // Die nächsten 5 Termine anzeigen
                 const nextEvents = eventsList.slice(0, 5);
 
                 nextEvents.forEach((ev, index) => {
@@ -455,7 +449,7 @@
                     const headerText = isNext ? 'Nächster Termin:' : 'Ausblick:';
 
                     htmlOutput += `
-                        <p style="${isNext ? 'margin-top: 0;' : 'margin-top: 12px; border-top: 1px solid #eee; pt: 8px;'}">
+                        <p style="${isNext ? 'margin-top: 0;' : 'margin-top: 12px; border-top: 1px solid #eee; padding-top: 8px;'}">
                             <strong>${headerText}</strong><br>
                             📅 <strong>${dateString}, ${timeString}</strong><br>
                             ${ev.title}
@@ -467,7 +461,12 @@
 
             } catch (error) {
                 console.error("Fehler beim Laden des Kalenders:", error);
-                container.innerHTML = '<p style="color: #c0392b; text-align: center;">Termine konnten im Moment nicht geladen werden.</p>';
+                // Fallback-Ansicht direkt im Modal, falls das Laden fehlschlägt
+                container.innerHTML = `
+                    <p style="color: #c0392b; text-align: center; font-size: 12px; margin-bottom: 10px;">Live-Abruf blockiert – hier die aktuellen Haupttermine:</p>
+                    <p style="margin-top: 0;"><strong>Nächster Termin:</strong><br>📅 <strong>17.09.2026, 18:30 Uhr</strong><br>Jahreshauptversammlung</p>
+                    <p style="margin-top: 12px; border-top: 1px solid #eee; padding-top: 8px;"><strong>Ausblick:</strong><br>📅 <strong>04.10.2026</strong><br>Busexkursion „Tour auf Von-Langen-Spuren“</p>
+                `;
             }
         }
 
@@ -499,7 +498,6 @@
             }
         }
 
-        // Steuerfunktionen für das Kalender-Modal
         function openCalendarModal() {
             document.getElementById('calendar-modal').style.display = 'flex';
         }
