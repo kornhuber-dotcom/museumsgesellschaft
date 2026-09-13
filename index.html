@@ -19,12 +19,19 @@
             padding: 20px 15px;
             border-bottom: 4px solid #d4af37;
         }
-        .header img {
-            max-height: 50px;
+        .header-logo {
             background: #ffffff;
-            padding: 5px;
-            border-radius: 4px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: inline-block;
             margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header-logo span {
+            font-weight: bold;
+            color: #1b4d3e;
+            font-size: 16px;
+            letter-spacing: 1px;
         }
         .header h1 {
             margin: 5px 0 0 0;
@@ -84,6 +91,7 @@
             border-radius: 6px;
             border: 1px solid #d4af37;
             margin-top: 10px;
+            margin-right: 5px;
             transition: background-color 0.2s;
         }
         .btn-gold {
@@ -99,6 +107,9 @@
 <body>
 
     <div class="header">
+        <div class="header-logo">
+            <span>F / S &nbsp; 🏛️</span>
+        </div>
         <h1>Museumsgesellschaft e. V. Braunlage</h1>
         <p>Mitgliederportal & Schnellinfo</p>
     </div>
@@ -112,19 +123,20 @@
             <button class="btn" onclick="alert('Push-Benachrichtigungen sind aktiv.')">Push-Benachrichtigungen aktivieren</button>
         </div>
 
-        <!-- Digitaler Mitgliedsausweis -->
+        <!-- Digitaler Mitgliedsausweis & Direkter Login -->
         <div class="card card-gold">
-            <h2>Digitaler Mitgliedsausweis</h2>
+            <h2>MGVO Mitglieder-Login</h2>
             <p>Status: <strong>Aktives Mitglied</strong><br>
-            Verein: Museumsgesellschaft e. V. Braunlage</p>
-            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" rel="noopener noreferrer" class="btn btn-gold">Mitgliedsstatus prüfen</a>
+            Direkter Zugang mit bereits hinterlegtem Benutzernamen.</p>
+            <!-- Direkter Login mit vorgegebener Mailadresse -->
+            <a href="https://www.mgvo.de/mgb/login/login.php?call_id=3d660e620b631ab2139df53ffecde062&mgb_id=kornhuber@t-online.de" target="_blank" rel="noopener noreferrer" class="btn btn-gold">🔑 Direkt-Login (App-Nutzer)</a>
         </div>
 
-        <!-- Mitglieder-Selbstauskunft -->
+        <!-- Mitglieder-Selbstauskunft (Zugang anfordern) -->
         <div class="card">
             <h2>Mitglieder-Selbstauskunft</h2>
-            <p>Hier können Sie Ihre bei uns geführten Daten einsehen und verwalten.</p>
-            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" rel="noopener noreferrer" class="btn">Zur Selbstauskunft</a>
+            <p>Falls Sie noch keine Zugangsdaten haben oder Ihre Daten anfordern möchten.</p>
+            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" rel="noopener noreferrer" class="btn">Zugang anfordern / Selbstauskunft</a>
         </div>
 
         <!-- Dokumente & Protokolle -->
