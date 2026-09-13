@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mitgliedsausweis - Museumsgesellschaft e. V. Braunlage</title>
-    <!-- PWA Meta Tags für Apple & Android -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Museumsverein">
@@ -53,12 +52,12 @@
             padding: 0 15px;
         }
         
-        /* Wallet-Pass Design im Tannengrün-Gold Look */
+        /* Wallet-Pass im Tannengrün-Gold Look */
         .wallet-pass {
-            background: linear-gradient(135deg, #1b4d3e 0%, #123329 100%);
+            background-color: #1b4d3e;
             color: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             margin-bottom: 20px;
             border: 2px solid #d4af37;
@@ -83,17 +82,21 @@
         .pass-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
+        }
+        .pass-row:last-child {
+            margin-bottom: 0;
         }
         .pass-field label {
             display: block;
             font-size: 10px;
             text-transform: uppercase;
             color: #a3c1b5;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
         }
-        .pass-field value, .pass-field div {
-            font-size: 16px;
+        .pass-field .pass-value {
+            font-size: 15px;
             font-weight: bold;
             color: #ffffff;
         }
@@ -101,12 +104,19 @@
             color: #d4af37 !important;
         }
         .wallet-footer {
-            background: rgba(0, 0, 0, 0.2);
+            background-color: rgba(0, 0, 0, 0.15);
             padding: 12px 20px;
             text-align: center;
-            font-size: 11px;
-            color: #c5d7d0;
             border-top: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        /* QR-Code Bereich auf der Karte */
+        .pass-qr-container {
+            background: #ffffff;
+            padding: 10px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 10px;
         }
 
         /* Normale Karten für Menüpunkte */
@@ -164,7 +174,6 @@
 <body>
 
     <div class="header">
-        <!-- Logo der Museumsgesellschaft -->
         <img src="logo.png" alt="Logo Museumsgesellschaft e. V. Braunlage" class="header-logo-img">
         <h1>Museumsgesellschaft e. V. Braunlage</h1>
         <p>Digitaler Mitgliedsausweis</p>
@@ -172,32 +181,47 @@
 
     <div class="container">
 
-        <!-- Der digitale Mitgliedsausweis im Wallet-Pass-Format -->
+        <!-- Push-Benachrichtigungen -->
+        <div class="card" id="push-card">
+            <h2>Eilmeldungen & Push</h2>
+            <p>Erhalten Sie wichtige Vereinsinformationen und Erinnerungen direkt per Benachrichtigung.</p>
+            <button class="btn" onclick="enablePush()">Push-Benachrichtigungen aktivieren</button>
+        </div>
+
+        <!-- Mitgliedsausweis mit dynamischer ID & datenschutzkonformem QR-Code -->
         <div class="wallet-pass">
             <div class="wallet-header">
                 <span>Mitgliedschaft</span>
-                <span style="font-size: 14px;">🏛️</span>
+                <span>🏛️</span>
             </div>
             <div class="wallet-body">
                 <div class="pass-row">
                     <div class="pass-field">
                         <label>Inhaber / Inhaberin</label>
-                        <div>Eckart Kornhuber</div>
+                        <div class="pass-value">Eckart Kornhuber</div>
                     </div>
                     <div class="pass-field" style="text-align: right;">
                         <label>Status</label>
-                        <div class="pass-gold">Aktiv</div>
+                        <div class="pass-value pass-gold">Aktiv</div>
                     </div>
                 </div>
-                <div class="pass-row" style="margin-bottom: 0;">
+                <div class="pass-row">
                     <div class="pass-field">
-                        <label>Kategorie</label>
-                        <div>Ordentliches Mitglied</div>
+                        <label>Mitglieds-ID</label>
+                        <div class="pass-value" id="display-member-id">-</div>
                     </div>
                     <div class="pass-field" style="text-align: right;">
                         <label>Gültigkeit</label>
-                        <div>Unbefristet</div>
+                        <div class="pass-value">Unbefristet</div>
                     </div>
+                </div>
+                
+                <!-- Datenschutzkonformer QR-Code (enthält nur die ID) -->
+                <div style="text-align: center; margin-top: 15px; border-top: 1px solid rgba(212,175,55,0.3); padding-top: 15px;">
+                    <div class="pass-qr-container">
+                        <img id="qr-code-img" src="" alt="Mitglieds-QR-Code" style="display: block; width: 120px; height: 120px;">
+                    </div>
+                    <div style="font-size: 10px; color: #c5d7d0; margin-top: 5px;">Anonymer Prüf-Code</div>
                 </div>
             </div>
             <div class="wallet-footer">
@@ -205,10 +229,10 @@
             </div>
         </div>
 
-        <!-- Anleitung zum Speichern auf dem Homescreen (Wallet-Ersatz) -->
+        <!-- Auf dem Smartphone speichern -->
         <div class="card" id="install-card">
             <h2>Auf dem Smartphone speichern</h2>
-            <p>Fügen Sie diese App zu Ihrem Startbildschirm hinzu, um den Ausweis wie eine Wallet-Karte immer griffbereit zu haben – auch ohne Internet.</p>
+            <p>Fügen Sie diese App zu Ihrem Startbildschirm hinzu, um den Ausweis immer griffbereit zu haben.</p>
             <button class="btn btn-gold" onclick="showInstallInstructions()">📲 Zum Startbildschirm hinzufügen</button>
         </div>
 
@@ -219,18 +243,18 @@
             <a href="#" onclick="alert('Veranstaltungsdetails werden geladen...'); return false;" class="btn">Details ansehen</a>
         </div>
 
-        <!-- Dokumente & Protokolle -->
+        <!-- Dokumente & Protokolle (Verweis auf den geschützten MGVO-Mitgliederbereich) -->
         <div class="card">
             <h2>Dokumente & Protokolle</h2>
-            <p>Einsicht in Satzungen und Vereinsberichte.</p>
-            <a href="#" onclick="alert('Dokumentenordner wird geladen...'); return false;" class="btn">Ordner öffnen</a>
+            <p>Einsicht in Satzungen, Protokolle und Vereinsberichte im geschützten Mitgliederbereich.</p>
+            <a href="https://www.mgvo.de/mgb/login/login.php?call_id=3d660e620b631ab2139df53ffecde062&mgb_id=kornhuber@t-online.de" target="_blank" rel="noopener noreferrer" class="btn">📂 Zum Mitgliederbereich & Dokumenten</a>
         </div>
 
     </div>
 
-    <!-- Einfaches Info-Fenster für die Anleitung -->
+    <!-- Info-Modal für Installationsanleitung -->
     <div id="install-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; justify-content:center; align-items:center;" onclick="closeInstallModal(event)">
-        <div style="background:#fff; padding:20px; border-radius:12px; width:85%; max-width:320px; border:2px solid #d4af37;" id="modal-box">
+        <div style="background:#fff; padding:20px; border-radius:12px; width:85%; max-width:320px; border:2px solid #d4af37;">
             <h3 style="color:#1b4d3e; margin-top:0;">Ausweis speichern</h3>
             <p id="install-text" style="font-size:13px; color:#444; line-height:1.5;"></p>
             <button class="btn" onclick="document.getElementById('install-modal').style.display='none'" style="margin-top:15px;">Verstanden</button>
@@ -238,6 +262,41 @@
     </div>
 
     <script>
+        // Beim Start: ID aus URL auslesen, speichern, QR-Code generieren und Push prüfen
+        window.addEventListener('DOMContentLoaded', (event) => {
+            if (localStorage.getItem('push_enabled') === 'true') {
+                document.getElementById('push-card').classList.add('hidden');
+            }
+            
+            // ID aus der URL abgreifen (z. B. index.html?id=1049) oder aus dem lokalen Speicher laden
+            const urlParams = new URLSearchParams(window.location.search);
+            let memberId = urlParams.get('id');
+            
+            if (memberId) {
+                localStorage.setItem('mg_member_id', memberId);
+            } else {
+                memberId = localStorage.getItem('mg_member_id') || '1049'; // Fallback falls keine ID übergeben
+            }
+            
+            document.getElementById('display-member-id').textContent = memberId;
+            
+            // URL bereinigen, damit die ID nicht unnötig in der Adresszeile steht
+            if (urlParams.get('id')) {
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
+            // QR-Code mit der reinen ID generieren (datenschutzkonform)
+            const qrImg = document.getElementById('qr-code-img');
+            const qrData = encodeURIComponent(`MG-${memberId}`);
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${qrData}`;
+        });
+
+        function enablePush() {
+            localStorage.setItem('push_enabled', 'true');
+            alert('Push-Benachrichtigungen wurden erfolgreich aktiviert.');
+            document.getElementById('push-card').classList.add('hidden');
+        }
+
         function showInstallInstructions() {
             const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             const textEl = document.getElementById('install-text');
