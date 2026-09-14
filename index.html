@@ -487,6 +487,7 @@
                     const memberId = parts[0];
                     const memberName = parts[1];
 
+                    // Daten direkt für die Sitzung/Gerät setzen
                     localStorage.setItem('mg_id', memberId);
                     localStorage.setItem('mg_name', memberName);
                     updateUI(memberId, memberName);
@@ -497,17 +498,14 @@
             }
         }
 
+        // Falls doch mal kein Parameter da ist (Fallback auf lokale Speicherdaten)
         const savedId = localStorage.getItem('mg_id');
         const savedName = localStorage.getItem('mg_name');
 
         if (savedId && savedName) {
             updateUI(savedId, savedName);
         } else {
-            const defaultId = "9999";
-            const defaultName = "Museumsgesellschaft";
-            localStorage.setItem('mg_id', defaultId);
-            localStorage.setItem('mg_name', defaultName);
-            updateUI(defaultId, defaultName);
+            document.getElementById('welcomeArea.innerHTML = `Bitte öffnen Sie das Portal über Ihren persönlichen Link.`;
         }
     }
 
@@ -534,8 +532,8 @@
 
     function sendContactMail() {
         const msg = encodeURIComponent(document.getElementById('contactMessage').value);
-        const name = localStorage.getItem('mg_name') || 'Unbekannt';
-        const id = localStorage.getItem('mg_id') || 'Unbekannt';
+        const name = localStorage.getItem('mg_name') || 'Mitglied';
+        const id = localStorage.getItem('mg_id') || '';
         window.location.href = `mailto:vorstand@museumsgesellschaft-braunlage.de?subject=Anfrage aus Mitgliederportal von ${name} (ID: ${id})&body=${msg}`;
         closeModal('contactModal');
     }
