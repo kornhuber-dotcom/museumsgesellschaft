@@ -105,7 +105,6 @@
             color: var(--primary);
         }
 
-        /* Kachel-Design mit dem linken grünen Rand */
         .card {
             background: var(--card-bg);
             border-radius: 12px;
@@ -129,7 +128,6 @@
             line-height: 1.4;
         }
 
-        /* Hervorgehobene Kachel (Ausweis) behält den goldenen Rand links */
         .card-accent {
             background: linear-gradient(135deg, #1b4d3e 0%, #12352a 100%);
             border: none;
@@ -329,8 +327,8 @@
             <h3>Digitaler Mitgliedsausweis</h3>
             <div style="background: var(--primary); color: white; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 15px;">
                 <h4 style="margin:0 0 10px 0; color: var(--accent);">Museumsgesellschaft Braunlage</h4>
-                <p id="badgeName" style="font-size: 18px; font-weight: bold; margin: 5px 0;">Testbenutzer</p>
-                <p id="badgeId" style="font-size: 14px; margin: 0; opacity: 0.8;">Mitglieds-ID: 9999</p>
+                <p id="badgeName" style="font-size: 18px; font-weight: bold; margin: 5px 0;"></p>
+                <p id="badgeId" style="font-size: 14px; margin: 0; opacity: 0.8;"></p>
             </div>
             <button class="btn" onclick="closeModal('badgeModal')">Schließen</button>
         </div>
@@ -405,7 +403,6 @@
             if (savedId && savedName) {
                 updateUI(savedId, savedName);
             } else {
-                // Automatischer Fallback für Testbenutzer
                 const defaultId = "9999";
                 const defaultName = "Testbenutzer";
                 sessionStorage.setItem('mg_id', defaultId);
