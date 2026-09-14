@@ -363,7 +363,7 @@
         <div class="card">
             <h3>Offizielle Homepage</h3>
             <p>Besuchen Sie unsere Hauptseite für aktuelle Ausstellungen, Berichte und das Museumsarchiv.</p>
-            <a href="https://museumsgesellschaft-braunlage.de" class="btn btn-secondary" target="_blank">🌐 Zur Website museum-braunlage.de</a>
+            <a href="https://museum-braunlage.de" class="btn btn-secondary" target="_blank">🌐 Zur Website museum-braunlage.de</a>
         </div>
 
         <!-- 7. Kontakt zum Vorstand -->
@@ -422,7 +422,7 @@
 
     <div id="calendarModal" class="modal">
         <div class="modal-content">
-            <h3>Termine &amp; Exkursionen</h3>
+            <h3>Termine &amp; Öffnungszeiten</h3>
             <p style="font-size: 14px; line-height: 1.5;">
                 <strong>04. Oktober 2026:</strong> Bus-Exkursion „Auf den Spuren von Johann Georg von Langen“ zum Erich-Mäder Glasmuseum (Grünenplan) und Porzellanmanufaktur Fürstenberg.
             </p>
@@ -502,7 +502,7 @@
             document.getElementById('badgeName').innerText = name;
             document.getElementById('badgeId').innerText = id;
             
-            // Exakte Prüf-URL ohne Namen: https://museum-braunlage.de/check.php?id=ID
+            // Exakter QR-Code Link: https://museum-braunlage.de/check.php?id=ID
             const checkUrl = `https://museum-braunlage.de/check.php?id=${id}`;
             const qrText = encodeURIComponent(checkUrl);
             document.getElementById('badgeQrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrText}`;
