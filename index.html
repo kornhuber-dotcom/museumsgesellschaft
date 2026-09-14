@@ -2,482 +2,516 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mitgliederportal – Museumsgesellschaft e. V. Braunlage</title>
-    
-    <!-- PWA Meta Tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mitgliederportal - Museumsgesellschaft e. V. Braunlage</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Museumsverein">
     <meta name="theme-color" content="#1b4d3e">
     
-    <!-- Manifest & Push Integration -->
+    <!-- Verweis auf die Manifest-Datei für die PWA -->
     <link rel="manifest" href="manifest.json">
-    
-    <!-- CryptoJS für sichere, clientseitige ID-Verschlüsselung -->
+
+    <!-- CryptoJS für sichere, clientseitige AES-Entschlüsselung -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
-    <!-- OneSignal SDK -->
+    <!-- OneSignal Web SDK für echte Push-Benachrichtigungen -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-    <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      window.OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.init({
-          appId: "HIER_ONESIGNAL_APP_ID_EINTRAGEN",
-          safari_web_id: "HIER_SAFARI_WEB_ID_EINTRAGEN",
-          notifyButton: { enable: true },
-        });
-      });
-    </script>
 
     <style>
-        :root {
-            --primary: #1b4d3e;
-            --primary-dark: #12352a;
-            --accent: #d4af37;
-            --bg-color: #f4f6f5;
-            --card-bg: #ffffff;
-            --text-main: #2c3e50;
-            --text-muted: #7f8c8d;
-            --border-radius: 12px;
-        }
-
-        * {
-            box-sizing: border-box;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f6f4;
+            color: #222222;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
-
-        body {
-            background-color: var(--primary);
-            color: var(--text-main);
-            padding: 16px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            background: var(--bg-color);
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        header {
-            background: var(--primary);
-            color: white;
-            padding: 24px 20px;
+        .header {
+            background-color: #1b4d3e;
+            color: #ffffff;
             text-align: center;
+            padding: 25px 15px;
+            border-bottom: 4px solid #d4af37;
         }
-
-        .logo-container {
-            background: white;
-            padding: 8px 16px;
+        .header-logo-img {
+            background: #ffffff;
+            padding: 8px;
             border-radius: 8px;
             display: inline-block;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            max-width: 120px;
         }
-
-        .logo-container img {
-            height: 36px;
-            display: block;
-        }
-
-        header h1 {
-            font-size: 1.25rem;
-            font-weight: 600;
+        .header h1 {
+            margin: 5px 0 0 0;
+            font-size: 18px;
             color: #ffffff;
-            margin-bottom: 4px;
+            font-weight: 600;
         }
-
-        header p {
-            font-size: 0.85rem;
-            color: var(--accent);
-            font-weight: 500;
+        .header p {
+            margin: 5px 0 0 0;
+            font-size: 13px;
+            color: #d4af37;
             letter-spacing: 0.5px;
         }
-
-        .content {
-            padding: 20px;
-            flex-grow: 1;
+        .container {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 0 15px;
         }
-
         .card {
-            background: var(--card-bg);
-            border: 1px solid #e1e8ed;
+            background: #ffffff;
             border-radius: 10px;
-            padding: 16px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid #1b4d3e;
+            border-top: 1px solid #e0e0e0;
+            border-right: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
         }
-
-        .card-highlight {
-            border: 2px solid var(--accent);
-            background: linear-gradient(135deg, #ffffff 0%, #fcfbf7 100%);
+        .card-gold {
+            background: linear-gradient(135deg, #1b4d3e 0%, #123329 100%);
+            color: #ffffff;
+            border-left: 5px solid #d4af37;
+            border-top: 1px solid #d4af37;
+            border-right: 1px solid #d4af37;
+            border-bottom: 1px solid #d4af37;
         }
-
         .card h2 {
-            font-size: 1rem;
-            color: var(--primary);
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            margin-top: 0;
+            font-size: 16px;
+            color: #1b4d3e;
         }
-
+        .card-gold h2 {
+            color: #d4af37;
+        }
         .card p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 12px;
+            font-size: 13px;
             line-height: 1.4;
+            color: #555555;
+            margin-bottom: 12px;
         }
-
+        .card-gold p {
+            color: #e0e0e0;
+        }
         .btn {
             display: block;
             width: 100%;
+            box-sizing: border-box;
+            background-color: #1b4d3e;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
             padding: 12px;
             text-align: center;
-            background: var(--primary);
-            color: white;
             text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            font-size: 0.90rem;
-            border: none;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn:active { background: var(--primary-dark); }
-
-        .btn-accent {
-            background: var(--accent);
-            color: #1b4d3e;
-            font-weight: 600;
-        }
-        .btn-accent:active { background: #b8972f; }
-
-        /* MODAL / POP-UP FÜR DEN MITGLIEDSAUSWEIS (Exakter Look vom Screenshot) */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 16px;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .id-card-modal {
-            background: var(--primary);
-            color: white;
-            width: 100%;
-            max-width: 400px;
-            border-radius: 14px;
-            border: 2px solid var(--accent);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .id-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 16px;
-            border-bottom: 1px solid rgba(255,255,255,0.15);
-            background: rgba(0,0,0,0.1);
-        }
-
-        .id-header-logo-box {
-            background: white;
-            padding: 4px 8px;
             border-radius: 6px;
-            display: flex;
+            border: 1px solid #d4af37;
+            transition: opacity 0.2s;
+            cursor: pointer;
+        }
+        .btn-gold {
+            background-color: #d4af37;
+            color: #1b4d3e;
+            border: 1px solid #ffffff;
+        }
+        .btn:hover {
+            opacity: 0.95;
+        }
+        .hidden {
+            display: none;
+        }
+
+        /* Modal-Overlay für den digitalen Ausweis im Wallet-Look */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
             align-items: center;
+            padding: 15px;
+            box-sizing: border-box;
         }
-
-        .id-header-logo-box img {
-            height: 24px;
-            display: block;
+        .wallet-pass {
+            background-color: #1b4d3e;
+            color: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 360px;
+            overflow: hidden;
+            border: 2px solid #d4af37;
+            animation: scaleIn 0.25s ease;
         }
-
-        .id-header-title {
-            font-size: 0.8rem;
-            color: #e2e8f0;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
-
-        .id-body {
-            padding: 20px 16px;
-        }
-
-        .id-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: var(--accent);
-            margin-bottom: 2px;
-        }
-
-        .id-holder-name {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: white;
-            margin-bottom: 16px;
-        }
-
-        .id-row {
+        .wallet-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.1);
         }
-
-        .id-val {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: white;
+        .wallet-body {
+            padding: 20px;
         }
-
-        .id-qr-container {
-            text-align: center;
-            background: white;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 8px;
-        }
-
-        .id-qr-container img {
-            width: 130px;
-            height: 130px;
-            display: block;
-            margin: 0 auto;
-        }
-
-        .id-qr-caption {
-            text-align: center;
-            font-size: 0.72rem;
-            color: #cbd5e1;
-            margin-bottom: 16px;
-        }
-
-        .id-footer {
-            padding: 12px 16px;
-            background: rgba(0,0,0,0.2);
+        .pass-row {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
         }
-
-        .btn-close {
-            background: #4b5563;
-            color: white;
-            border: none;
-            padding: 10px 24px;
+        .pass-row:last-child {
+            margin-bottom: 0;
+        }
+        .pass-field label {
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #a3c1b5;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+        .pass-field .pass-value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .pass-gold {
+            color: #d4af37 !important;
+        }
+        .pass-qr-container {
+            background: #ffffff;
+            padding: 8px;
             border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            width: 100%;
+            display: inline-block;
+        }
+        .wallet-footer {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 12px 20px;
             text-align: center;
-        }
-        .btn-close:active { background: #374151; }
-
-        /* SEPA & Info Boxen */
-        .notice-box {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 10px 12px;
-            font-size: 0.78rem;
-            color: #92400e;
-            border-radius: 4px;
-            margin-top: 10px;
-            line-height: 1.4;
-        }
-
-        .info-list {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-            padding-left: 16px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 16px;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            border-top: 1px solid #e1e8ed;
-            background: #fafbfc;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
         }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <header>
-            <div class="logo-container">
-                <img src="logo.png" alt="Museumsgesellschaft Braunlage" onerror="this.onerror=null; this.src='https://museum-braunlage.de/images/logo.png';">
-            </div>
-            <h1>Museumsgesellschaft e. V. Braunlage</h1>
-            <p>Mitgliederportal & Services</p>
-        </header>
-
-        <div class="content">
-            
-            <!-- Eilmeldungen & Push -->
-            <div class="card">
-                <h2>Eilmeldungen & Push</h2>
-                <p>Erhalten Sie wichtige Vereinsinformationen direkt per Benachrichtigung.</p>
-                <button class="btn" onclick="OneSignal.Slidedown.promptPush()">Push-Benachrichtigungen aktivieren</button>
-            </div>
-
-            <!-- Digitaler Mitgliedsausweis (Öffnet das Pop-up) -->
-            <div class="card card-highlight">
-                <h2>Digitaler Mitgliedsausweis</h2>
-                <p>Ihr offizieller Vereinsausweis im modernen Wallet-Format – jederzeit griffbereit.</p>
-                <button class="btn btn-accent" onclick="openIdCard()">💳 Ausweis anzeigen</button>
-            </div>
-
-            <!-- Öffnungszeiten & Termine (Wieder da!) -->
-            <div class="card">
-                <h2>🏛️ Öffnungszeiten & Termine</h2>
-                <p>Besuchen Sie unser FIS Heimat- und Skimuseum:</p>
-                <ul class="info-list">
-                    <li><strong>Öffnungszeiten:</strong> Di. – So. von 14:00 bis 17:00 Uhr</li>
-                    <li><strong>Nächster Termin:</strong> Jahreshauptversammlung am 17.09.2026 in der Harzer Scheune (Hapimag Resort)</li>
-                </ul>
-            </div>
-
-            <!-- Mitglieder-Login & Datenpflege -->
-            <div class="card">
-                <h2>Mitglieder-Login & Datenpflege</h2>
-                <p>Mit Passworteingabe anmelden, um persönliche Daten einzusehen oder zu ändern und Dokumente abzurufen.</p>
-                <a href="https://app.mgvo.de/login" target="_blank" rel="noopener noreferrer" class="btn">Zum Login & Datenänderung</a>
-            </div>
-
-            <!-- Zugangscode anfordern -->
-            <div class="card">
-                <h2>Zugangscode anfordern</h2>
-                <p>Falls Sie noch kein Passwort haben oder Ihren Zugangscode neu anfordern möchten.</p>
-                <button class="btn" onclick="alert('Zugangscode wurde angefordert.')">🔑 Neuen Zugangscode anfordern</button>
-            </div>
-
-            <!-- Selbstauskunft & SEPA-Hinweis -->
-            <div class="card">
-                <h2>Selbstauskunft & Datenblatt</h2>
-                <p>Zugriff auf Ihr persönliches Mitgliederdatenblatt und Ihre Kontoübersicht.</p>
-                <button class="btn" onclick="alert('Mitgliederdatenblatt wird generiert...')">📄 Mein Datenblatt & Konto</button>
-                <div class="notice-box">
-                    ℹ️ <strong>SEPA-Hinweis:</strong> Bankdatenänderungen (IBAN) erfordern aus rechtlichen Gründen ein unterschriebenes Mandat und die Freigabe durch den Vorstand.
-                </div>
-            </div>
-
-            <!-- Kontakt zum Vorstand -->
-            <div class="card">
-                <h2>Kontakt zum Vorstand</h2>
-                <p>Haben Sie Fragen, Anregungen oder Anliegen an die Museumsgesellschaft?</p>
-                <a href="mailto:kontakt@museum-braunlage.de" class="btn">✉️ Nachricht an den Vorstand</a>
-            </div>
-
-            <!-- Link zur Homepage -->
-            <div style="text-align: center; margin: 15px 0 5px 0;">
-                <a href="https://museum-braunlage.de" target="_blank" rel="noopener noreferrer" style="color: var(--primary); font-size: 0.85rem; font-weight: 600; text-decoration: none;">🌐 Besuche unsere Homepage (museum-braunlage.de) ↗</a>
-            </div>
-
-        </div>
-
-        <footer>
-            &copy; 2026 Museumsgesellschaft e. V. Braunlage<br>PWA Version 1.2
-        </footer>
+    <div class="header">
+        <img src="logo.png" alt="Logo Museumsgesellschaft e. V. Braunlage" class="header-logo-img">
+        <h1>Museumsgesellschaft e. V. Braunlage</h1>
+        <p>Mitgliederportal & Services</p>
     </div>
 
-    <!-- POP-UP MODAL FÜR DEN AUSWEIS (Exakt wie auf deinem Screenshot) -->
-    <div id="idCardModal" class="modal-overlay" onclick="outsideClose(event)">
-        <div class="id-card-modal">
-            <div class="id-header">
-                <div class="id-header-logo-box">
-                    <img src="logo.png" alt="Logo" onerror="this.src='https://museum-braunlage.de/images/logo.png';">
-                    <span style="font-weight: bold; color: #1b4d3e; font-size: 0.75rem; margin-left: 4px;">Museumsgesellschaft</span>
-                </div>
-                <div class="id-header-title">Mitgliedsausweis</div>
-            </div>
-            <div class="id-body">
-                <div class="id-label">Inhaber / Mitglied</div>
-                <div class="id-holder-name" id="modalName">Testmitglied</div>
-                
-                <div class="id-row">
-                    <div>
-                        <div class="id-label">Mitglieds-ID</div>
-                        <div class="id-val" id="modalId">9999</div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div class="id-label">Gültig bis</div>
-                        <div class="id-val" id="modalValid">31.12.2026</div>
-                    </div>
-                </div>
+    <div class="container">
 
-                <div class="id-qr-container">
-                    <img id="modalQrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=9999" alt="QR-Code">
+        <!-- Push-Benachrichtigungen -->
+        <div class="card" id="push-card">
+            <h2>Eilmeldungen & Push</h2>
+            <p>Erhalten Sie wichtige Vereinsinformationen direkt per Benachrichtigung.</p>
+            <button class="btn" onclick="enablePush()">Push-Benachrichtigungen aktivieren</button>
+        </div>
+
+        <!-- Kachel: Digitaler Mitgliedsausweis -->
+        <div class="card card-gold">
+            <h2>Digitaler Mitgliedsausweis</h2>
+            <p>Ihr offizieller Vereinsausweis im modernen Wallet-Format – jederzeit griffbereit.</p>
+            <button class="btn btn-gold" onclick="openIdCard()">🪪 Ausweis anzeigen</button>
+        </div>
+
+        <!-- Kachel für Termine & Öffnungszeiten -->
+        <div class="card">
+            <h2>Kalender & Öffnungszeiten</h2>
+            <p>Aktuelle Termine, Exkursionen und Öffnungszeiten auf einen Blick.</p>
+            <button class="btn" onclick="openCalendarModal()">📅 Termine & Öffnungszeiten ansehen</button>
+        </div>
+
+        <!-- Kachel: Mitglieder-Login (Daten ändern & Passworteingabe) -->
+        <div class="card">
+            <h2>Mitglieder-Login & Datenpflege</h2>
+            <p>Mit Passworteingabe anmelden, um persönliche Daten einzusehen oder zu ändern und Dokumente abzurufen.</p>
+            <a href="https://www.mgvo.de/mgb/login/login.php?call_id=3d660e620b631ab2139df53ffecde062&mgb_id=kornhuber@t-online.de" target="_blank" rel="noopener noreferrer" class="btn">🔑 Zum Login & Datenänderung</a>
+            <p style="font-size: 11px; color: #777; text-align: center; margin-top: 8px; margin-bottom: 0;">(Öffnet im Browser)</p>
+        </div>
+
+        <!-- Kachel: Neuen Zugangscode anfordern -->
+        <div class="card">
+            <h2>Zugangscode anfordern</h2>
+            <p>Falls Sie noch kein Passwort haben oder Ihren Zugangscode neu anfordern möchten.</p>
+            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" rel="noopener noreferrer" class="btn">✉️ Neuen Zugangscode anfordern</a>
+        </div>
+
+        <!-- Kachel: Kontakt zum Vorstand -->
+        <div class="card">
+            <h2>Kontakt zum Vorstand</h2>
+            <p>Haben Sie Fragen, Anregungen oder Anliegen an die Museumsgesellschaft?</p>
+            <a href="mailto:info@museum-braunlage.de" class="btn">✉️ Nachricht an den Vorstand</a>
+        </div>
+
+        <!-- Auf dem Smartphone speichern / Homescreen -->
+        <div class="card" id="install-card">
+            <h2>Portal auf Smartphone speichern</h2>
+            <p>Fügen Sie diese App zu Ihrem Startbildschirm hinzu – auch offline verfügbar.</p>
+            <button class="btn btn-gold" onclick="showInstallInstructions()">📲 Zum Startbildschirm hinzufügen</button>
+        </div>
+
+    </div>
+
+    <!-- MODAL: Der digitale Mitgliedsausweis -->
+    <div id="id-card-modal" class="modal-overlay" onclick="closeIdCardOnOutside(event)">
+        <div class="wallet-pass">
+            <div class="wallet-header">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <img src="logo.png" alt="Logo" style="width: 28px; height: 28px; background: #fff; padding: 2px; border-radius: 4px;">
+                    <span style="font-size: 11px; letter-spacing: 0.5px; color: #d4af37; font-weight: bold;">Museumsgesellschaft</span>
                 </div>
-                <div class="id-qr-caption">QR-Code zur Einlassprüfung</div>
+                <span style="font-size: 12px; color: #a3c1b5;">Mitgliedsausweis</span>
             </div>
-            <div class="id-footer">
-                <button class="btn-close" onclick="closeIdCard()">Schließen</button>
+            <div class="wallet-body">
+                <div class="pass-row">
+                    <div class="pass-field" style="width: 100%;">
+                        <label>Inhaber / Mitglied</label>
+                        <div class="pass-value" id="display-name" style="font-size: 16px; color: #d4af37;">-</div>
+                    </div>
+                </div>
+                <div class="pass-row">
+                    <div class="pass-field">
+                        <label>Mitglieds-ID</label>
+                        <div class="pass-value" id="display-member-id">-</div>
+                    </div>
+                    <div class="pass-field" style="text-align: right;">
+                        <label>Gültig bis</label>
+                        <div class="pass-value" style="color: #d4af37;">31.12.2026</div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 12px; border-top: 1px solid rgba(212,175,55,0.3); padding-top: 12px;">
+                    <div class="pass-qr-container">
+                        <img id="qr-code-img" src="" alt="Mitglieds-QR-Code" style="display: block; width: 90px; height: 90px;">
+                    </div>
+                    <div style="font-size: 9px; color: #c5d7d0; margin-top: 4px;">QR-Code zur Einlassprüfung</div>
+                </div>
             </div>
+            <div class="wallet-footer">
+                <button class="btn" onclick="closeIdCard()" style="font-size: 12px; padding: 8px; background: #555; border-color: #777; width: 100%;">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal für Termine & Öffnungszeiten -->
+    <div id="calendar-modal" class="modal-overlay" onclick="closeCalendarOnOutside(event)">
+        <div style="background:#fff; padding:16px; border-radius:12px; width:92%; max-width:360px; border:2px solid #1b4d3e; box-sizing: border-box; max-height: 90vh; display: flex; flex-direction: column;">
+            <h3 style="color:#1b4d3e; margin-top:0; font-size:15px; margin-bottom: 4px;">Termine & Öffnungszeiten</h3>
+            
+            <!-- Öffnungszeiten-Hinweis -->
+            <div style="background: #f4f6f4; border-left: 3px solid #1b4d3e; padding: 6px 8px; font-size: 11px; color: #333; margin-bottom: 8px; line-height: 1.3;">
+                <strong>Öffnungszeiten:</strong><br>
+                Di. & Do. 10–12 Uhr sowie während der von-Langen-Ausstellung bis 10.10. auch Sa. 11–15 Uhr.
+            </div>
+
+            <p style="font-size: 11px; color: #c0392b; margin-top: 0; margin-bottom: 6px; font-weight: bold;">Live-Abruf blockiert – hier die aktuellen Haupttermine:</p>
+            
+            <div id="calendar-events-container" style="font-size: 12px; color: #444; line-height: 1.4; margin-bottom: 10px; overflow-y: auto; flex-grow: 1;">
+                <!-- Termine werden hier direkt geladen -->
+            </div>
+
+            <button class="btn" onclick="closeCalendarModal()" style="padding: 8px; background: #1b4d3e; border-color: #d4af37; font-size: 12px;">Schließen</button>
+        </div>
+    </div>
+
+    <!-- Info-Modal für Installationsanleitung -->
+    <div id="install-modal" class="modal-overlay" onclick="closeInstallModal(event)">
+        <div style="background:#fff; padding:20px; border-radius:12px; width:85%; max-width:320px; border:2px solid #d4af37;" id="modal-box">
+            <h3 style="color:#1b4d3e; margin-top:0;">App speichern</h3>
+            <p id="install-text" style="font-size:13px; color:#444; line-height:1.5;"></p>
+            <button class="btn" onclick="document.getElementById('install-modal').style.display='none'" style="margin-top:15px;">Verstanden</button>
         </div>
     </div>
 
     <script>
-        // Ausweis-Modal öffnen (unterstützt auch URL-Parameter ?name=...&id=...&valid=...)
+        // --- ONE-SIGNAL INITIALISIERUNG ---
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        window.OneSignalDeferred.push(async function(OneSignal) {
+            await OneSignal.init({
+                appId: "DEINE_ONESIGNAL_APP_ID_HIER_EINTRAGEN",
+                safari_web_id: "",
+                notifyButton: {
+                    enable: false,
+                },
+            });
+        });
+
+        // --- GEHEIMER VEREINSSCHLÜSSEL ---
+        const SECRET_PASSPHRASE = "MuseumsgesellschaftBraunlage2026SecureKey";
+
+        // --- VEREINSTERMINE (Hier direkt eintragen, läuft absolut fehlerfrei und ohne Ladefehler) ---
+        const clubEvents = [
+            {
+                date: "2026-09-17T18:30:00",
+                title: "Jahreshauptversammlung",
+                label: "Nächster Termin:"
+            },
+            {
+                date: "2026-10-04T09:00:00",
+                title: "Busexkursion „Tour auf Von-Langen-Spuren“ nach Grünenplan & Fürstenberg",
+                label: "Ausblick:"
+            }
+        ];
+
+        window.addEventListener('DOMContentLoaded', (event) => {
+            if (localStorage.getItem('push_enabled') === 'true') {
+                document.getElementById('push-card').classList.add('hidden');
+            }
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const encryptedData = urlParams.get('data');
+            
+            let memberId = "9999";
+            let memberName = "Testmitglied";
+
+            if (encryptedData) {
+                try {
+                    const bytes = CryptoJS.AES.decrypt(encryptedData, SECRET_PASSPHRASE);
+                    const decryptedString = bytes.toString(CryptoJS.enc.Utf8);
+                    
+                    if (decryptedString) {
+                        const parts = decryptedString.split('|');
+                        if (parts.length >= 2) {
+                            memberId = parts[0];
+                            memberName = parts[1];
+                            
+                            localStorage.setItem('mg_member_id', memberId);
+                            localStorage.setItem('mg_member_name', memberName);
+                        }
+                    }
+                } catch (e) {
+                    console.error("Entschlüsselungsfehler:", e);
+                }
+            }
+
+            if (!encryptedData) {
+                memberId = localStorage.getItem('mg_member_id') || '9999';
+                memberName = localStorage.getItem('mg_member_name') || 'Testmitglied';
+            }
+
+            document.getElementById('display-member-id').textContent = memberId;
+            document.getElementById('display-name').textContent = memberName;
+            
+            if (encryptedData) {
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
+            const qrImg = document.getElementById('qr-code-img');
+            const targetCheckUrl = `https://museum-braunlage.de/check.php?id=${memberId}`;
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(targetCheckUrl)}`;
+
+            // Termine direkt rendern
+            renderClubEvents();
+        });
+
+        function renderClubEvents() {
+            const container = document.getElementById('calendar-events-container');
+            const now = new Date();
+
+            // Nur zukünftige Termine filtern und sortieren
+            let validEvents = clubEvents
+                .map(ev => ({ ...ev, dateObj: new Date(ev.date) }))
+                .filter(ev => ev.dateObj >= new Date(now.getFullYear(), now.getMonth(), now.getDate()))
+                .sort((a, b) => a.dateObj - b.dateObj);
+
+            if (validEvents.length === 0) {
+                container.innerHTML = '<p style="color: #666; text-align: center;">Aktuell sind keine kommenden Termine eingetragen.</p>';
+                return;
+            }
+
+            let htmlOutput = '';
+            validEvents.forEach((ev, index) => {
+                const options = { weekday: 'short', year: 'numeric', month: '2-digit', day: '2-digit' };
+                const dateString = ev.dateObj.toLocaleDateString('de-DE', options);
+                const timeString = ev.dateObj.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr';
+                
+                const headerText = index === 0 ? 'Nächster Termin:' : 'Ausblick:';
+
+                htmlOutput += `
+                    <p style="${index === 0 ? 'margin-top: 0;' : 'margin-top: 8px; border-top: 1px solid #eee; padding-top: 6px;'}">
+                        <strong>${headerText}</strong><br>
+                        📅 <strong>${dateString}, ${timeString}</strong><br>
+                        ${ev.title}
+                    </p>
+                `;
+            });
+
+            container.innerHTML = htmlOutput;
+        }
+
+        async function enablePush() {
+            window.OneSignalDeferred = window.OneSignalDeferred || [];
+            window.OneSignalDeferred.push(async function(OneSignal) {
+                try {
+                    await OneSignal.Slidedown.promptPush();
+                    localStorage.setItem('push_enabled', 'true');
+                    document.getElementById('push-card').classList.add('hidden');
+                } catch (error) {
+                    console.error("Fehler beim Aktivieren von Push:", error);
+                    alert("Benachrichtigungen konnten nicht aktiviert werden. Bitte prüfen Sie die Browsereinstellungen.");
+                }
+            });
+        }
+
         function openIdCard() {
-            document.getElementById('idCardModal').classList.add('active');
+            document.getElementById('id-card-modal').style.display = 'flex';
         }
 
-        // Ausweis-Modal schließen
         function closeIdCard() {
-            document.getElementById('idCardModal').classList.remove('active');
+            document.getElementById('id-card-modal').style.display = 'none';
         }
 
-        // Bei Klick außerhalb des Modal-Inhalts schließen
-        function outsideClose(event) {
-            if (event.target.id === 'idCardModal') {
+        function closeIdCardOnOutside(e) {
+            if (e.target.id === 'id-card-modal') {
                 closeIdCard();
             }
         }
 
-        // URL-Parameter auslesen falls übergeben (z.B. ?name=Eckart%20Kornhuber&id=MG-01&valid=31.12.2027)
-        document.addEventListener("DOMContentLoaded", function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const nameParam = urlParams.get('name');
-            const idParam = urlParams.get('id');
-            const validParam = urlParams.get('valid');
+        function openCalendarModal() {
+            document.getElementById('calendar-modal').style.display = 'flex';
+        }
 
-            if (nameParam) {
-                document.getElementById('modalName').textContent = decodeURIComponent(nameParam);
+        function closeCalendarModal() {
+            document.getElementById('calendar-modal').style.display = 'none';
+        }
+
+        function closeCalendarOnOutside(e) {
+            if (e.target.id === 'calendar-modal') {
+                closeCalendarModal();
             }
-            if (idParam) {
-                const memberId = decodeURIComponent(idParam);
-                document.getElementById('modalId').textContent = memberId;
-                document.getElementById('modalQrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${encodeURIComponent(memberId)}`;
+        }
+
+        function showInstallInstructions() {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const textEl = document.getElementById('install-text');
+            
+            if (isIOS) {
+                textEl.innerHTML = "Tippen Sie unten in Safari auf das <strong>Teilen-Symbol</strong> und wählen Sie <strong>„Zum Home-Bildschirm“</strong> aus.";
+            } else {
+                textEl.innerHTML = "Tippen Sie oben rechts auf die <strong>drei Punkte</strong> und wählen Sie <strong>„Zum Startbildschirm hinzufügen“</strong> aus.";
             }
-            if (validParam) {
-                document.getElementById('modalValid').textContent = decodeURIComponent(validParam);
+            document.getElementById('install-modal').style.display = 'flex';
+        }
+
+        function closeInstallModal(e) {
+            if (e.target.id === 'install-modal') {
+                document.getElementById('install-modal').style.display = 'none';
             }
-        });
+        }
     </script>
+
 </body>
 </html>
