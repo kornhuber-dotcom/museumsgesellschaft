@@ -342,7 +342,7 @@
         <div class="card">
             <h3>Mitglieder-Login &amp; Datenpflege</h3>
             <p>Mit Passworteingabe anmelden, um persönliche Daten einzusehen oder zu ändern.</p>
-            <a href="https://mgvo.de/konto" id="mgvoAccountBtn" class="btn" target="_blank">🔑 Zum Login &amp; Datenänderung</a>
+            <a href="https://www.mgvo.de/" id="mgvoAccountBtn" class="btn" target="_blank">🔑 Zum Login &amp; Datenänderung</a>
             <span class="hint-text">(Öffnet im Browser)</span>
         </div>
 
@@ -350,7 +350,7 @@
         <div class="card">
             <h3>Selbstauskunft &amp; Daten per Mail</h3>
             <p>Hier können Sie per E-Mail-Adresse (ohne Passwort) direkt Ihr <strong>Mitgliederdatenblatt</strong>, Ihr <strong>Finanzkonto</strong> oder den <strong>Zugang für den Mitgliederbereich</strong> anfordern.</p>
-            <a href="https://mgvo.de/datenschloss" id="mgvoDataSheetBtn" class="btn" target="_blank">✉️ Selbstauskunft anfordern</a>
+            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" id="mgvoDataSheetBtn" class="btn" target="_blank">✉️ Selbstauskunft anfordern</a>
         </div>
 
         <!-- 6. Offizielle Homepage -->
@@ -462,7 +462,6 @@
 
     <script>
         const SECRET_PASSPHRASE = "MuseumsgesellschaftBraunlage2026SecureKey";
-        const MGVO_BASE_URL = "https://mgvo.de/";
 
         function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
@@ -515,9 +514,6 @@
             const checkUrl = `https://museum-braunlage.de/check.php?id=${id}`;
             const qrText = encodeURIComponent(checkUrl);
             document.getElementById('badgeQrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrText}`;
-
-            document.getElementById('mgvoDataSheetBtn').href = `${MGVO_BASE_URL}datenschloss?id=${id}`;
-            document.getElementById('mgvoAccountBtn').href = `${MGVO_BASE_URL}konto?id=${id}`;
         }
 
         function enablePush() {
