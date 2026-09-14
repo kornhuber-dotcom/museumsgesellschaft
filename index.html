@@ -422,7 +422,7 @@
         <div class="modal-content">
             <h3>Nachricht an den Vorstand</h3>
             <p style="font-size: 13px; color: var(--text-muted);">Senden Sie uns Ihr Anliegen direkt per E-Mail:</p>
-            <textarea id="contentMessage" rows="4" placeholder="Ihre Nachricht..."></textarea>
+            <textarea id="contactMessage" rows="4" placeholder="Ihre Nachricht..."></textarea>
             <button class="btn" onclick="sendContactMail()" style="margin-bottom: 8px;">E-Mail senden</button>
             <button class="btn" onclick="closeModal('contactModal')">Abbrechen</button>
         </div>
@@ -460,8 +460,9 @@
                     const memberId = parts[0];
                     const memberName = parts[1];
 
-                    localStorage.setItem('mg_member_id', memberId);
-                    localStorage.setItem('mg_member_name', memberName);
+                    // Wir merken uns die Daten sicher im Sitzungsspeicher des Browsers für diesen Aufruf
+                    sessionStorage.setItem('mg_active_id', memberId);
+                    sessionStorage.setItem('mg_active_name', memberName);
 
                     updateUI(memberId, memberName);
                     return;
@@ -471,47 +472,26 @@
             }
         }
 
-        const savedId = localStorage.getItem('mg_member_id');
-        const savedName = localStorage.getItem('mg_member_name');
+        // Falls die Daten im aktuellen Tab noch da sind
+        const activeId = sessionStorage.getItem('mg_active_id');
+        const activeName = sessionStorage.getItem('mg_active_name');
 
-        if (savedId && savedName) {
-            updateUI(savedId, savedName);
+        if (activeId && activeName) {
+            updateUI(activeId, activeName);
             return;
         }
 
+        // Fallback: Wenn jemand die App ohne Link aufruft, leiten wir ihn dezent an die Startseite oder Info weiter,
+        // statt ein technisches Eingabefeld zu zeigen.
         document.getElementById('welcomeArea').innerHTML = `
-            ⚠️ <strong>Mitgliedsdaten nicht gefunden.</strong><br>
-            <span style="font-size: 12px; color: #555; display: block; margin-top: 5px;">
-                Bitte einmalig Ihren persönlichen Link aus der Willkommens-Mail öffnen. Oder hier einfügen:
+            👋 <strong>Willkommen bei der Museumsgesellschaft Braunlage!</strong><br>
+            <span style="font-size: 12px; color: #555; display: block; margin-top: 4px;">
+                Bitte rufen Sie das Portal über den persönlichen Link aus Ihrer Mitglieder-E-Mail auf, um Ihren Ausweis zu sehen.
             </span>
-            <div style="margin-top: 10px; display: flex; gap: 5px;">
-                <input type="text" id="manualLinkInput" placeholder="Link mit ?data= einfügen..." style="flex: 1; padding: 6px; font-size: 11px; border: 1px solid #ccc; border-radius: 4px;">
-                <button onclick="saveManualLink()" style="padding: 6px 10px; background: var(--primary); color: white; border: none; border-radius: 4px; font-size: 11px; cursor: pointer;">Speichern</button>
-            </div>
         `;
         document.getElementById('badgeName').innerText = "Mitgliedsausweis";
         document.getElementById('badgeId').innerText = "----";
         document.getElementById('badgeQrCode').src = "";
-    }
-
-    function saveManualLink() {
-        const val = document.getElementById('manualLinkInput').value.trim();
-        if (val.includes('?data=')) {
-            const encryptedData = val.split('?data=')[1].split('&')[0];
-            try {
-                const bytes = CryptoJS.AES.decrypt(encryptedData, SECRET_PASSPHRASE);
-                const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-                if (decrypted && decrypted.includes('|')) {
-                    const parts = decrypted.split('|');
-                    localStorage.setItem('mg_member_id', parts[0]);
-                    localStorage.setItem('mg_member_name', parts[1]);
-                    alert("Erfolgreich gespeichert!");
-                    location.reload();
-                    return;
-                }
-            } catch(e) {}
-        }
-        alert("Der Link scheint ungültig zu sein.");
     }
 
     function updateUI(id, name) {
@@ -536,7 +516,7 @@
     }
 
     function sendContactMail() {
-        const msg = encodeURIComponent(document.getElementById('contactMessage')?.value || '');
+        const msg = encodeURIComponent(document.getElementById('contactMessage').value);
         window.location.href = `mailto:vorstand@museumsgesellschaft-braunlage.de?subject=Anfrage aus Mitgliederportal&body=${msg}`;
         closeModal('contactModal');
     }
