@@ -12,13 +12,16 @@
     <!-- CryptoJS für AES-Entschlüsselung der URL-Parameter -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
-    <!-- OneSignal Push SDK -->
+<!-- OneSignal Push SDK -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       window.OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
           appId: "a053017d-f986-4e37-94d7-8d353fbaeea9",
+          safari_web_id: "", // Falls du eine hast, ansonsten leer lassen
+          serviceWorkerParam: { scope: "/" },
+          serviceWorkerPath: "OneSignalSDKWorker.js"
         });
       });
     </script>
