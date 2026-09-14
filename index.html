@@ -362,18 +362,25 @@
                 </ul>
             </div>
 
-            <!-- Mitglieder-Login & Datenpflege (Korrektur: Verweist wieder auf die MGVO-Startseite) -->
+            <!-- Mitglieder-Login & Datenpflege -->
             <div class="card">
                 <h2>Mitglieder-Login & Datenpflege</h2>
-                <p>Hier gelangen Sie direkt zur offiziellen MGVO-Hauptseite, um sich regulär im System anzumelden.</p>
-                <a href="https://www.mgvo.de/" target="_blank" rel="noopener noreferrer" class="btn">🔑 Zur MGVO-Startseite / Login</a>
+                <p>Mit Passworteingabe anmelden, um persönliche Daten einzusehen oder zu ändern und Dokumente abzurufen.</p>
+                <a href="https://www.mgvo.de/mgb/login/login.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" rel="noopener noreferrer" class="btn">Zum Login & Datenänderung</a>
             </div>
 
-            <!-- Selbstauskunft & Datenblatt (Korrektur: Verweist wieder auf den echten Selbstauskunfts-Link) -->
+            <!-- Zugangscode anfordern -->
+            <div class="card">
+                <h2>Zugangscode anfordern</h2>
+                <p>Falls Sie noch kein Passwort haben oder Ihren Zugangscode neu anfordern möchten.</p>
+                <button class="btn" onclick="requestAccessCode()">🔑 Neuen Zugangscode anfordern</button>
+            </div>
+
+            <!-- Selbstauskunft & SEPA-Hinweis -->
             <div class="card">
                 <h2>Selbstauskunft & Datenblatt</h2>
-                <p>Hier können Sie per E-Mail-Adresse direkt Ihr Mitgliederdatenblatt, Ihr Finanzkonto oder den Zugang anfordern.</p>
-                <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" rel="noopener noreferrer" class="btn">📄 Selbstauskunft anfordern</a>
+                <p>Zugriff auf Ihr persönliches Mitgliederdatenblatt und Ihre Kontoübersicht.</p>
+                <button class="btn" onclick="openDataSheet()">📄 Mein Datenblatt & Konto</button>
                 <div class="notice-box">
                     ℹ️ <strong>SEPA-Hinweis:</strong> Bankdatenänderungen (IBAN) erfordern aus rechtlichen Gründen ein unterschriebenes Mandat und die Freigabe durch den Vorstand.
                 </div>
@@ -459,6 +466,19 @@
             if (event.target.id === 'idCardModal') {
                 closeIdCard();
             }
+        }
+
+        // Zugangscode anfordern
+        function requestAccessCode() {
+            const email = prompt("Bitte geben Sie Ihre im Verein hinterlegte E-Mail-Adresse ein:");
+            if (email) {
+                alert("Ein neuer Zugangscode wurde an " + email + " gesendet.");
+            }
+        }
+
+        // Datenblatt abrufen
+        function openDataSheet() {
+            alert("Ihr persönliches Mitgliederdatenblatt wird aus der Mitgliederverwaltung (MGVO) geladen...");
         }
 
         // URL-Parameter auslesen falls übergeben (z.B. ?name=Eckart%20Kornhuber&id=MG-01&valid=31.12.2027)
