@@ -341,16 +341,16 @@
         <!-- 4. Mitglieder-Login & Datenpflege -->
         <div class="card">
             <h3>Mitglieder-Login &amp; Datenpflege</h3>
-            <p>Mit Passworteingabe anmelden, um persönliche Daten einzusehen oder zu ändern.</p>
-            <a href="https://www.mgvo.de/" id="mgvoAccountBtn" class="btn" target="_blank">🔑 Zum Login &amp; Datenänderung</a>
+            <p>Hier gelangen Sie direkt zur offiziellen MGVO-Hauptseite, um sich regulär im System anzumelden.</p>
+            <a href="https://www.mgvo.de/" class="btn" target="_blank">🔑 Zur MGVO-Startseite / Login</a>
             <span class="hint-text">(Öffnet im Browser)</span>
         </div>
 
         <!-- 5. Selbstauskunft & Daten per Mail -->
         <div class="card">
             <h3>Selbstauskunft &amp; Daten per Mail</h3>
-            <p>Hier können Sie per E-Mail-Adresse (ohne Passwort) direkt Ihr <strong>Mitgliederdatenblatt</strong>, Ihr <strong>Finanzkonto</strong> oder den <strong>Zugang für den Mitgliederbereich</strong> anfordern.</p>
-            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" id="mgvoDataSheetBtn" class="btn" target="_blank">✉️ Selbstauskunft anfordern</a>
+            <p>Hier können Sie per E-Mail-Adresse direkt Ihr <strong>Mitgliederdatenblatt</strong>, Ihr <strong>Finanzkonto</strong> oder den <strong>Zugang</strong> anfordern.</p>
+            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" class="btn" target="_blank">✉️ Selbstauskunft anfordern</a>
         </div>
 
         <!-- 6. Offizielle Homepage -->
@@ -510,7 +510,6 @@
             document.getElementById('badgeName').innerText = name;
             document.getElementById('badgeId').innerText = id;
             
-            // Exakter QR-Code Link: https://museum-braunlage.de/check.php?id=ID
             const checkUrl = `https://museum-braunlage.de/check.php?id=${id}`;
             const qrText = encodeURIComponent(checkUrl);
             document.getElementById('badgeQrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrText}`;
