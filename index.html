@@ -3,518 +3,319 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mitgliederportal - Museumsgesellschaft e. V. Braunlage</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Museumsverein">
+    <title>Museumsgesellschaft e. V. Braunlage - Mitgliederportal</title>
+    
+    <!-- PWA Manifest & Meta -->
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1b4d3e">
     
-    <!-- Verweis auf die Manifest-Datei für die PWA -->
-    <link rel="manifest" href="manifest.json">
-
-    <!-- CryptoJS für sichere, clientseitige AES-Entschlüsselung -->
+    <!-- CryptoJS für AES-Entschlüsselung der URL-Parameter -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
-    <!-- OneSignal Web SDK für echte Push-Benachrichtigungen -->
+    <!-- OneSignal Push SDK -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      window.OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "a053017d-f986-4e37-94d7-8d353fbaeea9",
+        });
+      });
+    </script>
 
     <style>
+        :root {
+            --primary: #1b4d3e;
+            --primary-dark: #12352a;
+            --accent: #d4af37;
+            --bg: #f4f6f4;
+            --card-bg: #ffffff;
+            --text: #222222;
+            --text-muted: #555555;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f6f4;
-            color: #222222;
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
-            padding: 0;
-            -webkit-font-smoothing: antialiased;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
-        .header {
-            background-color: #1b4d3e;
-            color: #ffffff;
-            text-align: center;
-            padding: 25px 15px;
-            border-bottom: 4px solid #d4af37;
-        }
-        .header-logo-img {
-            background: #ffffff;
-            padding: 8px;
-            border-radius: 8px;
-            display: inline-block;
-            margin-bottom: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-            max-width: 120px;
-        }
-        .header h1 {
-            margin: 5px 0 0 0;
-            font-size: 18px;
-            color: #ffffff;
-            font-weight: 600;
-        }
-        .header p {
-            margin: 5px 0 0 0;
-            font-size: 13px;
-            color: #d4af37;
-            letter-spacing: 0.5px;
-        }
+
         .container {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 0 15px;
+            width: 100%;
+            max-width: 550px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border-top: 5px solid var(--primary);
         }
-        .card {
-            background: #ffffff;
-            border-radius: 10px;
-            padding: 18px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            border-left: 5px solid #1b4d3e;
-            border-top: 1px solid #e0e0e0;
-            border-right: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
+
+        .header {
+            padding: 25px 20px 15px 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
         }
-        .card-gold {
-            background: linear-gradient(135deg, #1b4d3e 0%, #123329 100%);
-            color: #ffffff;
-            border-left: 5px solid #d4af37;
-            border-top: 1px solid #d4af37;
-            border-right: 1px solid #d4af37;
-            border-bottom: 1px solid #d4af37;
+
+        .header h1 {
+            font-size: 20px;
+            color: var(--primary);
+            margin: 0 0 5px 0;
         }
-        .card h2 {
-            margin-top: 0;
-            font-size: 16px;
-            color: #1b4d3e;
+
+        .header p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin: 0;
         }
-        .card-gold h2 {
-            color: #d4af37;
+
+        .content {
+            padding: 20px;
         }
-        .card p {
-            font-size: 13px;
-            line-height: 1.4;
-            color: #555555;
-            margin-bottom: 12px;
+
+        .welcome-box {
+            background: #eef2ef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border-left: 4px solid var(--accent);
         }
-        .card-gold p {
-            color: #e0e0e0;
+
+        .welcome-box strong {
+            color: var(--primary);
         }
+
         .btn {
             display: block;
             width: 100%;
-            box-sizing: border-box;
-            background-color: #1b4d3e;
-            color: #ffffff;
-            font-size: 14px;
+            padding: 14px;
+            margin-bottom: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
             font-weight: bold;
-            padding: 12px;
             text-align: center;
             text-decoration: none;
-            border-radius: 6px;
-            border: 1px solid #d4af37;
-            transition: opacity 0.2s;
             cursor: pointer;
-        }
-        .btn-gold {
-            background-color: #d4af37;
-            color: #1b4d3e;
-            border: 1px solid #ffffff;
-        }
-        .btn:hover {
-            opacity: 0.95;
-        }
-        .hidden {
-            display: none;
+            box-sizing: border-box;
+            transition: background 0.2s;
         }
 
-        /* Modal-Overlay für den digitalen Ausweis im Wallet-Look */
-        .modal-overlay {
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: #ffffff;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: #f0f4f1;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            color: #888;
+            border-top: 1px solid #eee;
+            background: #fafafa;
+        }
+
+        /* Modal Styles */
+        .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
             justify-content: center;
             align-items: center;
-            padding: 15px;
+            padding: 20px;
             box-sizing: border-box;
         }
-        .wallet-pass {
-            background-color: #1b4d3e;
-            color: #ffffff;
-            border-radius: 14px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            max-width: 450px;
             width: 100%;
-            max-width: 360px;
-            overflow: hidden;
-            border: 2px solid #d4af37;
-            animation: scaleIn 0.25s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
-        @keyframes scaleIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+        .modal-content h3 {
+            margin-top: 0;
+            color: var(--primary);
         }
-        .wallet-header {
-            padding: 15px 20px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.1);
-        }
-        .wallet-body {
-            padding: 20px;
-        }
-        .pass-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 14px;
-        }
-        .pass-row:last-child {
-            margin-bottom: 0;
-        }
-        .pass-field label {
-            display: block;
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #a3c1b5;
-            margin-bottom: 2px;
-            letter-spacing: 0.5px;
-        }
-        .pass-field .pass-value {
-            font-size: 14px;
-            font-weight: bold;
-            color: #ffffff;
-        }
-        .pass-gold {
-            color: #d4af37 !important;
-        }
-        .pass-qr-container {
-            background: #ffffff;
-            padding: 8px;
-            border-radius: 8px;
-            display: inline-block;
-        }
-        .wallet-footer {
-            background-color: rgba(0, 0, 0, 0.2);
-            padding: 12px 20px;
-            text-align: center;
-            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0 15px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <img src="logo.png" alt="Logo Museumsgesellschaft e. V. Braunlage" class="header-logo-img">
-        <h1>Museumsgesellschaft e. V. Braunlage</h1>
-        <p>Mitgliederportal & Services</p>
-    </div>
-
     <div class="container">
-
-        <!-- Push-Benachrichtigungen -->
-        <div class="card" id="push-card">
-            <h2>Eilmeldungen & Push</h2>
-            <p>Erhalten Sie wichtige Vereinsinformationen direkt per Benachrichtigung.</p>
-            <button class="btn" onclick="enablePush()">Push-Benachrichtigungen aktivieren</button>
+        <div class="header">
+            <h1>Museumsgesellschaft e. V. Braunlage</h1>
+            <p>Digitales Mitgliederportal</p>
         </div>
 
-        <!-- Kachel: Digitaler Mitgliedsausweis -->
-        <div class="card card-gold">
-            <h2>Digitaler Mitgliedsausweis</h2>
-            <p>Ihr offizieller Vereinsausweis im modernen Wallet-Format – jederzeit griffbereit.</p>
-            <button class="btn btn-gold" onclick="openIdCard()">🪪 Ausweis anzeigen</button>
-        </div>
-
-        <!-- Kachel für Termine & Öffnungszeiten -->
-        <div class="card">
-            <h2>Kalender & Öffnungszeiten</h2>
-            <p>Aktuelle Termine, Exkursionen und Öffnungszeiten auf einen Blick.</p>
-            <button class="btn" onclick="openCalendarModal()">📅 Termine & Öffnungszeiten ansehen</button>
-        </div>
-
-        <!-- Kachel: Mitglieder-Login -->
-        <div class="card">
-            <h2>Mitglieder-Login & Datenpflege</h2>
-            <p>Mit Passworteingabe anmelden, um persönliche Daten einzusehen oder zu ändern.</p>
-            <a href="https://www.mgvo.de/mgb/login/login.php?call_id=3d660e620b631ab2139df53ffecde062&mgb_id=kornhuber@t-online.de" target="_blank" rel="noopener noreferrer" class="btn">🔑 Zum Login & Datenänderung</a>
-            <p style="font-size: 11px; color: #777; text-align: center; margin-top: 8px; margin-bottom: 0;">(Öffnet im Browser)</p>
-        </div>
-
-        <!-- Kachel: Selbstauskunft & Zugangscode -->
-        <div class="card">
-            <h2>Selbstauskunft & Daten per Mail</h2>
-            <p>Hier können Sie per E-Mail-Adresse (ohne Passwort) direkt Ihr <strong>Mitgliedsdatenblatt</strong>, Ihr <strong>Finanzkonto</strong> oder den <strong>Zugang für den Mitgliederbereich</strong> anfordern.</p>
-            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" rel="noopener noreferrer" class="btn">✉️ Selbstauskunft anfordern</a>
-        </div>
-
-        <!-- Kachel: Direkt zur Museums-Homepage -->
-        <div class="card">
-            <h2>Offizielle Homepage</h2>
-            <p>Besuchen Sie unsere Hauptseite für aktuelle Ausstellungen, Berichte und das Museumsarchiv.</p>
-            <a href="https://museum-braunlage.de" target="_blank" rel="noopener noreferrer" class="btn">🌐 Zur Website museum-braunlage.de</a>
-        </div>
-
-        <!-- Kachel: Kontakt zum Vorstand -->
-        <div class="card">
-            <h2>Kontakt zum Vorstand</h2>
-            <p>Haben Sie Fragen, Anregungen oder Anliegen an die Museumsgesellschaft?</p>
-            <a href="mailto:info@museum-braunlage.de" class="btn">✉️ Nachricht an den Vorstand</a>
-        </div>
-
-        <!-- Auf dem Smartphone speichern / Homescreen -->
-        <div class="card" id="install-card">
-            <h2>Portal auf Smartphone speichern</h2>
-            <p>Fügen Sie diese App zu Ihrem Startbildschirm hinzu – auch offline verfügbar.</p>
-            <button class="btn btn-gold" onclick="showInstallInstructions()">📲 Zum Startbildschirm hinzufügen</button>
-        </div>
-
-    </div>
-
-    <!-- MODAL: Der digitale Mitgliedsausweis -->
-    <div id="id-card-modal" class="modal-overlay" onclick="closeIdCardOnOutside(event)">
-        <div class="wallet-pass">
-            <div class="wallet-header">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <img src="logo.png" alt="Logo" style="width: 28px; height: 28px; background: #fff; padding: 2px; border-radius: 4px;">
-                    <span style="font-size: 11px; letter-spacing: 0.5px; color: #d4af37; font-weight: bold;">Museumsgesellschaft</span>
-                </div>
-                <span style="font-size: 12px; color: #a3c1b5;">Mitgliedsausweis</span>
+        <div class="content">
+            <div id="welcomeArea" class="welcome-box">
+                Lade MGVO-Daten...
             </div>
-            <div class="wallet-body">
-                <div class="pass-row">
-                    <div class="pass-field" style="width: 100%;">
-                        <label>Inhaber / Mitglied</label>
-                        <div class="pass-value" id="display-name" style="font-size: 16px; color: #d4af37;">-</div>
-                    </div>
-                </div>
-                <div class="pass-row">
-                    <div class="pass-field">
-                        <label>Mitglieds-ID</label>
-                        <div class="pass-value" id="display-member-id">-</div>
-                    </div>
-                    <div class="pass-field" style="text-align: right;">
-                        <label>Gültig bis</label>
-                        <div class="pass-value" style="color: #d4af37;">31.12.2026</div>
-                    </div>
-                </div>
-                
-                <div style="text-align: center; margin-top: 12px; border-top: 1px solid rgba(212,175,55,0.3); padding-top: 12px;">
-                    <div class="pass-qr-container">
-                        <img id="qr-code-img" src="" alt="Mitglieds-QR-Code" style="display: block; width: 90px; height: 90px;">
-                    </div>
-                    <div style="font-size: 9px; color: #c5d7d0; margin-top: 4px;">QR-Code zur Einlassprüfung</div>
-                </div>
-            </div>
-            <div class="wallet-footer">
-                <button class="btn" onclick="closeIdCard()" style="font-size: 12px; padding: 8px; background: #555; border-color: #777; width: 100%;">Schließen</button>
-            </div>
+
+            <!-- Aktionen -->
+            <a href="#" id="mgvoDataSheetBtn" class="btn">MGVO-Mitgliederdatenblatt öffnen</a>
+            <a href="#" id="mgvoAccountBtn" class="btn btn-secondary">MGVO-Mitgliedskonto einsehen</a>
+            <button onclick="enablePush()" class="btn" style="background-color: var(--accent); color: var(--primary-dark);">🔔 Push-Benachrichtigungen aktivieren</button>
+            <button onclick="openModal('calendarModal')" class="btn btn-secondary">📅 Nächste Termine & Ausflüge</button>
+            <button onclick="openModal('installModal')" class="btn btn-secondary">📱 App auf Startbildschirm installieren</button>
+        </div>
+
+        <div class="footer">
+            &copy; 2026 Museumsgesellschaft e. V. Braunlage
         </div>
     </div>
 
-    <!-- Modal für Termine & Öffnungszeiten -->
-    <div id="calendar-modal" class="modal-overlay" onclick="closeCalendarOnOutside(event)">
-        <div style="background:#fff; padding:16px; border-radius:12px; width:92%; max-width:360px; border:2px solid #1b4d3e; box-sizing: border-box; max-height: 90vh; display: flex; flex-direction: column;">
-            <h3 style="color:#1b4d3e; margin-top:0; font-size:15px; margin-bottom: 4px;">Termine & Öffnungszeiten</h3>
-            
-            <!-- Öffnungszeiten-Hinweis -->
-            <div style="background: #f4f6f4; border-left: 3px solid #1b4d3e; padding: 6px 8px; font-size: 11px; color: #333; margin-bottom: 8px; line-height: 1.3;">
-                <strong>Öffnungszeiten:</strong><br>
-                Di. & Do. 10–12 Uhr sowie während der von-Langen-Ausstellung bis 10.10. auch Sa. 11–15 Uhr.
-            </div>
-            
-            <div id="calendar-events-container" style="font-size: 12px; color: #444; line-height: 1.4; margin-bottom: 10px; overflow-y: auto; flex-grow: 1;">
-                <!-- Termine werden hier direkt geladen -->
-            </div>
-
-            <button class="btn" onclick="closeCalendarModal()" style="padding: 8px; background: #1b4d3e; border-color: #d4af37; font-size: 12px;">Schließen</button>
+    <!-- Modal: ID Abfrage falls kein Parameter übergeben wurde -->
+    <div id="idModal" class="modal">
+        <div class="modal-content">
+            <h3>Mitglieder-Identifikation</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Bitte gib deine Mitglieds-ID und deinen Namen ein, um den sicheren Zugriff zu autorisieren:</p>
+            <label style="font-size: 12px; font-weight: bold;">Mitglieds-ID:</label>
+            <input type="text" id="manualId" placeholder="z. B. 1049">
+            <label style="font-size: 12px; font-weight: bold;">Vor- und Nachname:</label>
+            <input type="text" id="manualName" placeholder="z. B. Eckart Kornhuber">
+            <button class="btn" onclick="saveManualIdentity()">Zugriff bestätigen</button>
         </div>
     </div>
 
-    <!-- Info-Modal für Installationsanleitung -->
-    <div id="install-modal" class="modal-overlay" onclick="closeInstallModal(event)">
-        <div style="background:#fff; padding:20px; border-radius:12px; width:85%; max-width:320px; border:2px solid #d4af37;" id="modal-box">
-            <h3 style="color:#1b4d3e; margin-top:0;">App speichern</h3>
-            <p id="install-text" style="font-size:13px; color:#444; line-height:1.5;"></p>
-            <button class="btn" onclick="document.getElementById('install-modal').style.display='none'" style="margin-top:15px;">Verstanden</button>
+    <!-- Modal: Kalender -->
+    <div id="calendarModal" class="modal">
+        <div class="modal-content">
+            <h3>Termine & Exkursionen</h3>
+            <p style="font-size: 14px; line-height: 1.5;">
+                <strong>04. Oktober 2026:</strong> Bus-Exkursion „Auf den Spuren von Johann Georg von Langen“ zum Erich-Mäder Glasmuseum (Grünenplan) und Porzellanmanufaktur Fürstenberg.
+            </p>
+            <button class="btn" onclick="closeModal('calendarModal')">Schließen</button>
+        </div>
+    </div>
+
+    <!-- Modal: Installation -->
+    <div id="installModal" class="modal">
+        <div class="modal-content">
+            <h3>App installieren</h3>
+            <p style="font-size: 14px; line-height: 1.5;">
+                <strong>iPhone / iPad (Safari):</strong> Tippe unten auf das Teilen-Symbol (Viereck mit Pfeil) und wähle <em>„Zum Home-Bildschirm“</em>.<br><br>
+                <strong>Android (Chrome):</strong> Tippe oben rechts auf die drei Punkte und wähle <em>„App installieren“</em> oder <em>„Zum Startbildschirm hinzufügen“</em>.
+            </p>
+            <button class="btn" onclick="closeModal('installModal')">Verstanden</button>
         </div>
     </div>
 
     <script>
-        // --- ONE-SIGNAL INITIALISIERUNG ---
-        window.OneSignalDeferred = window.OneSignalDeferred || [];
-        window.OneSignalDeferred.push(async function(OneSignal) {
-            await OneSignal.init({
-                appId: "DEINE_ONESIGNAL_APP_ID_HIER_EINTRAGEN",
-                safari_web_id: "",
-                notifyButton: {
-                    enable: false,
-                },
-            });
-        });
-
-        // --- GEHEIMER VEREINSSCHLÜSSEL ---
         const SECRET_PASSPHRASE = "MuseumsgesellschaftBraunlage2026SecureKey";
+        const MGVO_BASE_URL = "https://mgvo.de/"; // Anpassen falls nötig
 
-        // --- VEREINSTERMINE ---
-        const clubEvents = [
-            {
-                date: "2026-09-17T18:30:00",
-                title: "Jahreshauptversammlung",
-                label: "Nächster Termin:"
-            },
-            {
-                date: "2026-10-04T09:00:00",
-                title: "Busexkursion „Tour auf Von-Langen-Spuren“ nach Grünenplan & Fürstenberg",
-                label: "Ausblick:"
-            }
-        ];
-
-        window.addEventListener('DOMContentLoaded', (event) => {
-            if (localStorage.getItem('push_enabled') === 'true') {
-                document.getElementById('push-card').classList.add('hidden');
-            }
-            
+        function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
-            const encryptedData = urlParams.get('data');
-            
-            let memberId = "9999";
-            let memberName = "Testmitglied";
+            return urlParams.get(param);
+        }
+
+        function initApp() {
+            const encryptedData = getQueryParam('data');
 
             if (encryptedData) {
                 try {
                     const bytes = CryptoJS.AES.decrypt(encryptedData, SECRET_PASSPHRASE);
-                    const decryptedString = bytes.toString(CryptoJS.enc.Utf8);
-                    
-                    if (decryptedString) {
-                        const parts = decryptedString.split('|');
-                        if (parts.length >= 2) {
-                            memberId = parts[0];
-                            memberName = parts[1];
-                            
-                            localStorage.setItem('mg_member_id', memberId);
-                            localStorage.setItem('mg_member_name', memberName);
-                        }
+                    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+
+                    if (decrypted && decrypted.includes('|')) {
+                        const parts = decrypted.split('|');
+                        const memberId = parts[0];
+                        const memberName = parts[1];
+
+                        sessionStorage.setItem('mg_id', memberId);
+                        sessionStorage.setItem('mg_name', memberName);
+                        updateUI(memberId, memberName);
+                        return;
                     }
                 } catch (e) {
                     console.error("Entschlüsselungsfehler:", e);
                 }
             }
 
-            if (!encryptedData) {
-                memberId = localStorage.getItem('mg_member_id') || '9999';
-                memberName = localStorage.getItem('mg_member_name') || 'Testmitglied';
-            }
+            // Prüfen ob bereits in Session
+            const savedId = sessionStorage.getItem('mg_id');
+            const savedName = sessionStorage.getItem('mg_name');
 
-            document.getElementById('display-member-id').textContent = memberId;
-            document.getElementById('display-name').textContent = memberName;
+            if (savedId && savedName) {
+                updateUI(savedId, savedName);
+            } else {
+                // Wenn keine Daten vorhanden sind, Abfrage-Modal öffnen
+                document.getElementById('idModal').style.display = 'flex';
+            }
+        }
+
+        function updateUI(id, name) {
+            document.getElementById('welcomeArea').innerHTML = `Willkommen zurück, <strong>${name}</strong>!<br><span style="font-size:12px; color:#666;">Mitglieds-ID: ${id}</span>`;
             
-            if (encryptedData) {
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
+            // MGVO Links belegen (Beispiel-URLs, je nach MGVO-Struktur anpassen)
+            document.getElementById('mgvoDataSheetBtn').href = `${MGVO_BASE_URL}datenschloss?id=${id}`;
+            document.getElementById('mgvoAccountBtn').href = `${MGVO_BASE_URL}konto?id=${id}`;
+        }
 
-            const qrImg = document.getElementById('qr-code-img');
-            const targetCheckUrl = `https://museum-braunlage.de/check.php?id=${memberId}`;
-            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(targetCheckUrl)}`;
+        function saveManualIdentity() {
+            const id = document.getElementById('manualId').value.trim();
+            const name = document.getElementById('manualName').value.trim();
 
-            renderClubEvents();
-        });
-
-        function renderClubEvents() {
-            const container = document.getElementById('calendar-events-container');
-            const now = new Date();
-
-            let validEvents = clubEvents
-                .map(ev => ({ ...ev, dateObj: new Date(ev.date) }))
-                .filter(ev => ev.dateObj >= new Date(now.getFullYear(), now.getMonth(), now.getDate()))
-                .sort((a, b) => a.dateObj - b.dateObj);
-
-            if (validEvents.length === 0) {
-                container.innerHTML = '<p style="color: #666; text-align: center;">Aktuell sind keine kommenden Termine eingetragen.</p>';
+            if (!id || !name) {
+                alert("Bitte beide Felder ausfüllen.");
                 return;
             }
 
-            let htmlOutput = '';
-            validEvents.forEach((ev, index) => {
-                const options = { weekday: 'short', year: 'numeric', month: '2-digit', day: '2-digit' };
-                const dateString = ev.dateObj.toLocaleDateString('de-DE', options);
-                const timeString = ev.dateObj.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr';
-                
-                const headerText = index === 0 ? 'Nächster Termin:' : 'Ausblick:';
-
-                htmlOutput += `
-                    <p style="${index === 0 ? 'margin-top: 0;' : 'margin-top: 8px; border-top: 1px solid #eee; padding-top: 6px;'}">
-                        <strong>${headerText}</strong><br>
-                        📅 <strong>${dateString}, ${timeString}</strong><br>
-                        ${ev.title}
-                    </p>
-                `;
-            });
-
-            container.innerHTML = htmlOutput;
+            sessionStorage.setItem('mg_id', id);
+            sessionStorage.setItem('mg_name', name);
+            document.getElementById('idModal').style.display = 'none';
+            updateUI(id, name);
         }
 
-        async function enablePush() {
-            window.OneSignalDeferred = window.OneSignalDeferred || [];
+        function enablePush() {
             window.OneSignalDeferred.push(async function(OneSignal) {
                 try {
                     await OneSignal.Slidedown.promptPush();
-                    localStorage.setItem('push_enabled', 'true');
-                    document.getElementById('push-card').classList.add('hidden');
                 } catch (error) {
-                    console.error("Fehler beim Aktivieren von Push:", error);
-                    alert("Benachrichtigungen konnten nicht aktiviert werden. Bitte prüfen Sie die Browsereinstellungen.");
+                    console.error("Push-Fehler:", error);
+                    alert("Push-Benachrichtigungen konnten nicht initialisiert werden.");
                 }
             });
         }
 
-        function openIdCard() {
-            document.getElementById('id-card-modal').style.display = 'flex';
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
         }
 
-        function closeIdCard() {
-            document.getElementById('id-card-modal').style.display = 'none';
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
         }
 
-        function closeIdCardOnOutside(e) {
-            if (e.target.id === 'id-card-modal') {
-                closeIdCard();
-            }
-        }
-
-        function openCalendarModal() {
-            document.getElementById('calendar-modal').style.display = 'flex';
-        }
-
-        function closeCalendarModal() {
-            document.getElementById('calendar-modal').style.display = 'none';
-        }
-
-        function closeCalendarOnOutside(e) {
-            if (e.target.id === 'calendar-modal') {
-                closeCalendarModal();
-            }
-        }
-
-        function showInstallInstructions() {
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            const textEl = document.getElementById('install-text');
-            
-            if (isIOS) {
-                textEl.innerHTML = "Tippen Sie unten in Safari auf das <strong>Teilen-Symbol</strong> und wählen Sie <strong>„Zum Home-Bildschirm“</strong> aus.";
-            } else {
-                textEl.innerHTML = "Tippen Sie oben rechts auf die <strong>drei Punkte</strong> und wählen Sie <strong>„Zum Startbildschirm hinzufügen“</strong> aus.";
-            }
-            document.getElementById('install-modal').style.display = 'flex';
-        }
-
-        function closeInstallModal(e) {
-            if (e.target.id === 'install-modal') {
-                document.getElementById('install-modal').style.display = 'none';
-            }
-        }
+        // App beim Laden starten
+        window.onload = initApp;
     </script>
-
 </body>
 </html>
