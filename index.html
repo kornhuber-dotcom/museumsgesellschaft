@@ -39,69 +39,121 @@
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            box-sizing: border-box;
+        }
+
+        /* Header mit grünem Hintergrund und Logo */
+        .top-header {
+            width: 100%;
+            background-color: var(--primary);
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .logo-container {
+            background: white;
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+
+        .logo-container img {
+            height: 45px;
+            display: block;
+        }
+
+        .top-header h1 {
+            font-size: 22px;
+            color: white;
+            margin: 0 0 4px 0;
+            font-weight: 600;
+        }
+
+        .top-header p {
+            font-size: 13px;
+            color: var(--accent);
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
         }
 
         .container {
             width: 100%;
             max-width: 550px;
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            border-top: 5px solid var(--primary);
-        }
-
-        .header {
-            padding: 25px 20px 15px 20px;
-            text-align: center;
-            border-bottom: 1px solid #eee;
-        }
-
-        .header h1 {
-            font-size: 20px;
-            color: var(--primary);
-            margin: 0 0 5px 0;
-        }
-
-        .header p {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin: 0;
-        }
-
-        .content {
             padding: 20px;
+            box-sizing: border-box;
         }
 
+        /* Willkommens-Box oben */
         .welcome-box {
-            background: #eef2ef;
-            padding: 15px;
-            border-radius: 8px;
+            background: #ffffff;
+            padding: 15px 20px;
+            border-radius: 12px;
             margin-bottom: 20px;
             font-size: 14px;
-            border-left: 4px solid var(--accent);
+            border-left: 5px solid var(--accent);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
         }
 
         .welcome-box strong {
             color: var(--primary);
         }
 
+        /* Kachel-Design */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8e2;
+            transition: transform 0.2s;
+        }
+
+        .card h3 {
+            margin: 0 0 6px 0;
+            font-size: 17px;
+            color: var(--primary);
+        }
+
+        .card p {
+            margin: 0 0 15px 0;
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .card-accent {
+            background: linear-gradient(135deg, #1b4d3e 0%, #12352a 100%);
+            border: none;
+        }
+
+        .card-accent h3 {
+            color: white;
+        }
+
+        .card-accent p {
+            color: #dcdcdc;
+        }
+
+        /* Buttons innerhalb der Kacheln */
         .btn {
             display: block;
             width: 100%;
-            padding: 14px;
-            margin-bottom: 12px;
+            padding: 13px;
             background-color: var(--primary);
             color: white;
             border: none;
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: bold;
             text-align: center;
             text-decoration: none;
@@ -112,6 +164,15 @@
 
         .btn:hover {
             background-color: var(--primary-dark);
+        }
+
+        .btn-accent {
+            background-color: var(--accent);
+            color: var(--primary-dark);
+        }
+
+        .btn-accent:hover {
+            background-color: #c39e2f;
         }
 
         .btn-secondary {
@@ -126,11 +187,9 @@
 
         .footer {
             text-align: center;
-            padding: 15px;
+            padding: 20px;
             font-size: 12px;
             color: #888;
-            border-top: 1px solid #eee;
-            background: #fafafa;
         }
 
         /* Modal Styles */
@@ -143,11 +202,12 @@
             align-items: center;
             padding: 20px;
             box-sizing: border-box;
+            z-index: 1000;
         }
         .modal-content {
             background: white;
             padding: 25px;
-            border-radius: 10px;
+            border-radius: 12px;
             max-width: 450px;
             width: 100%;
             box-shadow: 0 5px 20px rgba(0,0,0,0.2);
@@ -168,35 +228,74 @@
 </head>
 <body>
 
+    <!-- Oberer Header mit Logo -->
+    <div class="top-header">
+        <div class="logo-container">
+            <!-- Platzhalter oder echtes Logo einbinden -->
+            <img src="logo.png" alt="FIS Heimat- und Skimuseum Braunlage" onerror="this.style.display='none'">
+        </div>
+        <h1>Museumsgesellschaft e. V. Braunlage</h1>
+        <p>Mitgliederportal &amp; Services</p>
+    </div>
+
     <div class="container">
-        <div class="header">
-            <h1>Museumsgesellschaft e. V. Braunlage</h1>
-            <p>Digitales Mitgliederportal</p>
+        <!-- Willkommens-Box -->
+        <div id="welcomeArea" class="welcome-box">
+            Lade Mitgliedsdaten...
         </div>
 
-        <div class="content">
-            <div id="welcomeArea" class="welcome-box">
-                Lade MGVO-Daten...
-            </div>
-
-            <!-- Aktionen -->
-            <a href="#" id="mgvoDataSheetBtn" class="btn">MGVO-Mitgliederdatenblatt öffnen</a>
-            <a href="#" id="mgvoAccountBtn" class="btn btn-secondary">MGVO-Mitgliedskonto einsehen</a>
-            <button onclick="enablePush()" class="btn" style="background-color: var(--accent); color: var(--primary-dark);">🔔 Push-Benachrichtigungen aktivieren</button>
-            <button onclick="openModal('calendarModal')" class="btn btn-secondary">📅 Nächste Termine & Ausflüge</button>
-            <button onclick="openModal('installModal')" class="btn btn-secondary">📱 App auf Startbildschirm installieren</button>
+        <!-- Kachel 1: Push / Eilmeldungen -->
+        <div class="card">
+            <h3>Eilmeldungen &amp; Push</h3>
+            <p>Erhalten Sie wichtige Vereinsinformationen direkt per Benachrichtigung.</p>
+            <button onclick="enablePush()" class="btn">Push-Benachrichtigungen aktivieren</button>
         </div>
 
-        <div class="footer">
-            &copy; 2026 Museumsgesellschaft e. V. Braunlage
+        <!-- Kachel 2: Digitaler Mitgliedsausweis -->
+        <div class="card card-accent">
+            <h3>Digitaler Mitgliedsausweis</h3>
+            <p>Ihr offizieller Vereinsausweis im modernen Wallet-Format – jederzeit griffbereit.</p>
+            <button onclick="openModal('badgeModal')" class="btn btn-accent">🪪 Ausweis anzeigen</button>
+        </div>
+
+        <!-- Kachel 3: Kalender -->
+        <div class="card">
+            <h3>Kalender &amp; Öffnungszeiten</h3>
+            <p>Aktuelle Termine, Exkursionen und Öffnungszeiten auf einen Blick.</p>
+            <button onclick="openModal('calendarModal')" class="btn btn-secondary">📅 Termine &amp; Öffnungszeiten ansehen</button>
+        </div>
+
+        <!-- Kachel 4: MGVO Login & Datenpflege -->
+        <div class="card">
+            <h3>Mitglieder-Login &amp; Datenpflege</h3>
+            <p>Mit Passworteingabe anmelden, um persönliche Daten einzusehen oder zu ändern.</p>
+            <a href="#" id="mgvoAccountBtn" class="btn btn-secondary" target="_blank">Zum Login &amp; Datenänderung</a>
+        </div>
+
+        <!-- Kachel 5: MGVO Datenblatt -->
+        <div class="card">
+            <h3>Selbstauskunft &amp; Daten per Mail</h3>
+            <p>Hier können Sie direkt Ihr Mitgliederdatenblatt oder Finanzkonto anfordern.</p>
+            <a href="#" id="mgvoDataSheetBtn" class="btn btn-secondary" target="_blank">MGVO-Datenblatt anfordern</a>
+        </div>
+
+        <!-- Kachel 6: App Installation -->
+        <div class="card">
+            <h3>App auf Startbildschirm</h3>
+            <p>Installieren Sie das Portal als App auf Ihrem Smartphone.</p>
+            <button onclick="openModal('installModal')" class="btn btn-secondary">📱 Installationsanleitung</button>
         </div>
     </div>
 
-    <!-- Modal: ID Abfrage falls kein Parameter übergeben wurde -->
+    <div class="footer">
+        &copy; 2026 Museumsgesellschaft e. V. Braunlage
+    </div>
+
+    <!-- Modals -->
     <div id="idModal" class="modal">
         <div class="modal-content">
             <h3>Mitglieder-Identifikation</h3>
-            <p style="font-size: 13px; color: var(--text-muted);">Bitte gib deine Mitglieds-ID und deinen Namen ein, um den sicheren Zugriff zu autorisieren:</p>
+            <p style="font-size: 13px; color: var(--text-muted);">Bitte geben Sie Ihre Mitglieds-ID und Ihren Namen ein, um den sicheren Zugriff zu autorisieren:</p>
             <label style="font-size: 12px; font-weight: bold;">Mitglieds-ID:</label>
             <input type="text" id="manualId" placeholder="z. B. 1049">
             <label style="font-size: 12px; font-weight: bold;">Vor- und Nachname:</label>
@@ -205,10 +304,21 @@
         </div>
     </div>
 
-    <!-- Modal: Kalender -->
+    <div id="badgeModal" class="modal">
+        <div class="modal-content">
+            <h3>Digitaler Mitgliedsausweis</h3>
+            <div style="background: var(--primary); color: white; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 15px;">
+                <h4 style="margin:0 0 10px 0; color: var(--accent);">Museumsgesellschaft Braunlage</h4>
+                <p id="badgeName" style="font-size: 18px; font-weight: bold; margin: 5px 0;">Eckart Kornhuber</p>
+                <p id="badgeId" style="font-size: 14px; margin: 0; opacity: 0.8;">Mitglieds-ID: 1049</p>
+            </div>
+            <button class="btn" onclick="closeModal('badgeModal')">Schließen</button>
+        </div>
+    </div>
+
     <div id="calendarModal" class="modal">
         <div class="modal-content">
-            <h3>Termine & Exkursionen</h3>
+            <h3>Termine &amp; Exkursionen</h3>
             <p style="font-size: 14px; line-height: 1.5;">
                 <strong>04. Oktober 2026:</strong> Bus-Exkursion „Auf den Spuren von Johann Georg von Langen“ zum Erich-Mäder Glasmuseum (Grünenplan) und Porzellanmanufaktur Fürstenberg.
             </p>
@@ -216,13 +326,12 @@
         </div>
     </div>
 
-    <!-- Modal: Installation -->
     <div id="installModal" class="modal">
         <div class="modal-content">
             <h3>App installieren</h3>
             <p style="font-size: 14px; line-height: 1.5;">
-                <strong>iPhone / iPad (Safari):</strong> Tippe unten auf das Teilen-Symbol (Viereck mit Pfeil) und wähle <em>„Zum Home-Bildschirm“</em>.<br><br>
-                <strong>Android (Chrome):</strong> Tippe oben rechts auf die drei Punkte und wähle <em>„App installieren“</em> oder <em>„Zum Startbildschirm hinzufügen“</em>.
+                <strong>iPhone / iPad (Safari):</strong> Tippe unten auf das Teilen-Symbol und wähle <em>„Zum Home-Bildschirm“</em>.<br><br>
+                <strong>Android (Chrome):</strong> Tippe oben rechts auf die drei Punkte und wähle <em>„App installieren“</em>.
             </p>
             <button class="btn" onclick="closeModal('installModal')">Verstanden</button>
         </div>
@@ -230,7 +339,7 @@
 
     <script>
         const SECRET_PASSPHRASE = "MuseumsgesellschaftBraunlage2026SecureKey";
-        const MGVO_BASE_URL = "https://mgvo.de/"; // Anpassen falls nötig
+        const MGVO_BASE_URL = "https://mgvo.de/";
 
         function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
@@ -260,22 +369,21 @@
                 }
             }
 
-            // Prüfen ob bereits in Session
             const savedId = sessionStorage.getItem('mg_id');
             const savedName = sessionStorage.getItem('mg_name');
 
             if (savedId && savedName) {
                 updateUI(savedId, savedName);
             } else {
-                // Wenn keine Daten vorhanden sind, Abfrage-Modal öffnen
                 document.getElementById('idModal').style.display = 'flex';
             }
         }
 
         function updateUI(id, name) {
-            document.getElementById('welcomeArea').innerHTML = `Willkommen zurück, <strong>${name}</strong>!<br><span style="font-size:12px; color:#666;">Mitglieds-ID: ${id}</span>`;
+            document.getElementById('welcomeArea').innerHTML = `Angemeldet als: <strong>${name}</strong> (ID: ${id})`;
+            document.getElementById('badgeName').innerText = name;
+            document.getElementById('badgeId').innerText = `Mitglieds-ID: ${id}`;
             
-            // MGVO Links belegen (Beispiel-URLs, je nach MGVO-Struktur anpassen)
             document.getElementById('mgvoDataSheetBtn').href = `${MGVO_BASE_URL}datenschloss?id=${id}`;
             document.getElementById('mgvoAccountBtn').href = `${MGVO_BASE_URL}konto?id=${id}`;
         }
@@ -314,7 +422,6 @@
             document.getElementById(modalId).style.display = 'none';
         }
 
-        // App beim Laden starten
         window.onload = initApp;
     </script>
 </body>
