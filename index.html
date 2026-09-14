@@ -242,11 +242,18 @@
             <p style="font-size: 11px; color: #777; text-align: center; margin-top: 8px; margin-bottom: 0;">(Öffnet im Browser)</p>
         </div>
 
-        <!-- Kachel: Neuen Zugangscode anfordern -->
+        <!-- Kachel: Zugangscode & Selbstauskunft (Neu angepasst mit Hinweisen) -->
         <div class="card">
-            <h2>Zugangscode anfordern</h2>
-            <p>Falls Sie noch kein Passwort haben oder Ihren Zugangscode neu anfordern möchten.</p>
-            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" rel="noopener noreferrer" class="btn">✉️ Neuen Zugangscode anfordern</a>
+            <h2>Zugangscode & Selbstauskunft</h2>
+            <p>Hier können Sie Ihren persönlichen Zugangscode anfordern. Nach der Anmeldung im Portal finden Sie dort Ihr <strong>Mitgliedsdatenblatt</strong>, Ihr <strong>Kontoblatt</strong> sowie die Möglichkeit, Ihr Passwort zu ändern.</p>
+            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" target="_blank" rel="noopener noreferrer" class="btn">✉️ Zugangscode anfordern</a>
+        </div>
+
+        <!-- Kachel: Direkt zur Museums-Homepage -->
+        <div class="card">
+            <h2>Offizielle Homepage</h2>
+            <p>Besuchen Sie unsere Hauptseite für aktuelle Ausstellungen, Berichte und das Museumsarchiv.</p>
+            <a href="https://museum-braunlage.de" target="_blank" rel="noopener noreferrer" class="btn">🌐 Zur Website museum-braunlage.de</a>
         </div>
 
         <!-- Kachel: Kontakt zum Vorstand -->
@@ -352,7 +359,7 @@
         // --- GEHEIMER VEREINSSCHLÜSSEL ---
         const SECRET_PASSPHRASE = "MuseumsgesellschaftBraunlage2026SecureKey";
 
-        // --- VEREINSTERMINE (Hier direkt eintragen, läuft absolut fehlerfrei und ohne Ladefehler) ---
+        // --- VEREINSTERMINE ---
         const clubEvents = [
             {
                 date: "2026-09-17T18:30:00",
@@ -413,7 +420,6 @@
             const targetCheckUrl = `https://museum-braunlage.de/check.php?id=${memberId}`;
             qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(targetCheckUrl)}`;
 
-            // Termine direkt rendern
             renderClubEvents();
         });
 
@@ -421,7 +427,6 @@
             const container = document.getElementById('calendar-events-container');
             const now = new Date();
 
-            // Nur zukünftige Termine filtern und sortieren
             let validEvents = clubEvents
                 .map(ev => ({ ...ev, dateObj: new Date(ev.date) }))
                 .filter(ev => ev.dateObj >= new Date(now.getFullYear(), now.getMonth(), now.getDate()))
