@@ -460,7 +460,6 @@
 
 <script>
     const SECRET_PASSPHRASE = "MuseumsgesellschaftBraunlage2026SecureKey";
-    const MGVO_BASE_URL = "https://mgvo.de/";
 
     function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
@@ -480,9 +479,11 @@
                     const memberId = parts[0];
                     const memberName = parts[1];
 
-                    // Direkt im localStorage sichern für Homescreen-Aufrufe
+                    // Daten dauerhaft im localStorage sichern
                     localStorage.setItem('mg_member_id', memberId);
                     localStorage.setItem('mg_member_name', memberName);
+                    // Den kompletten aktuellen URL-Parameter für den Homescreen-Shortcut ablegen
+                    localStorage.setItem('mg_full_url', window.location.href);
 
                     updateUI(memberId, memberName);
                     return;
@@ -492,7 +493,7 @@
             }
         }
 
-        // Fallback: Aufruf vom Homescreen nutzt lokal gespeicherte Daten
+        // Fallback: Gespeicherte Daten nutzen
         const savedId = localStorage.getItem('mg_member_id');
         const savedName = localStorage.getItem('mg_member_name');
 
@@ -501,8 +502,11 @@
             return;
         }
 
-        // Wenn weder URL-Parameter noch gespeicherte Daten da sind
-        document.getElementById('welcomeArea').innerHTML = `Bitte öffnen Sie das Portal über Ihren persönlichen Mitgliedslink.`;
+        // Wenn kein Parameter und kein Speicher vorhanden ist (z. B. nackter Homescreen-Aufruf)
+        document.getElementById('welcomeArea').innerHTML = `
+            ⚠️ <strong>Kein persönlicher Link erkannt.</strong><br>
+            <span style="font-size: 12px; color: #555;">Bitte öffnen Sie einmalig Ihren personalisierten Link aus der Willkommens-Mail im Browser und fügen Sie ihn <em>danach</em> erneut zum Startbildschirm hinzu.</span>
+        `;
         document.getElementById('badgeName').innerText = "Mitgliedsausweis";
         document.getElementById('badgeId').innerText = "----";
         document.getElementById('badgeQrCode').src = "";
