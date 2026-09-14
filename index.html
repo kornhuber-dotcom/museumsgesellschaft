@@ -14,14 +14,14 @@
     <!-- CryptoJS für AES-Entschlüsselung der URL-Parameter -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
-<!-- OneSignal Push SDK -->
+    <!-- OneSignal Push SDK -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       window.OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
           appId: "a053017d-f986-4e37-94d7-8d353fbaeea9",
-          safari_web_id: "", // Falls du eine hast, ansonsten leer lassen
+          safari_web_id: "",
           serviceWorkerParam: { scope: "/" },
           serviceWorkerPath: "OneSignalSDKWorker.js"
         });
@@ -133,7 +133,6 @@
             line-height: 1.4;
         }
 
-        /* Spezielles Design für Mitgliedsausweis & Startbildschirm (Grün mit goldenem Rahmen) */
         .card-gold-accent {
             background: linear-gradient(135deg, #1b4d3e 0%, #12352a 100%);
             border: 2px solid var(--accent);
@@ -148,7 +147,6 @@
             color: #eaeaea;
         }
 
-        /* Standard-Button (Grün mit goldenem Rand für alle anderen) */
         .btn {
             display: block;
             width: 100%;
@@ -170,7 +168,6 @@
             background-color: var(--primary-dark);
         }
 
-        /* Spezieller Button (Gold mit dunklem Text für die beiden Highlight-Karten) */
         .btn-gold {
             background-color: var(--accent);
             color: var(--primary-dark);
@@ -216,11 +213,7 @@
             width: 100%;
             box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
-        .modal-content h3 {
-            margin-top: 0;
-            color: var(--primary);
-        }
-        .modal-content input, .modal-content textarea {
+        .modal-content textarea {
             width: 100%;
             padding: 10px;
             margin: 10px 0 15px 0;
@@ -230,7 +223,7 @@
             font-family: inherit;
         }
 
-        /* Originaler Ausweis-Card Design im Modal */
+        /* Ausweis-Card Design im Modal */
         .member-badge-card {
             background: #1b4d3e;
             border: 2px solid #d4af37;
@@ -343,20 +336,20 @@
             <button onclick="openModal('calendarModal')" class="btn">📅 Termine &amp; Öffnungszeiten ansehen</button>
         </div>
 
-<!-- 4. Mitglieder-Login & Datenpflege -->
-<div class="card">
-    <h3>Mitglieder-Login &amp; Datenpflege</h3>
-    <p>Mit Passworteingabe anmelden, um persönliche Daten einzusehen oder zu ändern.</p>
-    <a href="https://www.mgvo.de/mgb/login/login.php?call_id=3d660e620b631ab2139df53ffecde062" class="btn" target="_blank">🔑 Zum Login &amp; Datenänderung</a>
-    <span class="hint-text">(Öffnet im Browser)</span>
-</div>
+        <!-- 4. Mitglieder-Login & Datenpflege -->
+        <div class="card">
+            <h3>Mitglieder-Login &amp; Datenpflege</h3>
+            <p>Mit Passworteingabe anmelden, um persönliche Daten einzusehen oder zu ändern.</p>
+            <a href="https://www.mgvo.de/mgb/login/login.php?call_id=3d660e620b631ab2139df53ffecde062" class="btn" target="_blank">🔑 Zum Login &amp; Datenänderung</a>
+            <span class="hint-text">(Öffnet im Browser)</span>
+        </div>
 
-<!-- 5. Selbstauskunft & Daten per Mail -->
-<div class="card">
-    <h3>Selbstauskunft &amp; Daten per Mail</h3>
-    <p>Hier können Sie per E-Mail-Adresse (ohne Passwort) direkt Ihr <strong>Mitgliederdatenblatt</strong>, Ihr <strong>Finanzkonto</strong> oder den <strong>Zugang für den Mitgliederbereich</strong> anfordern.</p>
-    <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" class="btn" target="_blank">✉️ Selbstauskunft anfordern</a>
-</div>
+        <!-- 5. Selbstauskunft & Daten per Mail -->
+        <div class="card">
+            <h3>Selbstauskunft &amp; Daten per Mail</h3>
+            <p>Hier können Sie per E-Mail-Adresse (ohne Passwort) direkt Ihr <strong>Mitgliederdatenblatt</strong>, Ihr <strong>Finanzkonto</strong> oder den <strong>Zugang für den Mitgliederbereich</strong> anfordern.</p>
+            <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" class="btn" target="_blank">✉️ Selbstauskunft anfordern</a>
+        </div>
 
         <!-- 6. Offizielle Homepage -->
         <div class="card">
@@ -487,7 +480,10 @@
                     const memberId = parts[0];
                     const memberName = parts[1];
 
-                    // Direkt in die UI schreiben ohne Umweg über den Speicher
+                    // Direkt im localStorage sichern für Homescreen-Aufrufe
+                    localStorage.setItem('mg_member_id', memberId);
+                    localStorage.setItem('mg_member_name', memberName);
+
                     updateUI(memberId, memberName);
                     return;
                 }
@@ -496,7 +492,16 @@
             }
         }
 
-        // Wenn kein gültiger Parameter da ist, bleibt es strikt beim Hinweis
+        // Fallback: Aufruf vom Homescreen nutzt lokal gespeicherte Daten
+        const savedId = localStorage.getItem('mg_member_id');
+        const savedName = localStorage.getItem('mg_member_name');
+
+        if (savedId && savedName) {
+            updateUI(savedId, savedName);
+            return;
+        }
+
+        // Wenn weder URL-Parameter noch gespeicherte Daten da sind
         document.getElementById('welcomeArea').innerHTML = `Bitte öffnen Sie das Portal über Ihren persönlichen Mitgliedslink.`;
         document.getElementById('badgeName').innerText = "Mitgliedsausweis";
         document.getElementById('badgeId').innerText = "----";
