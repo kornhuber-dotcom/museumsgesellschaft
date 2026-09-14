@@ -1,7 +1,7 @@
 {
   "name": "Museumsgesellschaft e. V. Braunlage",
   "short_name": "Museum Braunlage",
-  "start_url": "./index.html",
+  "start_url": "./index.html?v=2",
   "display": "standalone",
   "background_color": "#f4f6f5",
   "theme_color": "#1b4d3e",
