@@ -197,6 +197,7 @@
             color: #888;
         }
 
+        /* Modals */
         .modal {
             display: none;
             position: fixed;
@@ -228,6 +229,81 @@
             border: 1px solid #ccc;
             border-radius: 6px;
             font-family: inherit;
+        }
+
+        /* Originaler Ausweis-Card Design im Modal */
+        .member-badge-card {
+            background: #1b4d3e;
+            border: 2px solid #d4af37;
+            border-radius: 14px;
+            padding: 20px;
+            color: white;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            text-align: left;
+            position: relative;
+        }
+        .badge-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .badge-header-row img {
+            height: 30px;
+            background: white;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+        .badge-org-title {
+            font-size: 14px;
+            color: var(--accent);
+            font-weight: bold;
+        }
+        .badge-type-title {
+            font-size: 12px;
+            color: #dcdcdc;
+            text-align: right;
+        }
+        .badge-field-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #a3c1ad;
+            margin-top: 8px;
+        }
+        .badge-field-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+        }
+        .badge-field-value.gold {
+            color: var(--accent);
+            font-size: 18px;
+        }
+        .badge-row-split {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+        }
+        .badge-qr-container {
+            text-align: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+        .badge-qr-container img {
+            width: 130px;
+            height: 130px;
+            background: white;
+            padding: 6px;
+            border-radius: 6px;
+        }
+        .badge-qr-hint {
+            font-size: 10px;
+            color: #dcdcdc;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -310,27 +386,37 @@
     </div>
 
     <!-- Modals -->
-    <div id="idModal" class="modal">
-        <div class="modal-content">
-            <h3>Mitglieder-Identifikation</h3>
-            <p style="font-size: 13px; color: var(--text-muted);">Bitte geben Sie Ihre Mitglieds-ID und Ihren Namen ein, um den sicheren Zugriff zu autorisieren:</p>
-            <label style="font-size: 12px; font-weight: bold;">Mitglieds-ID:</label>
-            <input type="text" id="manualId" placeholder="z. B. 1049">
-            <label style="font-size: 12px; font-weight: bold;">Vor- und Nachname:</label>
-            <input type="text" id="manualName" placeholder="z. B. Eckart Kornhuber">
-            <button class="btn" onclick="saveManualIdentity()">Zugriff bestätigen</button>
-        </div>
-    </div>
-
     <div id="badgeModal" class="modal">
-        <div class="modal-content">
-            <h3>Digitaler Mitgliedsausweis</h3>
-            <div style="background: var(--primary); color: white; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 15px;">
-                <h4 style="margin:0 0 10px 0; color: var(--accent);">Museumsgesellschaft Braunlage</h4>
-                <p id="badgeName" style="font-size: 18px; font-weight: bold; margin: 5px 0;"></p>
-                <p id="badgeId" style="font-size: 14px; margin: 0; opacity: 0.8;"></p>
+        <div class="modal-content" style="max-width: 380px;">
+            <div class="member-badge-card">
+                <div class="badge-header-row">
+                    <div>
+                        <img src="logo.png" alt="Logo" onerror="this.style.display='none'">
+                        <div class="badge-org-title">Museumsgesellschaft</div>
+                    </div>
+                    <div class="badge-type-title">Mitgliedsausweis</div>
+                </div>
+
+                <div class="badge-field-label">Inhaber / Mitglied</div>
+                <div id="badgeName" class="badge-field-value gold">Testmitglied</div>
+
+                <div class="badge-row-split">
+                    <div>
+                        <div class="badge-field-label">Mitglieds-ID</div>
+                        <div id="badgeId" class="badge-field-value">9999</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="badge-field-label">Gültig bis</div>
+                        <div class="badge-field-value" style="color: var(--accent);">31.12.2026</div>
+                    </div>
+                </div>
+
+                <div class="badge-qr-container">
+                    <img id="badgeQrCode" src="" alt="QR-Code zur Einlassprüfung">
+                    <div class="badge-qr-hint">QR-Code zur Einlassprüfung</div>
+                </div>
             </div>
-            <button class="btn" onclick="closeModal('badgeModal')">Schließen</button>
+            <button class="btn btn-secondary" onclick="closeModal('badgeModal')" style="margin-top: 15px;">Schließen</button>
         </div>
     </div>
 
@@ -404,7 +490,7 @@
                 updateUI(savedId, savedName);
             } else {
                 const defaultId = "9999";
-                const defaultName = "Testbenutzer";
+                const defaultName = "Testmitglied";
                 sessionStorage.setItem('mg_id', defaultId);
                 sessionStorage.setItem('mg_name', defaultName);
                 updateUI(defaultId, defaultName);
@@ -413,26 +499,15 @@
 
         function updateUI(id, name) {
             document.getElementById('welcomeArea').innerHTML = `Angemeldet als: <strong>${name}</strong> (ID: ${id})`;
-            document.getElementById('badgeName').innerText = name;
-            document.getElementById('badgeId').innerText = `Mitglieds-ID: ${id}`;
+            document.getElementById('badgeNameinnerText' in document.getElementById('badgeName') ? '' : 'badgeName').innerText = name;
+            document.getElementById('badgeId').innerText = id;
             
+            // QR-Code über den externen Generator (z.B. QuickChart API) basierend auf ID & Name befüllen
+            const qrText = encodeURIComponent(`Museumsgesellschaft Braunlage - Mitglied: ${name} (ID: ${id})`);
+            document.getElementById('badgeQrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrText}`;
+
             document.getElementById('mgvoDataSheetBtn').href = `${MGVO_BASE_URL}datenschloss?id=${id}`;
             document.getElementById('mgvoAccountBtn').href = `${MGVO_BASE_URL}konto?id=${id}`;
-        }
-
-        function saveManualIdentity() {
-            const id = document.getElementById('manualId').value.trim();
-            const name = document.getElementById('manualName').value.trim();
-
-            if (!id || !name) {
-                alert("Bitte beide Felder ausfüllen.");
-                return;
-            }
-
-            sessionStorage.setItem('mg_id', id);
-            sessionStorage.setItem('mg_name', name);
-            document.getElementById('idModal').style.display = 'none';
-            updateUI(id, name);
         }
 
         function enablePush() {
