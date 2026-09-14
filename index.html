@@ -477,6 +477,7 @@
     function initApp() {
         const encryptedData = getQueryParam('data');
 
+        // 1. Wenn ein personalisierter Link da ist, IMMER diesen Vorrang geben und aktualisieren!
         if (encryptedData) {
             try {
                 const bytes = CryptoJS.AES.decrypt(encryptedData, SECRET_PASSPHRASE);
@@ -487,14 +488,10 @@
                     const memberId = parts[0];
                     const memberName = parts[1];
 
-                    // Dauerhaft auf dem Gerät sichern
+                    // Direkt für dieses Gerät speichern
                     localStorage.setItem('mg_id', memberId);
                     localStorage.setItem('mg_name', memberName);
                     
-                    // WICHTIG: Den Parameter in die URL schreiben, damit auch der Homescreen-Start ihn behält!
-                    const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?data=" + encodeURIComponent(encryptedData);
-                    window.history.replaceState({path: newUrl}, '', newUrl);
-
                     updateUI(memberId, memberName);
                     return;
                 }
@@ -503,14 +500,18 @@
             }
         }
 
-        // Kein URL-Parameter da? Schauen, ob auf dem Gerät schon Daten hinterlegt sind (z.B. vom Homescreen-Start)
+        // 2. Kein Parameter in der URL? Schauen, ob im Browser-Speicher bereits ein Mitglied hinterlegt ist.
         const savedId = localStorage.getItem('mg_id');
         const savedName = localStorage.getItem('mg_name');
 
         if (savedId && savedName) {
             updateUI(savedId, savedName);
         } else {
-            document.getElementById('welcomeArea').innerHTML = `Bitte öffnen Sie das Portal über Ihren persönlichen Link.`;
+            // Absolut sicherer Fallback, falls gar nichts da ist
+            document.getElementById('welcomeArea').innerHTML = `Bitte öffnen Sie das Portal über Ihren persönlichen Mitgliedslink.`;
+            document.getElementById('badgeName').innerText = "Mitgliedsausweis";
+            document.getElementById('badgeId').innerText = "----";
+            document.getElementById('badgeQrCode').src = "";
         }
     }
 
