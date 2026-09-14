@@ -502,8 +502,8 @@
             document.getElementById('badgeName').innerText = name;
             document.getElementById('badgeId').innerText = id;
             
-            // QR-Code zeigt nun exakt auf die Prüf-URL mit ID und Namen
-            const checkUrl = `https://museum-braunlage.de?check.php&id=${id}&name=${encodeURIComponent(name)}`;
+            // Exakte Prüf-URL ohne Namen: https://museum-braunlage.de/check.php?id=ID
+            const checkUrl = `https://museum-braunlage.de/check.php?id=${id}`;
             const qrText = encodeURIComponent(checkUrl);
             document.getElementById('badgeQrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrText}`;
 
