@@ -46,7 +46,6 @@
             min-height: 100vh;
         }
 
-        /* Header mit grünem Hintergrund und Logo */
         .top-header {
             width: 100%;
             background-color: var(--primary);
@@ -92,7 +91,6 @@
             box-sizing: border-box;
         }
 
-        /* Willkommens-Box oben */
         .welcome-box {
             background: #ffffff;
             padding: 15px 20px;
@@ -107,7 +105,6 @@
             color: var(--primary);
         }
 
-        /* Kachel-Design */
         .card {
             background: var(--card-bg);
             border-radius: 12px;
@@ -143,7 +140,6 @@
             color: #dcdcdc;
         }
 
-        /* Buttons innerhalb der Kacheln */
         .btn {
             display: block;
             width: 100%;
@@ -184,6 +180,14 @@
             background-color: #f0f4f1;
         }
 
+        .hint-text {
+            display: block;
+            text-align: center;
+            font-size: 11px;
+            color: #777;
+            margin-top: 8px;
+        }
+
         .footer {
             text-align: center;
             padding: 20px;
@@ -191,7 +195,6 @@
             color: #888;
         }
 
-        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -215,19 +218,19 @@
             margin-top: 0;
             color: var(--primary);
         }
-        .modal-content input {
+        .modal-content input, .modal-content textarea {
             width: 100%;
             padding: 10px;
             margin: 10px 0 15px 0;
             box-sizing: border-box;
             border: 1px solid #ccc;
             border-radius: 6px;
+            font-family: inherit;
         }
     </style>
 </head>
 <body>
 
-    <!-- Oberer Header mit Logo -->
     <div class="top-header">
         <div class="logo-container">
             <img src="logo.png" alt="FIS Heimat- und Skimuseum Braunlage" onerror="this.style.display='none'">
@@ -242,53 +245,61 @@
             Lade Mitgliedsdaten...
         </div>
 
-        <!-- Kachel 1: Push / Eilmeldungen -->
+        <!-- 1. Eilmeldungen & Push -->
         <div class="card">
             <h3>Eilmeldungen &amp; Push</h3>
             <p>Erhalten Sie wichtige Vereinsinformationen direkt per Benachrichtigung.</p>
             <button onclick="enablePush()" class="btn">Push-Benachrichtigungen aktivieren</button>
         </div>
 
-        <!-- Kachel 2: Digitaler Mitgliedsausweis -->
+        <!-- 2. Digitaler Mitgliedsausweis -->
         <div class="card card-accent">
             <h3>Digitaler Mitgliedsausweis</h3>
             <p>Ihr offizieller Vereinsausweis im modernen Wallet-Format – jederzeit griffbereit.</p>
             <button onclick="openModal('badgeModal')" class="btn btn-accent">🪪 Ausweis anzeigen</button>
         </div>
 
-        <!-- Kachel 3: Kalender -->
+        <!-- 3. Kalender & Öffnungszeiten -->
         <div class="card">
             <h3>Kalender &amp; Öffnungszeiten</h3>
             <p>Aktuelle Termine, Exkursionen und Öffnungszeiten auf einen Blick.</p>
             <button onclick="openModal('calendarModal')" class="btn btn-secondary">📅 Termine &amp; Öffnungszeiten ansehen</button>
         </div>
 
-        <!-- Kachel 4: MGVO Login & Datenpflege -->
+        <!-- 4. Mitglieder-Login & Datenpflege -->
         <div class="card">
             <h3>Mitglieder-Login &amp; Datenpflege</h3>
             <p>Mit Passworteingabe anmelden, um persönliche Daten einzusehen oder zu ändern.</p>
-            <a href="#" id="mgvoAccountBtn" class="btn btn-secondary" target="_blank">Zum Login &amp; Datenänderung</a>
+            <a href="#" id="mgvoAccountBtn" class="btn btn-secondary" target="_blank">🔑 Zum Login &amp; Datenänderung</a>
+            <span class="hint-text">(Öffnet im Browser)</span>
         </div>
 
-        <!-- Kachel 5: MGVO Datenblatt -->
+        <!-- 5. Selbstauskunft & Daten per Mail -->
         <div class="card">
             <h3>Selbstauskunft &amp; Daten per Mail</h3>
-            <p>Hier können Sie direkt Ihr Mitgliederdatenblatt oder Finanzkonto anfordern.</p>
-            <a href="#" id="mgvoDataSheetBtn" class="btn btn-secondary" target="_blank">MGVO-Datenblatt anfordern</a>
+            <p>Hier können Sie per E-Mail-Adresse (ohne Passwort) direkt Ihr <strong>Mitgliederdatenblatt</strong>, Ihr <strong>Finanzkonto</strong> oder den <strong>Zugang für den Mitgliederbereich</strong> anfordern.</p>
+            <a href="#" id="mgvoDataSheetBtn" class="btn btn-secondary" target="_blank">✉️ Selbstauskunft anfordern</a>
         </div>
 
-        <!-- Kachel 6: Vereins-Homepage (Wieder da!) -->
+        <!-- 6. Offizielle Homepage -->
         <div class="card">
-            <h3>Vereins-Homepage</h3>
-            <p>Besuchen Sie unsere offizielle Internetpräsenz für weitere Informationen.</p>
-            <a href="https://museumsgesellschaft-braunlage.de" class="btn btn-secondary" target="_blank">🌐 Zur Homepage</a>
+            <h3>Offizielle Homepage</h3>
+            <p>Besuchen Sie unsere Hauptseite für aktuelle Ausstellungen, Berichte und das Museumsarchiv.</p>
+            <a href="https://museumsgesellschaft-braunlage.de" class="btn btn-secondary" target="_blank">🌐 Zur Website museum-braunlage.de</a>
         </div>
 
-        <!-- Kachel 7: App Installation -->
+        <!-- 7. Kontakt zum Vorstand -->
         <div class="card">
-            <h3>App auf Startbildschirm</h3>
-            <p>Installieren Sie das Portal als App auf Ihrem Smartphone.</p>
-            <button onclick="openModal('installModal')" class="btn btn-secondary">📱 Installationsanleitung</button>
+            <h3>Kontakt zum Vorstand</h3>
+            <p>Haben Sie Fragen, Anregungen oder Anliegen an die Museumsgesellschaft?</p>
+            <button onclick="openModal('contactModal')" class="btn btn-secondary">✉️ Nachricht an den Vorstand</button>
+        </div>
+
+        <!-- 8. Portal auf Smartphone speichern -->
+        <div class="card">
+            <h3>Portal auf Smartphone speichern</h3>
+            <p>Fügen Sie diese App zu Ihrem Startbildschirm hinzu – auch offline verfügbar.</p>
+            <button onclick="openModal('installModal')" class="btn btn-accent" style="background-color: var(--accent); color: var(--primary-dark);">📱 Zum Startbildschirm hinzufügen</button>
         </div>
     </div>
 
@@ -328,6 +339,16 @@
                 <strong>04. Oktober 2026:</strong> Bus-Exkursion „Auf den Spuren von Johann Georg von Langen“ zum Erich-Mäder Glasmuseum (Grünenplan) und Porzellanmanufaktur Fürstenberg.
             </p>
             <button class="btn" onclick="closeModal('calendarModal')">Schließen</button>
+        </div>
+    </div>
+
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <h3>Nachricht an den Vorstand</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Senden Sie uns Ihr Anliegen direkt per E-Mail:</p>
+            <textarea id="contactMessage" rows="4" placeholder="Ihre Nachricht..."></textarea>
+            <button class="btn" onclick="sendContactMail()">E-Mail senden</button>
+            <button class="btn btn-secondary" onclick="closeModal('contactModal')" style="margin-top: 8px;">Abbrechen</button>
         </div>
     </div>
 
@@ -417,6 +438,14 @@
                     alert("Push-Benachrichtigungen konnten nicht initialisiert werden.");
                 }
             });
+        }
+
+        function sendContactMail() {
+            const msg = encodeURIComponent(document.getElementById('contactMessage').value);
+            const name = sessionStorage.getItem('mg_name') || 'Unbekannt';
+            const id = sessionStorage.getItem('mg_id') || 'Unbekannt';
+            window.location.href = `mailto:vorstand@museumsgesellschaft-braunlage.de?subject=Anfrage aus Mitgliederportal von ${name} (ID: ${id})&body=${msg}`;
+            closeModal('contactModal');
         }
 
         function openModal(modalId) {
