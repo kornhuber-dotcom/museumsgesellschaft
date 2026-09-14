@@ -128,27 +128,29 @@
             line-height: 1.4;
         }
 
-        .card-accent {
+        /* Spezielles Design für Mitgliedsausweis & Startbildschirm (Grün mit goldenem Rahmen) */
+        .card-gold-accent {
             background: linear-gradient(135deg, #1b4d3e 0%, #12352a 100%);
-            border: none;
-            border-left: 5px solid var(--accent);
+            border: 2px solid var(--accent);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
         }
 
-        .card-accent h3 {
-            color: white;
+        .card-gold-accent h3 {
+            color: var(--accent);
         }
 
-        .card-accent p {
-            color: #dcdcdc;
+        .card-gold-accent p {
+            color: #eaeaea;
         }
 
+        /* Standard-Button (Grün mit goldenem Rand für alle anderen) */
         .btn {
             display: block;
             width: 100%;
             padding: 13px;
             background-color: var(--primary);
             color: white;
-            border: none;
+            border: 2px solid var(--accent);
             border-radius: 8px;
             font-size: 14px;
             font-weight: bold;
@@ -156,30 +158,22 @@
             text-decoration: none;
             cursor: pointer;
             box-sizing: border-box;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.1s;
         }
 
         .btn:hover {
             background-color: var(--primary-dark);
         }
 
-        .btn-accent {
+        /* Spezieller Button (Gold mit dunklem Text für die beiden Highlight-Karten) */
+        .btn-gold {
             background-color: var(--accent);
             color: var(--primary-dark);
+            border: 1px solid #b8972b;
         }
 
-        .btn-accent:hover {
+        .btn-gold:hover {
             background-color: #c39e2f;
-        }
-
-        .btn-secondary {
-            background-color: #ffffff;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
-
-        .btn-secondary:hover {
-            background-color: #f0f4f1;
         }
 
         .hint-text {
@@ -330,25 +324,25 @@
             <button onclick="enablePush()" class="btn">Push-Benachrichtigungen aktivieren</button>
         </div>
 
-        <!-- 2. Digitaler Mitgliedsausweis -->
-        <div class="card card-accent">
+        <!-- 2. Digitaler Mitgliedsausweis (Highlight) -->
+        <div class="card card-gold-accent">
             <h3>Digitaler Mitgliedsausweis</h3>
             <p>Ihr offizieller Vereinsausweis im modernen Wallet-Format – jederzeit griffbereit.</p>
-            <button onclick="openModal('badgeModal')" class="btn btn-accent">🪪 Ausweis anzeigen</button>
+            <button onclick="openModal('badgeModal')" class="btn btn-gold">🪪 Ausweis anzeigen</button>
         </div>
 
         <!-- 3. Kalender & Öffnungszeiten -->
         <div class="card">
             <h3>Kalender &amp; Öffnungszeiten</h3>
             <p>Aktuelle Termine, Exkursionen und Öffnungszeiten auf einen Blick.</p>
-            <button onclick="openModal('calendarModal')" class="btn btn-secondary">📅 Termine &amp; Öffnungszeiten ansehen</button>
+            <button onclick="openModal('calendarModal')" class="btn">📅 Termine &amp; Öffnungszeiten ansehen</button>
         </div>
 
         <!-- 4. Mitglieder-Login & Datenpflege -->
         <div class="card">
             <h3>Mitglieder-Login &amp; Datenpflege</h3>
             <p>Mit Passworteingabe anmelden, um persönliche Daten einzusehen oder zu ändern.</p>
-            <a href="#" id="mgvoAccountBtn" class="btn btn-secondary" target="_blank">🔑 Zum Login &amp; Datenänderung</a>
+            <a href="#" id="mgvoAccountBtn" class="btn" target="_blank">🔑 Zum Login &amp; Datenänderung</a>
             <span class="hint-text">(Öffnet im Browser)</span>
         </div>
 
@@ -356,28 +350,28 @@
         <div class="card">
             <h3>Selbstauskunft &amp; Daten per Mail</h3>
             <p>Hier können Sie per E-Mail-Adresse (ohne Passwort) direkt Ihr <strong>Mitgliederdatenblatt</strong>, Ihr <strong>Finanzkonto</strong> oder den <strong>Zugang für den Mitgliederbereich</strong> anfordern.</p>
-            <a href="#" id="mgvoDataSheetBtn" class="btn btn-secondary" target="_blank">✉️ Selbstauskunft anfordern</a>
+            <a href="#" id="mgvoDataSheetBtn" class="btn" target="_blank">✉️ Selbstauskunft anfordern</a>
         </div>
 
         <!-- 6. Offizielle Homepage -->
         <div class="card">
             <h3>Offizielle Homepage</h3>
             <p>Besuchen Sie unsere Hauptseite für aktuelle Ausstellungen, Berichte und das Museumsarchiv.</p>
-            <a href="https://museum-braunlage.de" class="btn btn-secondary" target="_blank">🌐 Zur Website museum-braunlage.de</a>
+            <a href="https://museum-braunlage.de" class="btn" target="_blank">🌐 Zur Website museum-braunlage.de</a>
         </div>
 
         <!-- 7. Kontakt zum Vorstand -->
         <div class="card">
             <h3>Kontakt zum Vorstand</h3>
             <p>Haben Sie Fragen, Anregungen oder Anliegen an die Museumsgesellschaft?</p>
-            <button onclick="openModal('contactModal')" class="btn btn-secondary">✉️ Nachricht an den Vorstand</button>
+            <button onclick="openModal('contactModal')" class="btn">✉️ Nachricht an den Vorstand</button>
         </div>
 
-        <!-- 8. Portal auf Smartphone speichern -->
-        <div class="card">
+        <!-- 8. Portal auf Smartphone speichern (Highlight) -->
+        <div class="card card-gold-accent">
             <h3>Portal auf Smartphone speichern</h3>
             <p>Fügen Sie diese App zu Ihrem Startbildschirm hinzu – auch offline verfügbar.</p>
-            <button onclick="openModal('installModal')" class="btn btn-accent" style="background-color: var(--accent); color: var(--primary-dark);">📱 Zum Startbildschirm hinzufügen</button>
+            <button onclick="openModal('installModal')" class="btn btn-gold">📱 Zum Startbildschirm hinzufügen</button>
         </div>
     </div>
 
@@ -416,16 +410,31 @@
                     <div class="badge-qr-hint">QR-Code zur Einlassprüfung</div>
                 </div>
             </div>
-            <button class="btn btn-secondary" onclick="closeModal('badgeModal')" style="margin-top: 15px;">Schließen</button>
+            <button class="btn" onclick="closeModal('badgeModal')" style="margin-top: 15px;">Schließen</button>
         </div>
     </div>
 
     <div id="calendarModal" class="modal">
         <div class="modal-content">
-            <h3>Termine &amp; Öffnungszeiten</h3>
-            <p style="font-size: 14px; line-height: 1.5;">
-                <strong>04. Oktober 2026:</strong> Bus-Exkursion „Auf den Spuren von Johann Georg von Langen“ zum Erich-Mäder Glasmuseum (Grünenplan) und Porzellanmanufaktur Fürstenberg.
-            </p>
+            <h3 style="margin-bottom: 15px; color: var(--primary);">Termine &amp; Öffnungszeiten</h3>
+            
+            <div style="background: #f8f9f8; padding: 12px; border-radius: 8px; border-left: 4px solid var(--primary); margin-bottom: 15px; font-size: 13px; line-height: 1.4;">
+                <strong style="color: var(--primary); display: block; margin-bottom: 4px;">Öffnungszeiten:</strong>
+                Di. &amp; Do. 10–12 Uhr sowie während der von-Langen-Ausstellung bis 10.10. auch Sa. 11–15 Uhr.
+            </div>
+
+            <div style="margin-bottom: 15px; font-size: 13px; line-height: 1.4;">
+                <strong style="color: var(--text); display: block; margin-bottom: 3px;">Nächster Termin:</strong>
+                📅 Do., 17.09.2026, 18:30 Uhr<br>
+                <span style="color: var(--text-muted);">Jahreshauptversammlung</span>
+            </div>
+
+            <div style="margin-bottom: 20px; font-size: 13px; line-height: 1.4; border-top: 1px solid #eee; padding-top: 12px;">
+                <strong style="color: var(--text); display: block; margin-bottom: 3px;">Ausblick:</strong>
+                📅 So., 04.10.2026, 09:00 Uhr<br>
+                <span style="color: var(--text-muted);">Busexkursion „Tour auf Von-Langen-Spuren“ nach Grünenplan &amp; Fürstenberg</span>
+            </div>
+
             <button class="btn" onclick="closeModal('calendarModal')">Schließen</button>
         </div>
     </div>
@@ -435,8 +444,8 @@
             <h3>Nachricht an den Vorstand</h3>
             <p style="font-size: 13px; color: var(--text-muted);">Senden Sie uns Ihr Anliegen direkt per E-Mail:</p>
             <textarea id="contactMessage" rows="4" placeholder="Ihre Nachricht..."></textarea>
-            <button class="btn" onclick="sendContactMail()">E-Mail senden</button>
-            <button class="btn btn-secondary" onclick="closeModal('contactModal')" style="margin-top: 8px;">Abbrechen</button>
+            <button class="btn" onclick="sendContactMail()" style="margin-bottom: 8px;">E-Mail senden</button>
+            <button class="btn" onclick="closeModal('contactModal')">Abbrechen</button>
         </div>
     </div>
 
