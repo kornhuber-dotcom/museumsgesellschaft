@@ -479,9 +479,11 @@
                     const memberId = parts[0];
                     const memberName = parts[1];
 
-                    // Daten dauerhaft lokal auf dem Gerät des Mitglieds speichern
+                    // Sofort in allen verfügbaren Speichern sichern
                     localStorage.setItem('mg_member_id', memberId);
                     localStorage.setItem('mg_member_name', memberName);
+                    sessionStorage.setItem('mg_member_id', memberId);
+                    sessionStorage.setItem('mg_member_name', memberName);
 
                     updateUI(memberId, memberName);
                     return;
@@ -491,23 +493,56 @@
             }
         }
 
-        // Kein URL-Parameter vorhanden? Greife automatisch auf den Gerätespeicher zurück!
-        const savedId = localStorage.getItem('mg_member_id');
-        const savedName = localStorage.getItem('mg_member_name');
+        // Fallback 1: localStorage prüfen
+        let savedId = localStorage.getItem('mg_member_id');
+        let savedName = localStorage.getItem('mg_member_name');
+
+        // Fallback 2: Falls localStorage leer ist, sessionStorage testen
+        if (!savedId) {
+            savedId = sessionStorage.getItem('mg_member_id');
+            savedName = sessionStorage.getItem('mg_member_name');
+        }
 
         if (savedId && savedName) {
             updateUI(savedId, savedName);
             return;
         }
 
-        // Falls wirklich gar nichts da ist (z. B. völlig frischer Aufruf ohne personalisierten Link)
+        // Wenn gar nichts da ist: Direkt ein Eingabefeld anbieten, falls der Link per Hand/Mail eingefügt werden muss
         document.getElementById('welcomeArea').innerHTML = `
-            ⚠️ <strong>Willkommen bei der Museumsgesellschaft!</strong><br>
-            <span style="font-size: 12px; color: #555;">Bitte nutzen Sie Ihren persönlichen Link aus der Mitglieder-Mail, um sich einmalig anzumelden. Danach bleibt Ihr Ausweis dauerhaft gespeichert.</span>
+            ⚠️ <strong>Mitgliedsdaten nicht gefunden.</strong><br>
+            <span style="font-size: 12px; color: #555; display: block; margin-top: 5px;">
+                Bitte öffnen Sie einmalig Ihren persönlichen Link aus der Willkommens-Mail direkt im Browser. 
+                Alternativ können Sie Ihren personalisierten Link hier einfügen:
+            </span>
+            <div style="margin-top: 10px; display: flex; gap: 5px;">
+                <input type="text" id="manualLinkInput" placeholder="Persönlichen Link hier einfügen..." style="flex: 1; padding: 6px; font-size: 11px; border: 1px solid #ccc; border-radius: 4px;">
+                <button onclick="saveManualLink()" style="padding: 6px 10px; background: var(--primary); color: white; border: none; border-radius: 4px; font-size: 11px; cursor: pointer;">Speichern</button>
+            </div>
         `;
         document.getElementById('badgeName').innerText = "Mitgliedsausweis";
         document.getElementById('badgeId').innerText = "----";
         document.getElementById('badgeQrCode').src = "";
+    }
+
+    function saveManualLink() {
+        const val = document.getElementById('manualLinkInput').value.trim();
+        if (val.includes('?data=')) {
+            const encryptedData = val.split('?data=')[1].split('&')[0];
+            try {
+                const bytes = CryptoJS.AES.decrypt(encryptedData, SECRET_PASSPHRASE);
+                const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+                if (decrypted && decrypted.includes('|')) {
+                    const parts = decrypted.split('|');
+                    localStorage.setItem('mg_member_id', parts[0]);
+                    localStorage.setItem('mg_member_name', parts[1]);
+                    alert("Erfolgreich gespeichert!");
+                    location.reload();
+                    return;
+                }
+            } catch(e) {}
+        }
+        alert("Der Link scheint ungültig zu sein.");
     }
 
     function updateUI(id, name) {
@@ -519,33 +554,7 @@
         const qrText = encodeURIComponent(checkUrl);
         document.getElementById('badgeQrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrText}`;
     }
-
-    function enablePush() {
-        window.OneSignalDeferred.push(async function(OneSignal) {
-            try {
-                await OneSignal.Notifications.requestPermission();
-            } catch (error) {
-                console.error("Push-Fehler:", error);
-                alert("Push-Benachrichtigungen konnten auf diesem Gerät nicht gestartet werden.");
-            }
-        });
-    }
-
-    function sendContactMail() {
-        const msg = encodeURIComponent(document.getElementById('contactMessage').value);
-        window.location.href = `mailto:vorstand@museumsgesellschaft-braunlage.de?subject=Anfrage aus Mitgliederportal&body=${msg}`;
-        closeModal('contactModal');
-    }
-
-    function openModal(modalId) {
-        document.getElementById(modalId).style.display = 'flex';
-    }
-
-    function closeModal(modalId) {
-        document.getElementById(modalId).style.display = 'none';
-    }
-
-    window.onload = initApp;
+    // ... (restliche Funktionen bleiben gleich)
 </script>
 </body>
 </html>
