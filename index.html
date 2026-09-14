@@ -477,7 +477,6 @@
     function initApp() {
         const encryptedData = getQueryParam('data');
 
-        // 1. Wenn ein personalisierter Link da ist, IMMER diesen Vorrang geben und aktualisieren!
         if (encryptedData) {
             try {
                 const bytes = CryptoJS.AES.decrypt(encryptedData, SECRET_PASSPHRASE);
@@ -488,10 +487,7 @@
                     const memberId = parts[0];
                     const memberName = parts[1];
 
-                    // Direkt für dieses Gerät speichern
-                    localStorage.setItem('mg_id', memberId);
-                    localStorage.setItem('mg_name', memberName);
-                    
+                    // Direkt in die UI schreiben ohne Umweg über den Speicher
                     updateUI(memberId, memberName);
                     return;
                 }
@@ -500,19 +496,11 @@
             }
         }
 
-        // 2. Kein Parameter in der URL? Schauen, ob im Browser-Speicher bereits ein Mitglied hinterlegt ist.
-        const savedId = localStorage.getItem('mg_id');
-        const savedName = localStorage.getItem('mg_name');
-
-        if (savedId && savedName) {
-            updateUI(savedId, savedName);
-        } else {
-            // Absolut sicherer Fallback, falls gar nichts da ist
-            document.getElementById('welcomeArea').innerHTML = `Bitte öffnen Sie das Portal über Ihren persönlichen Mitgliedslink.`;
-            document.getElementById('badgeName').innerText = "Mitgliedsausweis";
-            document.getElementById('badgeId').innerText = "----";
-            document.getElementById('badgeQrCode').src = "";
-        }
+        // Wenn kein gültiger Parameter da ist, bleibt es strikt beim Hinweis
+        document.getElementById('welcomeArea').innerHTML = `Bitte öffnen Sie das Portal über Ihren persönlichen Mitgliedslink.`;
+        document.getElementById('badgeName').innerText = "Mitgliedsausweis";
+        document.getElementById('badgeId').innerText = "----";
+        document.getElementById('badgeQrCode').src = "";
     }
 
     function updateUI(id, name) {
@@ -538,9 +526,7 @@
 
     function sendContactMail() {
         const msg = encodeURIComponent(document.getElementById('contactMessage').value);
-        const name = localStorage.getItem('mg_name') || 'Mitglied';
-        const id = localStorage.getItem('mg_id') || '';
-        window.location.href = `mailto:vorstand@museumsgesellschaft-braunlage.de?subject=Anfrage aus Mitgliederportal von ${name} (ID: ${id})&body=${msg}`;
+        window.location.href = `mailto:vorstand@museumsgesellschaft-braunlage.de?subject=Anfrage aus Mitgliederportal&body=${msg}`;
         closeModal('contactModal');
     }
 
