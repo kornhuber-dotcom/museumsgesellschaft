@@ -479,11 +479,9 @@
                     const memberId = parts[0];
                     const memberName = parts[1];
 
-                    // Daten dauerhaft im localStorage sichern
+                    // Daten dauerhaft lokal auf dem Gerät des Mitglieds speichern
                     localStorage.setItem('mg_member_id', memberId);
                     localStorage.setItem('mg_member_name', memberName);
-                    // Den kompletten aktuellen URL-Parameter für den Homescreen-Shortcut ablegen
-                    localStorage.setItem('mg_full_url', window.location.href);
 
                     updateUI(memberId, memberName);
                     return;
@@ -493,7 +491,7 @@
             }
         }
 
-        // Fallback: Gespeicherte Daten nutzen
+        // Kein URL-Parameter vorhanden? Greife automatisch auf den Gerätespeicher zurück!
         const savedId = localStorage.getItem('mg_member_id');
         const savedName = localStorage.getItem('mg_member_name');
 
@@ -502,10 +500,10 @@
             return;
         }
 
-        // Wenn kein Parameter und kein Speicher vorhanden ist (z. B. nackter Homescreen-Aufruf)
+        // Falls wirklich gar nichts da ist (z. B. völlig frischer Aufruf ohne personalisierten Link)
         document.getElementById('welcomeArea').innerHTML = `
-            ⚠️ <strong>Kein persönlicher Link erkannt.</strong><br>
-            <span style="font-size: 12px; color: #555;">Bitte öffnen Sie einmalig Ihren personalisierten Link aus der Willkommens-Mail im Browser und fügen Sie ihn <em>danach</em> erneut zum Startbildschirm hinzu.</span>
+            ⚠️ <strong>Willkommen bei der Museumsgesellschaft!</strong><br>
+            <span style="font-size: 12px; color: #555;">Bitte nutzen Sie Ihren persönlichen Link aus der Mitglieder-Mail, um sich einmalig anzumelden. Danach bleibt Ihr Ausweis dauerhaft gespeichert.</span>
         `;
         document.getElementById('badgeName').innerText = "Mitgliedsausweis";
         document.getElementById('badgeId').innerText = "----";
