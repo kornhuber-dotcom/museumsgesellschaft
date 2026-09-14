@@ -451,18 +451,28 @@
         const encryptedData = getQueryParam('data');
 
         if (encryptedData) {
+            // Wenn ein Link mit Daten aufgerufen wurde, speichern wir ihn sofort dauerhaft im Browser-Speicher dieses Geräts!
             try {
                 const bytes = CryptoJS.AES.decrypt(encryptedData, SECRET_PASSPHRASE);
+                const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+                if (decrypted && decrypted.includes('|')) {
+                    localStorage.setItem('mg_persistent_data', encryptedData);
+                }
+            } catch (e) {}
+        }
+
+        // Wir holen die Daten jetzt Prio 1 aus der aktuellen URL, Prio 2 aus dem dauerhaften Gerätespeicher
+        const activeEncrypted = encryptedData || localStorage.getItem('mg_persistent_data');
+
+        if (activeEncrypted) {
+            try {
+                const bytes = CryptoJS.AES.decrypt(activeEncrypted, SECRET_PASSPHRASE);
                 const decrypted = bytes.toString(CryptoJS.enc.Utf8);
 
                 if (decrypted && decrypted.includes('|')) {
                     const parts = decrypted.split('|');
                     const memberId = parts[0];
                     const memberName = parts[1];
-
-                    // Wir merken uns die Daten sicher im Sitzungsspeicher des Browsers für diesen Aufruf
-                    sessionStorage.setItem('mg_active_id', memberId);
-                    sessionStorage.setItem('mg_active_name', memberName);
 
                     updateUI(memberId, memberName);
                     return;
@@ -472,21 +482,11 @@
             }
         }
 
-        // Falls die Daten im aktuellen Tab noch da sind
-        const activeId = sessionStorage.getItem('mg_active_id');
-        const activeName = sessionStorage.getItem('mg_active_name');
-
-        if (activeId && activeName) {
-            updateUI(activeId, activeName);
-            return;
-        }
-
-        // Fallback: Wenn jemand die App ohne Link aufruft, leiten wir ihn dezent an die Startseite oder Info weiter,
-        // statt ein technisches Eingabefeld zu zeigen.
+        // Absoluter Notfall, falls absolut gar nichts da ist (z.B. frisch gelöschter Browser)
         document.getElementById('welcomeArea').innerHTML = `
             👋 <strong>Willkommen bei der Museumsgesellschaft Braunlage!</strong><br>
             <span style="font-size: 12px; color: #555; display: block; margin-top: 4px;">
-                Bitte rufen Sie das Portal über den persönlichen Link aus Ihrer Mitglieder-E-Mail auf, um Ihren Ausweis zu sehen.
+                Bitte klicke einmal kurz auf den personalisierten Link in deiner Willkommens-E-Mail. Danach merkt sich dein Handy die Daten für immer.
             </span>
         `;
         document.getElementById('badgeName').innerText = "Mitgliedsausweis";
