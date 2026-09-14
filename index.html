@@ -519,13 +519,17 @@
 
         }
 
-        function enablePush() {
+function enablePush() {
             window.OneSignalDeferred.push(async function(OneSignal) {
                 try {
-                    await OneSignal.Slidedown.promptPush();
+                    if (OneSignal.Slidedown && typeof OneSignal.Slidedown.promptPush === 'function') {
+                        await OneSignal.Slidedown.promptPush();
+                    } else {
+                        await OneSignal.Notifications.requestPermission();
+                    }
                 } catch (error) {
                     console.error("Push-Fehler:", error);
-                    alert("Push-Benachrichtigungen konnten nicht initialisiert werden.");
+                    alert("Push-Benachrichtigungen konnten auf diesem Gerät nicht direkt gestartet werden. Bitte prüfen Sie die Browsereinstellungen.");
                 }
             });
         }
