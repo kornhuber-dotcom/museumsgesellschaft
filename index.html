@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Museumsverein">
-    <meta name="theme-color" content="#1b4d3e">
+    <meta name="theme-color" content="#1b365d">
     
     <!-- Manifest & Push Integration -->
     <link rel="manifest" href="manifest.json">
@@ -34,13 +34,13 @@
 
     <style>
         :root {
-            --primary: #1b4d3e;
-            --primary-dark: #12352a;
-            --accent: #d4af37;
-            --bg-color: #f4f6f5;
+            --primary: #1b365d;
+            --primary-light: #2c4d7d;
+            --accent: #c5a059;
+            --bg-color: #f8f9fa;
             --card-bg: #ffffff;
-            --text-main: #2c3e50;
-            --text-muted: #7f8c8d;
+            --text-main: #212529;
+            --text-muted: #6c757d;
             --border-radius: 12px;
         }
 
@@ -73,7 +73,7 @@
         header {
             background: var(--primary);
             color: white;
-            padding: 22px 20px;
+            padding: 20px;
             text-align: center;
         }
 
@@ -95,7 +95,7 @@
 
         .card {
             background: #ffffff;
-            border: 1px solid #e1e8ed;
+            border: 1px solid #e5e7eb;
             border-radius: 10px;
             padding: 16px;
             margin-bottom: 16px;
@@ -135,22 +135,22 @@
         }
 
         .btn:active {
-            background: var(--primary-dark);
+            background: var(--primary-light);
         }
 
         .btn-secondary {
-            background: #f8f9fa;
+            background: #f3f4f6;
             color: var(--text-main);
-            border: 1px solid #ccd1d1;
+            border: 1px solid #d1d5db;
         }
 
         .btn-secondary:active {
-            background: #e2e8f0;
+            background: #e5e7eb;
         }
 
         /* Digitaler Ausweis (Wallet Optik) */
         .wallet-card {
-            background: linear-gradient(135deg, #1b4d3e 0%, #2e7d63 100%);
+            background: linear-gradient(135deg, #1b365d 0%, #2c4d7d 100%);
             color: white;
             border-radius: 12px;
             padding: 20px;
@@ -186,7 +186,7 @@
 
         .wallet-id {
             font-size: 0.85rem;
-            color: #e2e8f0;
+            color: #d1d5db;
             margin-bottom: 16px;
         }
 
@@ -211,14 +211,14 @@
 
         /* SEPA Notice Box */
         .notice-box {
-            background: #fef3c7;
+            background: #fffbeb;
             border-left: 4px solid #f59e0b;
             padding: 10px 12px;
             font-size: 0.8rem;
             color: #92400e;
             border-radius: 4px;
-            margin-top: 12px;
-            line-height: 1.4;
+            margin-top: 10px;
+            line-height: 1.3;
         }
 
         footer {
@@ -226,8 +226,8 @@
             padding: 16px;
             font-size: 0.75rem;
             color: var(--text-muted);
-            border-top: 1px solid #e1e8ed;
-            background: #fafbfc;
+            border-top: 1px solid #e5e7eb;
+            background: #fafafa;
         }
     </style>
 </head>
@@ -241,18 +241,18 @@
 
         <div class="content">
             
-            <!-- Digitaler Mitgliedsausweis Card -->
+            <!-- Digitaler Mitgliedsausweis (Dynamisch via URL-Parameter) -->
             <div class="wallet-card">
                 <div class="wallet-header">Mitgliedsausweis</div>
-                <div class="wallet-name" id="memberName">Eckart Kornhuber</div>
-                <div class="wallet-id">Mitglieds-Nr: MG-2026-01</div>
+                <div class="wallet-name" id="displayName">Lade Mitglied...</div>
+                <div class="wallet-id" id="displayId">Mitglieds-Nr: --</div>
                 <div class="wallet-footer">
                     <div>
-                        <div style="font-size: 0.75rem; color: #cbd5e1;">Status</div>
+                        <div style="font-size: 0.75rem; color: #9ca3af;">Status</div>
                         <div style="font-size: 0.9rem; font-weight: 500;">Aktiv (Vollzahler)</div>
                     </div>
                     <div class="qr-placeholder">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=64x64&data=MG-2026-01-ECKART" alt="QR-Code">
+                        <img id="qrCodeImg" src="https://api.qrserver.com/v1/create-qr-code/?size=64x64&data=MGV-DEFAULT" alt="QR-Code">
                     </div>
                 </div>
             </div>
@@ -260,31 +260,30 @@
             <!-- MGVO Login / Portal Integration -->
             <div class="card">
                 <h2>MGVO Mitglieder-Bereich</h2>
-                <p>Verwalte deine Stammdaten, rufe Dokumente ab oder passe deine Einstellungen an.</p>
-                <!-- Externer Browser Window Trigger (Verhindert iframe Einschränkungen) -->
+                <p>Verwalte deine Daten, rufe Bescheinigungen ab oder passe deine Einstellungen an.</p>
+                <!-- Externer Browser Window Trigger -->
                 <a href="https://app.mgvo.de/login" target="_blank" rel="noopener noreferrer" class="btn">Zum MGVO-Portal öffnen ↗</a>
             </div>
 
             <!-- Selbst-Service & Dokumente -->
             <div class="card">
                 <h2>Zugangscode & Selbstauskunft</h2>
-                <p>Direktzugriff auf deine hinterlegten Dokumente und Kontoinformationen.</p>
-                
+                <p>Direktzugriff auf deine hinterlegten Dokumente und Datenblätter.</p>
                 <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <button class="btn btn-secondary" onclick="alert('Mitgliederdatenblatt (PDF) wird erstellt...')">📄 Mitgliederdatenblatt abrufen</button>
-                    <button class="btn btn-secondary" onclick="alert('Konto- und Beitragsstand wird geladen...')">💶 Konto- und Beitragsübersicht</button>
-                    <button class="btn btn-secondary" onclick="alert('Link zum Zurücksetzen des Passworts wurde gesendet.')">🔑 Passwort zurücksetzen / ändern</button>
+                    <button class="btn btn-secondary" onclick="alert('Mitgliederdatenblatt wird generiert...')">📄 Mein Datenblatt (PDF)</button>
+                    <button class="btn btn-secondary" onclick="alert('Konto- und Beitragsübersicht wird geladen...')">💶 Konto- und Beitragsstand</button>
+                    <button class="btn btn-secondary" onclick="alert('Passwort-Zurücksetzungslink wurde angefordert.')">🔑 Passwort zurücksetzen</button>
                 </div>
                 
                 <!-- SEPA / Bankdaten Änderungshinweis -->
                 <div class="notice-box">
-                    ℹ️ <strong>Wichtiger Hinweis zu Bankdatenänderungen:</strong> Aus rechtlichen Gründen (erforderliches SEPA-Lastschriftmandat) werden Online-Änderungen der IBAN im System als Entwurf markiert und erst nach Vorlage des unterschriebenen Mandats durch den Vorstand freigegeben.
+                    ℹ️ <strong>Hinweis zu Bankdatenänderungen:</strong> Aus rechtlichen Gründen (SEPA-Lastschriftmandat) werden IBAN-Änderungen im System als Entwurf markiert und erfordern die Freigabe des Vorstandes nach Vorlage des unterschriebenen Mandats.
                 </div>
             </div>
 
             <!-- Link zur Homepage -->
             <div style="text-align: center; margin: 20px 0;">
-                <a href="https://museum-braunlage.de" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="background-color: #f8f9fa; color: #1b4d3e; border: 1px solid #1b4d3e; font-weight: 600;">🌐 Besuche unsere Homepage</a>
+                <a href="https://museum-braunlage.de" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="background-color: #f0f0f0; color: #333; border: 1px solid #ccc;">🌐 Besuche unsere Homepage</a>
             </div>
 
         </div>
@@ -295,12 +294,33 @@
     </div>
 
     <script>
-        // Clientseitige Initialisierung / Verschlüsselungs-Check mit CryptoJS
+        // Dynamisches Auslesen der URL-Parameter für den Mitgliedsausweis
+        // Beispiel-Aufruf: index.html?name=Eckart%20Kornhuber&id=MG-2026-01
         document.addEventListener("DOMContentLoaded", function() {
-            // Beispiel für lokale ID-Verschlüsselung bei Bedarf
-            const memberId = "MG-2026-01";
-            const encryptedId = CryptoJS.AES.encrypt(memberId, 'MuseumBraunlageKey').toString();
-            console.log("Portal erfolgreich initialisiert.");
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            const nameParam = urlParams.get('name');
+            const idParam = urlParams.get('id');
+
+            const nameElement = document.getElementById('displayName');
+            const idElement = document.getElementById('displayId');
+            const qrElement = document.getElementById('qrCodeImg');
+
+            if (nameParam) {
+                nameElement.textContent = decodeURIComponent(nameParam);
+            } else {
+                nameElement.textContent = "Eckart Kornhuber"; // Fallback
+            }
+
+            if (idParam) {
+                const memberId = decodeURIComponent(idParam);
+                idElement.textContent = "Mitglieds-Nr: " + memberId;
+                // QR-Code mit den echten URL-Daten füttern oder clientseitig mit CryptoJS verschlüsseln
+                const encryptedData = CryptoJS.AES.encrypt(memberId, 'MuseumBraunlageKey').toString();
+                qrElement.src = `https://api.qrserver.com/v1/create-qr-code/?size=64x64&data=${encodeURIComponent(memberId)}`;
+            } else {
+                idElement.textContent = "Mitglieds-Nr: MG-2026-01";
+            }
         });
     </script>
 </body>
