@@ -522,18 +522,13 @@
 function enablePush() {
     window.OneSignalDeferred.push(async function(OneSignal) {
         try {
-            await OneSignal.Slidedown.promptMain({ slidedownPromptType: 'push' });
+            await OneSignal.Notifications.requestPermission();
         } catch (error) {
             console.error("Push-Fehler:", error);
-            try {
-                await OneSignal.Notifications.requestPermission();
-            } catch (innerError) {
-                alert("Push-Benachrichtigungen konnten auf diesem Gerät nicht direkt gestartet werden. Bitte prüfen Sie die Browsereinstellungen.");
-            }
+            alert("Push-Benachrichtigungen konnten auf diesem Gerät nicht gestartet werden.");
         }
     });
 }
-
         function sendContactMail() {
             const msg = encodeURIComponent(document.getElementById('contactMessage').value);
             const name = sessionStorage.getItem('mg_name') || 'Unbekannt';
