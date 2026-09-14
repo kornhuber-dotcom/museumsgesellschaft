@@ -79,7 +79,7 @@
 
         .logo-container {
             background: white;
-            padding: 8px 12px;
+            padding: 8px 16px;
             border-radius: 8px;
             display: inline-block;
             margin-bottom: 12px;
@@ -87,7 +87,7 @@
         }
 
         .logo-container img {
-            height: 36px;
+            height: 40px;
             display: block;
         }
 
@@ -170,6 +170,73 @@
             background: #b8972f;
         }
 
+        /* Digitaler Ausweis (Wallet Optik - initial versteckt, wird per Button eingeblendet) */
+        .wallet-card {
+            background: linear-gradient(135deg, #1b4d3e 0%, #2e7d63 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 16px;
+            display: none; /* Standardmäßig eingeklappt */
+            box-shadow: 0 4px 12px rgba(27, 77, 62, 0.3);
+        }
+
+        .wallet-card.active {
+            display: block;
+        }
+
+        .wallet-card::after {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+
+        .wallet-header {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .wallet-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .wallet-id {
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            margin-bottom: 16px;
+        }
+
+        .wallet-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .qr-placeholder {
+            background: white;
+            padding: 6px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .qr-placeholder img {
+            width: 64px;
+            height: 64px;
+            display: block;
+        }
+
         /* SEPA Hinweis im Selbstservice */
         .notice-box {
             background: #fef3c7;
@@ -197,8 +264,8 @@
     <div class="app-container">
         <header>
             <div class="logo-container">
-                <!-- Platzhalter für Museums-Logo -->
-                <span style="font-weight: bold; color: #1b4d3e; font-size: 0.9rem;">F / S 🏠 Heimatmuseum</span>
+                <!-- Echte Logo-Einbindung (Dateiname anpassen falls nötig, z.B. logo.png) -->
+                <img src="logo.png" alt="Museumsgesellschaft Braunlage" onerror="this.onerror=null; this.src='https://museum-braunlage.de/images/logo.png';">
             </div>
             <h1>Museumsgesellschaft e. V. Braunlage</h1>
             <p>Mitgliederportal & Services</p>
@@ -206,6 +273,22 @@
 
         <div class="content">
             
+            <!-- Digitaler Mitgliedsausweis (Wallet-Ansicht, wird durch Klick oder Parameter geladen) -->
+            <div id="walletCard" class="wallet-card">
+                <div class="wallet-header">Digitaler Mitgliedsausweis</div>
+                <div class="wallet-name" id="displayName">Eckart Kornhuber</div>
+                <div class="wallet-id" id="displayId">Mitglieds-Nr: MG-2026-01</div>
+                <div class="wallet-footer">
+                    <div>
+                        <div style="font-size: 0.75rem; color: #cbd5e1;">Status</div>
+                        <div style="font-size: 0.9rem; font-weight: 500;">Aktiv (Vollzahler)</div>
+                    </div>
+                    <div class="qr-placeholder">
+                        <img id="qrCodeImg" src="https://api.qrserver.com/v1/create-qr-code/?size=64x64&data=MG-2026-01" alt="QR-Code">
+                    </div>
+                </div>
+            </div>
+
             <!-- Eilmeldungen & Push -->
             <div class="card">
                 <h2>Eilmeldungen & Push</h2>
@@ -213,11 +296,11 @@
                 <button class="btn" onclick="OneSignal.Slidedown.promptPush()">Push-Benachrichtigungen aktivieren</button>
             </div>
 
-            <!-- Digitaler Mitgliedsausweis (Ausweis-Kachel im Original-Look) -->
+            <!-- Ausweis umschalten / anzeigen Button -->
             <div class="card card-highlight">
                 <h2>Digitaler Mitgliedsausweis</h2>
                 <p>Ihr offizieller Vereinsausweis im modernen Wallet-Format – jederzeit griffbereit.</p>
-                <button class="btn btn-accent" onclick="alert('Mitgliedsausweis wird geladen...')">💳 Ausweis anzeigen</button>
+                <button class="btn btn-accent" onclick="toggleWallet()">💳 Ausweis ein-/ausblenden</button>
             </div>
 
             <!-- Mitglieder-Login & Datenpflege -->
@@ -263,5 +346,42 @@
         </footer>
     </div>
 
+    <script>
+        // Funktion zum Ein-/Ausblenden des Ausweises
+        function toggleWallet() {
+            const wallet = document.getElementById('walletCard');
+            wallet.classList.toggle('active');
+            if(wallet.classList.contains('active')) {
+                wallet.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        // Dynamisches Auslesen der URL-Parameter (z.B. ?name=Eckart%20Kornhuber&id=MG-2026-01)
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const nameParam = urlParams.get('name');
+            const idParam = urlParams.get('id');
+
+            const nameElement = document.getElementById('displayName');
+            const idElement = document.getElementById('displayId');
+            const qrElement = document.getElementById('qrCodeImg');
+            const walletCard = document.getElementById('walletCard');
+
+            if (nameParam) {
+                nameElement.textContent = decodeURIComponent(nameParam);
+            }
+
+            if (idParam) {
+                const memberId = decodeURIComponent(idParam);
+                idElement.textContent = "Mitglieds-Nr: " + memberId;
+                // Clientseitige Verschlüsselung/Signatur der ID für den QR-Code
+                const encryptedId = CryptoJS.AES.encrypt(memberId, 'MuseumBraunlageKey').toString();
+                qrElement.src = `https://api.qrserver.com/v1/create-qr-code/?size=64x64&data=${encodeURIComponent(memberId)}`;
+                
+                // Wenn Parameter in der URL übergeben wurden, direkt automatisch anzeigen
+                walletCard.classList.add('active');
+            }
+        });
+    </script>
 </body>
 </html>
