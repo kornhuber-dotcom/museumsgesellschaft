@@ -520,19 +520,19 @@
         }
 
 function enablePush() {
-            window.OneSignalDeferred.push(async function(OneSignal) {
-                try {
-                    if (OneSignal.Slidedown && typeof OneSignal.Slidedown.promptPush === 'function') {
-                        await OneSignal.Slidedown.promptPush();
-                    } else {
-                        await OneSignal.Notifications.requestPermission();
-                    }
-                } catch (error) {
-                    console.error("Push-Fehler:", error);
-                    alert("Push-Benachrichtigungen konnten auf diesem Gerät nicht direkt gestartet werden. Bitte prüfen Sie die Browsereinstellungen.");
-                }
-            });
+    window.OneSignalDeferred.push(async function(OneSignal) {
+        try {
+            await OneSignal.Slidedown.promptMain({ slidedownPromptType: 'push' });
+        } catch (error) {
+            console.error("Push-Fehler:", error);
+            try {
+                await OneSignal.Notifications.requestPermission();
+            } catch (innerError) {
+                alert("Push-Benachrichtigungen konnten auf diesem Gerät nicht direkt gestartet werden. Bitte prüfen Sie die Browsereinstellungen.");
+            }
         }
+    });
+}
 
         function sendContactMail() {
             const msg = encodeURIComponent(document.getElementById('contactMessage').value);
