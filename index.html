@@ -516,8 +516,7 @@
             const qrText = encodeURIComponent(checkUrl);
             document.getElementById('badgeQrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrText}`;
 
-            document.getElementById('mgvoDataSheetBtn').href = `${MGVO_BASE_URL}datenschloss?id=${id}`;
-            document.getElementById('mgvoAccountBtn').href = `${MGVO_BASE_URL}konto?id=${id}`;
+
         }
 
         function enablePush() {
