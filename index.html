@@ -465,92 +465,90 @@
         </div>
     </div>
 
-    <script>
-        const SECRET_PASSPHRASE = "MuseumsgesellschaftBraunlage2026SecureKey";
-        const MGVO_BASE_URL = "https://mgvo.de/";
+<script>
+    const SECRET_PASSPHRASE = "MuseumsgesellschaftBraunlage2026SecureKey";
+    const MGVO_BASE_URL = "https://mgvo.de/";
 
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
 
-        function initApp() {
-            const encryptedData = getQueryParam('data');
+    function initApp() {
+        const encryptedData = getQueryParam('data');
 
-            if (encryptedData) {
-                try {
-                    const bytes = CryptoJS.AES.decrypt(encryptedData, SECRET_PASSPHRASE);
-                    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+        if (encryptedData) {
+            try {
+                const bytes = CryptoJS.AES.decrypt(encryptedData, SECRET_PASSPHRASE);
+                const decrypted = bytes.toString(CryptoJS.enc.Utf8);
 
-                    if (decrypted && decrypted.includes('|')) {
-                        const parts = decrypted.split('|');
-                        const memberId = parts[0];
-                        const memberName = parts[1];
+                if (decrypted && decrypted.includes('|')) {
+                    const parts = decrypted.split('|');
+                    const memberId = parts[0];
+                    const memberName = parts[1];
 
-                        sessionStorage.setItem('mg_id', memberId);
-                        sessionStorage.setItem('mg_name', memberName);
-                        updateUI(memberId, memberName);
-                        return;
-                    }
-                } catch (e) {
-                    console.error("Entschlüsselungsfehler:", e);
+                    localStorage.setItem('mg_id', memberId);
+                    localStorage.setItem('mg_name', memberName);
+                    updateUI(memberId, memberName);
+                    return;
                 }
-            }
-
-            const savedId = sessionStorage.getItem('mg_id');
-            const savedName = sessionStorage.getItem('mg_name');
-
-            if (savedId && savedName) {
-                updateUI(savedId, savedName);
-            } else {
-                const defaultId = "9999";
-                const defaultName = "Testmitglied";
-                sessionStorage.setItem('mg_id', defaultId);
-                sessionStorage.setItem('mg_name', defaultName);
-                updateUI(defaultId, defaultName);
+            } catch (e) {
+                console.error("Entschlüsselungsfehler:", e);
             }
         }
 
-        function updateUI(id, name) {
-            document.getElementById('welcomeArea').innerHTML = `Angemeldet als: <strong>${name}</strong> (ID: ${id})`;
-            document.getElementById('badgeName').innerText = name;
-            document.getElementById('badgeId').innerText = id;
-            
-            // Exakter QR-Code Link: https://museum-braunlage.de/check.php?id=ID
-            const checkUrl = `https://museum-braunlage.de/check.php?id=${id}`;
-            const qrText = encodeURIComponent(checkUrl);
-            document.getElementById('badgeQrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrText}`;
+        const savedId = localStorage.getItem('mg_id');
+        const savedName = localStorage.getItem('mg_name');
 
-
+        if (savedId && savedName) {
+            updateUI(savedId, savedName);
+        } else {
+            const defaultId = "9999";
+            const defaultName = "Testmitglied";
+            localStorage.setItem('mg_id', defaultId);
+            localStorage.setItem('mg_name', defaultName);
+            updateUI(defaultId, defaultName);
         }
+    }
 
-function enablePush() {
-    window.OneSignalDeferred.push(async function(OneSignal) {
-        try {
-            await OneSignal.Notifications.requestPermission();
-        } catch (error) {
-            console.error("Push-Fehler:", error);
-            alert("Push-Benachrichtigungen konnten auf diesem Gerät nicht gestartet werden.");
-        }
-    });
-}
-        function sendContactMail() {
-            const msg = encodeURIComponent(document.getElementById('contactMessage').value);
-            const name = sessionStorage.getItem('mg_name') || 'Unbekannt';
-            const id = sessionStorage.getItem('mg_id') || 'Unbekannt';
-            window.location.href = `mailto:vorstand@museumsgesellschaft-braunlage.de?subject=Anfrage aus Mitgliederportal von ${name} (ID: ${id})&body=${msg}`;
-            closeModal('contactModal');
-        }
+    function updateUI(id, name) {
+        document.getElementById('welcomeArea').innerHTML = `Angemeldet als: <strong>${name}</strong> (ID: ${id})`;
+        document.getElementById('badgeName').innerText = name;
+        document.getElementById('badgeId').innerText = id;
+        
+        const checkUrl = `https://museum-braunlage.de/check.php?id=${id}`;
+        const qrText = encodeURIComponent(checkUrl);
+        document.getElementById('badgeQrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrText}`;
+    }
 
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
-        }
+    function enablePush() {
+        window.OneSignalDeferred.push(async function(OneSignal) {
+            try {
+                await OneSignal.Notifications.requestPermission();
+            } catch (error) {
+                console.error("Push-Fehler:", error);
+                alert("Push-Benachrichtigungen konnten auf diesem Gerät nicht gestartet werden.");
+            }
+        });
+    }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
+    function sendContactMail() {
+        const msg = encodeURIComponent(document.getElementById('contactMessage').value);
+        const name = localStorage.getItem('mg_name') || 'Unbekannt';
+        const id = localStorage.getItem('mg_id') || 'Unbekannt';
+        window.location.href = `mailto:vorstand@museumsgesellschaft-braunlage.de?subject=Anfrage aus Mitgliederportal von ${name} (ID: ${id})&body=${msg}`;
+        closeModal('contactModal');
+    }
 
-        window.onload = initApp;
-    </script>
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    window.onload = initApp;
+</script>
 </body>
 </html>
