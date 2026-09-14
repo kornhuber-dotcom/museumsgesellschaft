@@ -5,16 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Museumsgesellschaft e. V. Braunlage - Mitgliederportal</title>
     
-    <!-- PWA Manifest & Meta -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1b4d3e">
     <meta name="apple-mobile-web-app-title" content="Museumsgesellschaft">
     <meta name="apple-mobile-web-app-capable" content="yes">
     
-    <!-- CryptoJS für AES-Entschlüsselung der URL-Parameter -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
-    <!-- OneSignal Push SDK -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -193,7 +190,6 @@
             color: #888;
         }
 
-        /* Modals */
         .modal {
             display: none;
             position: fixed;
@@ -223,7 +219,6 @@
             font-family: inherit;
         }
 
-        /* Ausweis-Card Design im Modal */
         .member-badge-card {
             background: #1b4d3e;
             border: 2px solid #d4af37;
@@ -310,33 +305,28 @@
     </div>
 
     <div class="container">
-        <!-- Willkommens-Box -->
         <div id="welcomeArea" class="welcome-box">
             Lade Mitgliedsdaten...
         </div>
 
-        <!-- 1. Eilmeldungen & Push -->
         <div class="card">
             <h3>Eilmeldungen &amp; Push</h3>
             <p>Erhalten Sie wichtige Vereinsinformationen direkt per Benachrichtigung.</p>
             <button onclick="enablePush()" class="btn">Push-Benachrichtigungen aktivieren</button>
         </div>
 
-        <!-- 2. Digitaler Mitgliedsausweis (Highlight) -->
         <div class="card card-gold-accent">
             <h3>Digitaler Mitgliedsausweis</h3>
             <p>Ihr offizieller Vereinsausweis im modernen Wallet-Format – jederzeit griffbereit.</p>
             <button onclick="openModal('badgeModal')" class="btn btn-gold">🪪 Ausweis anzeigen</button>
         </div>
 
-        <!-- 3. Kalender & Öffnungszeiten -->
         <div class="card">
             <h3>Kalender &amp; Öffnungszeiten</h3>
             <p>Aktuelle Termine, Exkursionen und Öffnungszeiten auf einen Blick.</p>
             <button onclick="openModal('calendarModal')" class="btn">📅 Termine &amp; Öffnungszeiten ansehen</button>
         </div>
 
-        <!-- 4. Mitglieder-Login & Datenpflege -->
         <div class="card">
             <h3>Mitglieder-Login &amp; Datenpflege</h3>
             <p>Mit Passworteingabe anmelden, um persönliche Daten einzusehen oder zu ändern.</p>
@@ -344,28 +334,24 @@
             <span class="hint-text">(Öffnet im Browser)</span>
         </div>
 
-        <!-- 5. Selbstauskunft & Daten per Mail -->
         <div class="card">
             <h3>Selbstauskunft &amp; Daten per Mail</h3>
             <p>Hier können Sie per E-Mail-Adresse (ohne Passwort) direkt Ihr <strong>Mitgliederdatenblatt</strong>, Ihr <strong>Finanzkonto</strong> oder den <strong>Zugang für den Mitgliederbereich</strong> anfordern.</p>
             <a href="https://www.mgvo.de/prog/pub_ssrequest.php?call_id=3d660e620b631ab2139df53ffecde062" class="btn" target="_blank">✉️ Selbstauskunft anfordern</a>
         </div>
 
-        <!-- 6. Offizielle Homepage -->
         <div class="card">
             <h3>Offizielle Homepage</h3>
             <p>Besuchen Sie unsere Hauptseite für aktuelle Ausstellungen, Berichte und das Museumsarchiv.</p>
             <a href="https://museum-braunlage.de" class="btn" target="_blank">🌐 Zur Website museum-braunlage.de</a>
         </div>
 
-        <!-- 7. Kontakt zum Vorstand -->
         <div class="card">
             <h3>Kontakt zum Vorstand</h3>
             <p>Haben Sie Fragen, Anregungen oder Anliegen an die Museumsgesellschaft?</p>
             <button onclick="openModal('contactModal')" class="btn">✉️ Nachricht an den Vorstand</button>
         </div>
 
-        <!-- 8. Portal auf Smartphone speichern (Highlight) -->
         <div class="card card-gold-accent">
             <h3>Portal auf Smartphone speichern</h3>
             <p>Fügen Sie diese App zu Ihrem Startbildschirm hinzu – auch offline verfügbar.</p>
@@ -377,7 +363,6 @@
         &copy; 2026 Museumsgesellschaft e. V. Braunlage
     </div>
 
-    <!-- Modals -->
     <div id="badgeModal" class="modal">
         <div class="modal-content" style="max-width: 380px;">
             <div class="member-badge-card">
@@ -415,24 +400,20 @@
     <div id="calendarModal" class="modal">
         <div class="modal-content">
             <h3 style="margin-bottom: 15px; color: var(--primary);">Termine &amp; Öffnungszeiten</h3>
-            
             <div style="background: #f8f9f8; padding: 12px; border-radius: 8px; border-left: 4px solid var(--primary); margin-bottom: 15px; font-size: 13px; line-height: 1.4;">
                 <strong style="color: var(--primary); display: block; margin-bottom: 4px;">Öffnungszeiten:</strong>
                 Di. &amp; Do. 10–12 Uhr sowie während der von-Langen-Ausstellung bis 10.10. auch Sa. 11–15 Uhr.
             </div>
-
             <div style="margin-bottom: 15px; font-size: 13px; line-height: 1.4;">
                 <strong style="color: var(--text); display: block; margin-bottom: 3px;">Nächster Termin:</strong>
                 📅 Do., 17.09.2026, 18:30 Uhr<br>
                 <span style="color: var(--text-muted);">Jahreshauptversammlung</span>
             </div>
-
             <div style="margin-bottom: 20px; font-size: 13px; line-height: 1.4; border-top: 1px solid #eee; padding-top: 12px;">
                 <strong style="color: var(--text); display: block; margin-bottom: 3px;">Ausblick:</strong>
                 📅 So., 04.10.2026, 09:00 Uhr<br>
                 <span style="color: var(--text-muted);">Busexkursion „Tour auf Von-Langen-Spuren“ nach Grünenplan &amp; Fürstenberg</span>
             </div>
-
             <button class="btn" onclick="closeModal('calendarModal')">Schließen</button>
         </div>
     </div>
@@ -441,7 +422,7 @@
         <div class="modal-content">
             <h3>Nachricht an den Vorstand</h3>
             <p style="font-size: 13px; color: var(--text-muted);">Senden Sie uns Ihr Anliegen direkt per E-Mail:</p>
-            <textarea id="contactMessage" rows="4" placeholder="Ihre Nachricht..."></textarea>
+            <textarea id="contentMessage" rows="4" placeholder="Ihre Nachricht..."></textarea>
             <button class="btn" onclick="sendContactMail()" style="margin-bottom: 8px;">E-Mail senden</button>
             <button class="btn" onclick="closeModal('contactModal')">Abbrechen</button>
         </div>
@@ -479,11 +460,8 @@
                     const memberId = parts[0];
                     const memberName = parts[1];
 
-                    // Sofort in allen verfügbaren Speichern sichern
                     localStorage.setItem('mg_member_id', memberId);
                     localStorage.setItem('mg_member_name', memberName);
-                    sessionStorage.setItem('mg_member_id', memberId);
-                    sessionStorage.setItem('mg_member_name', memberName);
 
                     updateUI(memberId, memberName);
                     return;
@@ -493,30 +471,21 @@
             }
         }
 
-        // Fallback 1: localStorage prüfen
-        let savedId = localStorage.getItem('mg_member_id');
-        let savedName = localStorage.getItem('mg_member_name');
-
-        // Fallback 2: Falls localStorage leer ist, sessionStorage testen
-        if (!savedId) {
-            savedId = sessionStorage.getItem('mg_member_id');
-            savedName = sessionStorage.getItem('mg_member_name');
-        }
+        const savedId = localStorage.getItem('mg_member_id');
+        const savedName = localStorage.getItem('mg_member_name');
 
         if (savedId && savedName) {
             updateUI(savedId, savedName);
             return;
         }
 
-        // Wenn gar nichts da ist: Direkt ein Eingabefeld anbieten, falls der Link per Hand/Mail eingefügt werden muss
         document.getElementById('welcomeArea').innerHTML = `
             ⚠️ <strong>Mitgliedsdaten nicht gefunden.</strong><br>
             <span style="font-size: 12px; color: #555; display: block; margin-top: 5px;">
-                Bitte öffnen Sie einmalig Ihren persönlichen Link aus der Willkommens-Mail direkt im Browser. 
-                Alternativ können Sie Ihren personalisierten Link hier einfügen:
+                Bitte einmalig Ihren persönlichen Link aus der Willkommens-Mail öffnen. Oder hier einfügen:
             </span>
             <div style="margin-top: 10px; display: flex; gap: 5px;">
-                <input type="text" id="manualLinkInput" placeholder="Persönlichen Link hier einfügen..." style="flex: 1; padding: 6px; font-size: 11px; border: 1px solid #ccc; border-radius: 4px;">
+                <input type="text" id="manualLinkInput" placeholder="Link mit ?data= einfügen..." style="flex: 1; padding: 6px; font-size: 11px; border: 1px solid #ccc; border-radius: 4px;">
                 <button onclick="saveManualLink()" style="padding: 6px 10px; background: var(--primary); color: white; border: none; border-radius: 4px; font-size: 11px; cursor: pointer;">Speichern</button>
             </div>
         `;
@@ -554,7 +523,33 @@
         const qrText = encodeURIComponent(checkUrl);
         document.getElementById('badgeQrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrText}`;
     }
-    // ... (restliche Funktionen bleiben gleich)
+
+    function enablePush() {
+        window.OneSignalDeferred.push(async function(OneSignal) {
+            try {
+                await OneSignal.Notifications.requestPermission();
+            } catch (error) {
+                console.error("Push-Fehler:", error);
+                alert("Push-Benachrichtigungen konnten nicht gestartet werden.");
+            }
+        });
+    }
+
+    function sendContactMail() {
+        const msg = encodeURIComponent(document.getElementById('contactMessage')?.value || '');
+        window.location.href = `mailto:vorstand@museumsgesellschaft-braunlage.de?subject=Anfrage aus Mitgliederportal&body=${msg}`;
+        closeModal('contactModal');
+    }
+
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    window.onload = initApp;
 </script>
 </body>
 </html>
